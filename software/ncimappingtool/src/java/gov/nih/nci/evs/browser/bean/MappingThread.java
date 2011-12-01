@@ -417,8 +417,13 @@ public class MappingThread implements Runnable
 
 			MappingData mappingData = null;
 
-			source_scheme = DataUtils.getFormalName(source_abbrev);
-			source_version = DataUtils.getVocabularyVersionByTag(source_scheme, null);
+			if (source_abbrev.compareTo("") != 0) {
+				source_scheme = DataUtils.getFormalName(source_abbrev);
+				source_version = DataUtils.getVocabularyVersionByTag(source_scheme, null);
+			} else {
+				source_scheme = "UNSPECIFIED";
+				source_version = "N/A";
+			}
 
 			target_scheme = DataUtils.getFormalName(target_abbrev);
 			target_version = DataUtils.getVocabularyVersionByTag(target_scheme, null);
@@ -576,71 +581,58 @@ public class MappingThread implements Runnable
 
 				try {
 
-					Entity source_entity = MappingUtils.getConceptByCode(sourceCodingScheme,
+					Entity source_entity = null;
+					if (sourceCodingScheme != null) {
+						source_entity = MappingUtils.getConceptByCode(sourceCodingScheme,
 															sourceCodingSchemeVersion,
 															null,
 															sourceCode);
-
+				    }
 					if (source_entity != null) {
 						if (source_entity != null) {
 							sourceName = source_entity.getEntityDescription().getContent();
 							sourceCodeNamespace = source_entity.getEntityCodeNamespace();
 						}
+					} else {
+							sourceName = matchtext;
+							sourceCodeNamespace = "UNSPECIFIED";
+							sourceCodingSchemeVersion = "N/A";
+							sourceCodeNamespace = "N/A";
+					}
 
-						if(input_option.compareToIgnoreCase("Code") == 0) {
-							Vector matchtext_vec = new Vector();
-							Vector synonyms = DataUtils.getSynonyms(sourceCodingScheme, sourceCodingSchemeVersion, null, sourceCode);
-							if (synonyms != null) {
-								for (int k=0; k<synonyms.size(); k++) {
-									String synonym_str = (String) synonyms.elementAt(k);
-									Vector v = DataUtils.parseData(synonym_str);
-									String synonym = (String) v.elementAt(0);
-									matchtext_vec.add(synonym);
-									System.out.println(sourceCode + " " + synonym);
-								}
-								iterator = new SearchUtils().searchByName(targetCodingScheme, targetCodingSchemeVersion, matchtext_vec, algorithm);
-						    }
-
-						} else if(input_option.compareTo("Name") == 0) {
-							iterator = mapping_utils.searchByName(targetCodingScheme, targetCodingSchemeVersion, matchtext, null, algorithm, false, -1);
-						} else {
-                            Vector src_properties = mapping_utils.getPropertyValues(sourceCodingScheme, sourceCodingSchemeVersion,
-                                                                                   sourceCode, src_property);
-                            Vector matchText_vec = new Vector();
-                            for (int k=0; k<src_properties.size(); k++) {
-								String value = (String) src_properties.elementAt(k);
-								value = new SearchUtils().convertPropertyValue(value, right_trim, left_trim, prefix, suffix);
-								System.out.println(value);
-								matchText_vec.add(value);
+					if(input_option.compareToIgnoreCase("Code") == 0) {
+						Vector matchtext_vec = new Vector();
+						Vector synonyms = DataUtils.getSynonyms(sourceCodingScheme, sourceCodingSchemeVersion, null, sourceCode);
+						if (synonyms != null) {
+							for (int k=0; k<synonyms.size(); k++) {
+								String synonym_str = (String) synonyms.elementAt(k);
+								Vector v = DataUtils.parseData(synonym_str);
+								String synonym = (String) v.elementAt(0);
+								matchtext_vec.add(synonym);
+								System.out.println(sourceCode + " " + synonym);
 							}
-
-							// find source property values for a given code
-
-							/*
-							String[] property_types = null;
-							String all_sources = null;
-
-							String[] property_names = new String[1];
-							property_names[0] = property;
-							iterator = MappingUtils.searchByProperties(
-										  targetCodingScheme,
-										  targetCodingSchemeVersion,
-										  matchtext,
-										  property_types,
-										  property_names,
-										  all_sources,
-										  algorithm,
-										  true,
-										  true,
-										  10);
-										  targetCodingScheme, targetCodingSchemeVersion, matchtext, null, algorithm, false, -1);
-						    */
-						    iterator = new SearchUtils().searchByProperty(
-							        targetCodingScheme, targetCodingSchemeVersion, target_property, matchText_vec, algorithm);
-
+							iterator = new SearchUtils().searchByName(targetCodingScheme, targetCodingSchemeVersion, matchtext_vec, algorithm);
 						}
 
+					} else if(input_option.compareTo("Name") == 0) {
+						iterator = mapping_utils.searchByName(targetCodingScheme, targetCodingSchemeVersion, matchtext, null, algorithm, false, -1);
+					} else if (sourceCodingScheme != null) {
+						Vector src_properties = mapping_utils.getPropertyValues(sourceCodingScheme, sourceCodingSchemeVersion,
+																			   sourceCode, src_property);
+						Vector matchText_vec = new Vector();
+						for (int k=0; k<src_properties.size(); k++) {
+							String value = (String) src_properties.elementAt(k);
+							value = new SearchUtils().convertPropertyValue(value, right_trim, left_trim, prefix, suffix);
+							System.out.println(value);
+							matchText_vec.add(value);
+						}
+
+						iterator = new SearchUtils().searchByProperty(
+								targetCodingScheme, targetCodingSchemeVersion, target_property, matchText_vec, algorithm);
+
 					}
+
+
 					if (iterator == null) {
 						System.out.println("******************* search returns null???");
 					} else {

@@ -92,12 +92,17 @@ if (mapping_hmap == null) {
 List list = (ArrayList) request.getSession().getAttribute("data");
 String type = (String) request.getSession().getAttribute("type");
 
+System.out.println("manual_mapping type: " + type);
+
 String idx1_str = request.getParameter("idx1");
 if (!DataUtils.isNull(idx1_str)) {
     request.getSession().setAttribute("idx1_str", idx1_str);
 } else {
     idx1_str = (String) request.getSession().getAttribute("idx1_str");
 }
+
+
+System.out.println("manual_mapping idx1_str: " + idx1_str);
 
 int idx1 = Integer.parseInt(idx1_str);
 String data_value = (String) list.get(idx1);

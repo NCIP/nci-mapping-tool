@@ -79,8 +79,13 @@ if (algorithm != null && algorithm.compareTo("null") == 0) {
 }
 
 
-String source_scheme = DataUtils.getFormalName(source_abbrev);
-String source_version = DataUtils.getVocabularyVersionByTag(source_scheme, null);
+String source_scheme = null;
+String source_version = null;
+
+if (!DataUtils.isNull(source_abbrev)) {
+	source_scheme = DataUtils.getFormalName(source_abbrev);
+	source_version = DataUtils.getVocabularyVersionByTag(source_scheme, null);
+}
 
 String target_scheme = DataUtils.getFormalName(target_abbrev);
 String target_version = DataUtils.getVocabularyVersionByTag(target_scheme, null);
@@ -123,9 +128,26 @@ String target_version = DataUtils.getVocabularyVersionByTag(target_scheme, null)
                   </tr>
                   
                 <tr>
+                <%
+                if (source_scheme != null) {
+                %>
 		  <td align="left" class="textbody">
 		      <b>From</b>:&nbsp;<%=source_abbrev%>&nbsp;(<%=source_scheme%>)
 		  </td>
+		<%  
+		} else {
+		    input_option = "Name";
+		    input_option_label = input_option;
+		    input_option_label = input_option_label.toLowerCase();		    
+		    
+		%>
+		  <td align="left" class="textbody">
+		      <b>From</b>:&nbsp;UNSPECIFIED
+		  </td>
+		<%
+		}
+		%>
+		
                           <td>
                       &nbsp;
                           </td>
@@ -160,8 +182,6 @@ if (input_option.compareTo("Name") == 0) {
     MappingUtils util = new MappingUtils();
     Vector algorithms = util.getSupportedSearchTechniqueNames();
 %>    
-
-
                 <tr>
 		  <td align="left" class="textbody">
 		      <b>Algorithm</b>:
@@ -194,10 +214,28 @@ if (input_option.compareTo("Name") == 0) {
      
      
      
-     <tr>               
+     <tr>          
+
+                <%
+                if (source_scheme != null) {
+                %>
+                
                           <td align="left" class="textbody">
                               <b><%=source_abbrev%>&nbsp;<%=input_option_label%>&nbsp;data:</b>
                           </td>
+                          
+		<%
+		} else {
+		%> 
+		
+                          <td align="left" class="textbody">
+                              <b>Data:</b>
+                          </td>		
+		
+		<%
+		}
+		%>                         
+                          
                           
      <td>  
          <textarea name="codes" cols="50" rows=10 tabindex="3"></textarea>

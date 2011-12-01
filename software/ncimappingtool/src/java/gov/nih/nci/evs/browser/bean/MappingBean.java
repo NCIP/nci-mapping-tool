@@ -231,6 +231,7 @@ System.out.println("createMappingAction type: " + type);
 
     public MappingObject createMappingObject(String type, String identifier, String version, String from_cs, String from_version, String to_cs,
                                              String to_version, List list) {
+
 		MappingObject mapping_obj = getMapping(identifier + "|" + version);
 		if (mapping_obj != null) return null;
 
@@ -305,11 +306,13 @@ System.out.println("submitMetadataAction type: " + type);
 
 			String source_abbrev = (String) request.getParameter("source_abbrev");
 			source_abbrev = source_abbrev.trim();
+			/*
 			if (source_abbrev.compareTo("") == 0) {
 				message = "Please select a source.";
 				request.getSession().setAttribute("message", message);
 				return "message";
 			}
+			*/
 
 			String target_abbrev = (String) request.getParameter("target_abbrev");
 			target_abbrev = target_abbrev.trim();
@@ -962,7 +965,7 @@ String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
 String target_scheme = DataUtils.key2CodingSchemeName(target_cs);
 String target_version = DataUtils.key2CodingSchemeVersion(target_cs);
 
-System.out.println("Creating MappingObject ...");
+System.out.println("Creating MappingObject ...codingscheme");
 
             MappingObject mappingObj = createMappingObject(type, identifier, mapping_version, source_scheme, source_version, target_scheme, target_version, list);
             if (mappingObj == null) {
@@ -1081,7 +1084,7 @@ request.getSession().setAttribute("acsvrl", acsvrl);
 String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
 
-System.out.println("Creating MappingObject ...");
+System.out.println("Creating MappingObject ... valueset ");
 
             MappingObject mappingObj = createMappingObject(type, identifier, mapping_version, source_scheme, source_version, vsdURI, valueSetDefinitionName, list);
             if (mappingObj == null) {
@@ -1286,26 +1289,47 @@ System.out.println("Creating MappingObject ...");
 
 
 		synchronized (request.getSession()) {
-			String message = "Mapping entry saved successfully.";
-			request.getSession().setAttribute("message", message);
+			String message = null;
 			List list = (ArrayList) request.getSession().getAttribute("data");
 			int idx = Integer.parseInt(idx1_str);
 			String input_data = (String) list.get(idx);
 
 			HashMap mapping_hmap = (HashMap) request.getSession().getAttribute("mapping_hmap");
+
 			List selected_matches = (ArrayList) mapping_hmap.get(input_data);
 			if (selected_matches == null) {
 				selected_matches = new ArrayList();
 			}
 
-			selected_matches.add(mappingData);
-			mapping_hmap.put(input_data, selected_matches);
-			request.getSession().setAttribute("mapping_hmap", mapping_hmap);
+            boolean found = searchMappingData(selected_matches, mappingData.getKey());
+			if (!found) {
+				selected_matches.add(mappingData);
+			    mapping_hmap.put(input_data, selected_matches);
+			    request.getSession().setAttribute("mapping_hmap", mapping_hmap);
+				message = "Mapping entry saved successfully.";
+				request.getSession().setAttribute("message", message);
 
+			} else {
+				message = "Mapping entry already exists -- data not saved.";
+				request.getSession().setAttribute("message", message);
+			}
 	    }
-
 		return type;
 	}
+
+
+    public boolean searchMappingData(List match_list, String search_key) {
+		if (match_list == null) return false;
+		for (int i=0; i<match_list.size(); i++) {
+			MappingData mappingData = (MappingData) match_list.get(i);
+			String key = mappingData.getKey();
+			if (search_key.compareTo(key) == 0) {
+                return true;
+			}
+		}
+		return false;
+	}
+
 
 
     public String advancedSearchAction() {

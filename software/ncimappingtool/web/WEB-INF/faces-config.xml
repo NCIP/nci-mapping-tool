@@ -386,7 +386,7 @@
     
     
     
- 
+ <!--
       <navigation-rule>
           <from-view-id>/pages/ncimeta_manual_mapping.jsp</from-view-id>
         
@@ -401,10 +401,8 @@
               <from-outcome>ncimeta</from-outcome>
               <to-view-id>/pages/ncimeta_manual_mapping.jsp</to-view-id>
           </navigation-case>
-         
-          
-          
-    </navigation-rule>     
+   </navigation-rule>     
+-->
 
 
       <navigation-rule>
@@ -415,13 +413,37 @@
               <from-outcome>ncimeta</from-outcome>
               <to-view-id>/pages/manual_mapping.jsp</to-view-id>
           </navigation-case>
+
+          <navigation-case>
+              <from-action>#{mappingBean.manualMappingAction}</from-action>
+              <from-outcome>codingscheme</from-outcome>
+              <to-view-id>/pages/manual_mapping.jsp</to-view-id>
+          </navigation-case>
+
+          <navigation-case>
+              <from-action>#{mappingBean.manualMappingAction}</from-action>
+              <from-outcome>valueset</from-outcome>
+              <to-view-id>/pages/manual_mapping.jsp</to-view-id>
+          </navigation-case>
           
+          
+           <navigation-case>
+              <from-action>#{mappingBean.saveManualMappingAction}</from-action>
+              <from-outcome>ncimeta</from-outcome>
+              <to-view-id>/pages/manual_mapping.jsp</to-view-id>
+          </navigation-case>
+         
            <navigation-case>
               <from-action>#{mappingBean.saveManualMappingAction}</from-action>
               <from-outcome>codingscheme</from-outcome>
               <to-view-id>/pages/manual_mapping.jsp</to-view-id>
           </navigation-case>
-         
+          
+           <navigation-case>
+              <from-action>#{mappingBean.saveManualMappingAction}</from-action>
+              <from-outcome>valueset</from-outcome>
+              <to-view-id>/pages/manual_mapping.jsp</to-view-id>
+          </navigation-case>          
           
           
     </navigation-rule>     

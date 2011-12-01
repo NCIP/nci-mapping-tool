@@ -265,17 +265,19 @@ if (expanded_hset == null) {
 List selected_matches = null;
 HashMap code2name_hmap = null;
 HashMap mapping_hmap = (HashMap) request.getSession().getAttribute("mapping_hmap");
+
+
 if (mapping_hmap == null) {
     mapping_hmap = new HashMap();
     request.getSession().setAttribute("mapping_hmap", mapping_hmap);
-    
-    if (list != null && list.size() > 0) {
-	    code2name_hmap =DataUtils.code2Name(source_scheme, source_version, list);
-	    request.getSession().setAttribute("code2name_hmap", code2name_hmap);
-    }
-    
 } 
 
+
+if (list != null && list.size() > 0) {
+    code2name_hmap =DataUtils.code2Name(source_scheme, source_version, list);
+    request.getSession().setAttribute("code2name_hmap", code2name_hmap);
+}
+    
 
 if (input_option.compareToIgnoreCase("Code") == 0) {
     code2name_hmap = (HashMap) request.getSession().getAttribute("code2name_hmap");
@@ -421,7 +423,18 @@ Iterator it = mapping_hmap.keySet().iterator();
                   
                 <tr>
 		  <td align="left" class="textbody">
+	<%	  
+	if (source_abbrev.compareTo("") != 0) {
+	%>
 		      <b>From</b>:&nbsp;<%=source_abbrev%>&nbsp;(<%=source_scheme%>)
+	<%
+	} else {
+	%>
+	              <b>From</b>:&nbsp;UNSPECIFIED
+	<%              
+	}
+	%>
+		      
 		  </td>
                           <td>
                       &nbsp;
@@ -458,7 +471,6 @@ Iterator it = mapping_hmap.keySet().iterator();
                       &nbsp;
                           </td>
                 </tr>
-
 
           <%        
           }  else if (type.compareTo("valueset") == 0) {
@@ -693,11 +705,19 @@ if (!readonly) {
 
                                       &nbsp;
                                       
+<%
+if (type.compareTo("codingscheme") == 0) {
+%>
 
       <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/manual_mapping.jsf?idx1=<%=idx1_str%>',
         '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="13">
         <img src="<%= request.getContextPath() %>/images/user.png" style="border: none">
       </a> 
+
+
+<%    
+}
+%> 
 
 <%    
 }
@@ -944,7 +964,7 @@ if (!readonly) {
 %>
 
       
-      <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_info.jsf?src_cd=<%=source_code%>&target_cd=<%=target_code%>',
+      <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_info.jsf?src_cd=<%=input_data%>&target_cd=<%=target_code%>',
         '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="13">
         <img src="<%= request.getContextPath() %>/images/Info.gif" style="border: none">
       </a>       
