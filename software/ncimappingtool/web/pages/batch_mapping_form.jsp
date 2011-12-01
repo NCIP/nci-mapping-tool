@@ -879,10 +879,24 @@ if (!readonly) {
 			 <td class="datacoldark"><%=source_namespace%></td>
 			 
 			 <td class="datacoldark">
+<%
+if (source_code != null && source_code.compareTo("") != 0 && source_code.compareTo("N/A") != 0) {
+%>
 				 <a href="#"
 				       onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>'">
 				       <%=source_code%>
 				 </a>
+<%				 
+} else {
+%>
+
+     <td class="datacoldark"><%=source_code%></td>
+<%    
+}
+%>
+
+				 
+				 
 			 </td>
 			 
 			 <td class="datacoldark"><%=source_name%></td>
