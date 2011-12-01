@@ -156,22 +156,16 @@ Vector target_properties = OntologyBean.getSupportedPropertyNames(target_scheme,
                 
                 <tr>
 		  <td align="left" class="textbody">
-		      <b>To</b>:&nbsp;<%=target_cs%> 
+		      <b>To</b>:&nbsp;<%=target_cs%>&nbsp;
+		         <a href="<%=request.getContextPath()%>/pages/apply_restriction.jsf" >
+			     Apply Restriction
+			</a> 
 		  </td>
                           <td>
                       &nbsp;
                           </td>
                 </tr>
-<!--                
-                <tr>
-		  <td align="left" class="textbody">
-		      <b>Input Option</b>:&nbsp;<%=input_option%> 
-		  </td>
-                          <td>
-                      &nbsp;
-                          </td>
-                </tr>                
--->
+
      </table>
      
     
@@ -343,8 +337,20 @@ if (input_option.compareToIgnoreCase("Property") == 0) {
      %>
                           
                           
-     <td>  
-         <textarea name="codes" cols="50" rows=10 tabindex="3"></textarea>
+     <td> 
+             <table>
+             <tr>
+		     <td valign=top>    
+			     <textarea name="codes" cols="50" rows=10 tabindex="3"></textarea>
+			     &nbsp;
+			    <h:commandButton id="import" value="import" action="#{mappingBean.importDataAction}"
+			      image="#{basePath}/images/import.gif"
+			      alt="Import"
+			      tabindex="2">
+			    </h:commandButton>             
+		     </td>
+             </tr>
+             </table>
      </td>
      </tr>
      
