@@ -102,10 +102,8 @@ String target_abbrev = null;
 String source_cs = null;
 String target_cs = null;
 
-
 source_code = (String) request.getParameter("src_cd");
 target_code = (String) request.getParameter("target_cd");
-
 
 String identifier = (String) request.getSession().getAttribute("identifier");
 if (identifier != null && identifier.compareTo("null") == 0) {
@@ -129,8 +127,10 @@ if (type.compareTo("ncimeta") == 0) {
 	source_abbrev = (String) request.getSession().getAttribute("source_abbrev");
 	target_abbrev = (String) request.getSession().getAttribute("target_abbrev");
 	
-        source_scheme = DataUtils.getFormalName(source_abbrev);
-        source_version = DataUtils.getVocabularyVersionByTag(source_scheme, null);
+	if (source_abbrev.compareTo("") != 0) {
+		source_scheme = DataUtils.getFormalName(source_abbrev);
+		source_version = DataUtils.getVocabularyVersionByTag(source_scheme, null);
+	}
 
         target_scheme = DataUtils.getFormalName(target_abbrev);
         target_version = DataUtils.getVocabularyVersionByTag(target_scheme, null);
@@ -145,8 +145,10 @@ if (type.compareTo("ncimeta") == 0) {
 System.out.println("source_cs: " + source_cs);
 System.out.println("target_cs: " + target_cs);
 
-	source_scheme = DataUtils.key2CodingSchemeName(source_cs);
-	source_version = DataUtils.key2CodingSchemeVersion(source_cs);
+        if (source_abbrev.compareTo("") != 0) {
+		source_scheme = DataUtils.key2CodingSchemeName(source_cs);
+		source_version = DataUtils.key2CodingSchemeVersion(source_cs);
+	}
 
 	target_scheme = DataUtils.key2CodingSchemeName(target_cs);
 	target_version = DataUtils.key2CodingSchemeVersion(target_cs);
@@ -155,21 +157,46 @@ System.out.println("target_cs: " + target_cs);
 
 
 String input_option = (String) request.getSession().getAttribute("input_option");
-
-
-Entity src_concept    = MappingUtils.getConceptByCode(source_scheme, source_version, null, source_code);
-Entity target_concept = MappingUtils.getConceptByCode(target_scheme, target_version, null, target_code);
-
-String source_concept_name = src_concept.getEntityDescription().getContent();
-String target_concept_name = target_concept.getEntityDescription().getContent();
-
+String source_concept_name = null;
+if (source_scheme == null) {
+     source_concept_name = source_code;
+}
 
 Presentation[] src_presentations = null;
-src_presentations = src_concept.getPresentation();
-
 Definition[] src_definitions = null;
-src_definitions = src_concept.getDefinition();
+Property[] src_properties = null;
+ArrayList src_superconceptList = new ArrayList();
+HashMap hmap_super = null;
 
+Entity src_concept    = null;
+if (source_scheme != null && source_code != null) {
+	src_concept = MappingUtils.getConceptByCode(source_scheme, source_version, null, source_code);
+	if (src_concept) != null) {
+	     source_concept_name = src_concept.getEntityDescription().getContent();
+	     src_presentations = src_concept.getPresentation();
+	     src_definitions = src_concept.getDefinition();
+	     src_properties = src_concept.getProperty();
+	     
+		hmap_super = TreeUtils.getSuperconcepts(source_scheme, source_version, source_code);
+		if (hmap_super != null) {
+			TreeItem ti = (TreeItem) hmap_super.get(source_code);
+			if (ti != null) {
+				for (String association : ti._assocToChildMap.keySet()) {
+					List<TreeItem> children =
+						ti._assocToChildMap.get(association);
+					for (TreeItem childItem : children) {
+						src_superconceptList.add(childItem._text + "|"
+							+ childItem._code);
+					}
+				}
+			}
+		}
+		SortUtils.quickSort(src_superconceptList);	     
+	}
+}
+
+Entity target_concept = MappingUtils.getConceptByCode(target_scheme, target_version, null, target_code);
+String target_concept_name = target_concept.getEntityDescription().getContent();
 
 Presentation[] target_presentations = null;
 target_presentations = target_concept.getPresentation();
@@ -177,28 +204,7 @@ target_presentations = target_concept.getPresentation();
 Definition[] target_definitions = null;
 target_definitions = target_concept.getDefinition();
 
-
-Property[] src_properties = src_concept.getProperty();
 Property[] target_properties = target_concept.getProperty();
-
-
-ArrayList src_superconceptList = new ArrayList();
-HashMap hmap_super = TreeUtils.getSuperconcepts(source_scheme, source_version, source_code);
-if (hmap_super != null) {
-	TreeItem ti = (TreeItem) hmap_super.get(source_code);
-	if (ti != null) {
-		for (String association : ti._assocToChildMap.keySet()) {
-			List<TreeItem> children =
-				ti._assocToChildMap.get(association);
-			for (TreeItem childItem : children) {
-				src_superconceptList.add(childItem._text + "|"
-					+ childItem._code);
-			}
-		}
-	}
-}
-SortUtils.quickSort(src_superconceptList);
-				
 				
 ArrayList target_superconceptList = new ArrayList();
 hmap_super = TreeUtils.getSuperconcepts(target_scheme, target_version, target_code);

@@ -121,6 +121,8 @@ public class MappingUtils {
 
     public static Vector<String> supportedSearchTechniqueNames;
 
+    public static int MAX_RETURN = -1;
+
     private static Logger _logger = Logger.getLogger(MappingUtils.class);
 
 	private OutputStream os;
@@ -2280,8 +2282,14 @@ for (int i=0; i<u.size(); i++) {
 		if (data == null) return null;
 		if (data.length == 0) return null;
 
-		String sourceCodingScheme = DataUtils.getFormalName(source_abbrev);
-		String sourceCodingSchemeVersion = DataUtils.getVocabularyVersionByTag(sourceCodingScheme, null);
+		String sourceCodingScheme = "UNSPECIFIED";
+		String sourceCodingSchemeVersion = "N/A";
+
+		if (source_abbrev.compareTo("") != 0) {
+		    sourceCodingScheme = DataUtils.getFormalName(source_abbrev);
+		    sourceCodingSchemeVersion = DataUtils.getVocabularyVersionByTag(sourceCodingScheme, null);
+		}
+
 
 		String targetCodingScheme = DataUtils.getFormalName(target_abbrev);
 		String targetCodingSchemeVersion = DataUtils.getVocabularyVersionByTag(targetCodingScheme, null);
@@ -2297,7 +2305,7 @@ for (int i=0; i<u.size(); i++) {
             ResolvedConceptReferencesIterator iterator = null;
 
             if(input_option.compareToIgnoreCase("Name") == 0) {
-				iterator = searchByName("NCI Metathesaurus", ncim_version, name, source, algorithm, ranking, 10);
+				iterator = searchByName("NCI Metathesaurus", ncim_version, name, source, algorithm, ranking, MAX_RETURN);
 				if (iterator == null) return null;
 				HashSet source_code_hset = new HashSet();
 				HashSet target_code_hset = new HashSet();
@@ -2317,30 +2325,26 @@ for (int i=0; i<u.size(); i++) {
 									 String term_type = (String) u.elementAt(1);
 									 String term_source = (String) u.elementAt(2);
 									 String term_source_code = (String) u.elementAt(3);
-									 if (term_source.compareTo(source_abbrev) == 0 && !source_code_hset.contains(term_source_code))
-									 {
-										 source_code_hset.add(term_source_code);
-									 } else if (term_source.compareTo(target_abbrev) == 0 && !target_code_hset.contains(term_source_code)) {
+									 if (source_abbrev != null && source_abbrev.compareTo("") != 0) {
+										 if (term_source.compareTo(source_abbrev) == 0 && !source_code_hset.contains(term_source_code))
+										 {
+											 source_code_hset.add(term_source_code);
+										 }
+									 }
+
+									 if (term_source.compareTo(target_abbrev) == 0 && !target_code_hset.contains(term_source_code)) {
 										 target_code_hset.add(term_source_code);
 									 }
 								 }
 							 }
 						 }
-						 if (source_code_hset.size() > 0 && target_code_hset.size() > 0) {
-                             Iterator it_source = source_code_hset.iterator();
-                             while (it_source.hasNext()) {
-								 String sourceCode = (String) it_source.next();
 
-								 Entity source_entity = getConceptByCode(sourceCodingScheme,
-																		sourceCodingSchemeVersion,
-																		null,
-																		sourceCode);
-								 String sourceName = "";
-								 String sourceCodeNamespace = "";
-								 if (source_entity != null) {
-									sourceName = source_entity.getEntityDescription().getContent();
-									sourceCodeNamespace = source_entity.getEntityCodeNamespace();
-								 }
+						 if (source_abbrev == null || source_abbrev.compareTo("") == 0) {
+							 if (target_code_hset.size() > 0) {
+								 String sourceCode = "N/A";
+								 String sourceName = name;
+								 String sourceCodeNamespace = "UNSPECIFIED";
+								 sourceCodeNamespace = "N/A";
 								 String associationName = "mapsTo";
 								 String rel = "";
 								 int score = 0;
@@ -2375,8 +2379,62 @@ for (int i=0; i<u.size(); i++) {
 										targetCodingSchemeVersion,
 										targetCodeNamespace);
 									 list.add(mappingData);
-								 }
+						    	 }
+							 }
 
+						 } else if (source_abbrev != null && source_abbrev.compareTo("") != 0) {
+							 if (source_code_hset.size() > 0 && target_code_hset.size() > 0) {
+								 Iterator it_source = source_code_hset.iterator();
+								 while (it_source.hasNext()) {
+									 String sourceCode = (String) it_source.next();
+
+									 Entity source_entity = getConceptByCode(sourceCodingScheme,
+																			sourceCodingSchemeVersion,
+																			null,
+																			sourceCode);
+									 String sourceName = "";
+									 String sourceCodeNamespace = "";
+									 if (source_entity != null) {
+										sourceName = source_entity.getEntityDescription().getContent();
+										sourceCodeNamespace = source_entity.getEntityCodeNamespace();
+									 }
+									 String associationName = "mapsTo";
+									 String rel = "";
+									 int score = 0;
+
+									 Iterator it_target = target_code_hset.iterator();
+									 while (it_target.hasNext()) {
+										 String targetCode = (String) it_target.next();
+										 Entity target_entity = getConceptByCode(targetCodingScheme,
+																				targetCodingSchemeVersion,
+																				null,
+																				targetCode);
+										 String targetName = "";
+										 String targetCodeNamespace = "";
+										 if (target_entity != null) {
+											targetName = target_entity.getEntityDescription().getContent();
+											targetCodeNamespace = target_entity.getEntityCodeNamespace();
+										 }
+
+
+										 MappingData mappingData = new MappingData(
+											sourceCode,
+											sourceName,
+											sourceCodingScheme,
+											sourceCodingSchemeVersion,
+											sourceCodeNamespace,
+											associationName,
+											rel,
+											score,
+											targetCode,
+											targetName,
+											targetCodingScheme,
+											targetCodingSchemeVersion,
+											targetCodeNamespace);
+										 list.add(mappingData);
+									 }
+
+								 }
 							 }
 						 }
 					 }

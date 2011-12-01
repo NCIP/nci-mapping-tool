@@ -186,6 +186,19 @@ if (input_option.compareTo("Name") == 0) {
                     <select id="source_abbrev" name="source_abbrev" size="1" tabindex="4">
                     <%
                        if (src_vec != null) {
+                                 t = "";
+				 if (t.compareTo(source_abbrev) == 0) {
+			    %>
+				   <option value="<%=t%>" selected><%=t%></option>
+			    <%
+				 } else {
+			    %>
+				   <option value="<%=t%>"><%=t%></option>
+			    <%
+				 }                            
+                            %>       
+
+                            <%
 			    for (int i=0; i<src_vec.size(); i++) {
 				 t = (String) src_vec.elementAt(i);
 				 if (t.compareTo(source_abbrev) == 0) {
