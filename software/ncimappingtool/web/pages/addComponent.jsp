@@ -608,17 +608,40 @@ if (transitivity_checkbox != null && transitivity_checkbox.compareTo("true") == 
                           
                           </td> 
                      </tr>  
-                     
+ 
+ 
+ 
+
+     
+     
+     
            
                      
                   <% } else { %>
+                  
+                  
+                  
+                  
                     <input type="hidden" name="selectProperty" id="selectProperty" value="<%=selectProperty%>">
                     <input type="hidden" name="rel_search_association" id="rel_search_association" value="<%=rel_search_association%>">
                     
  
                   <% }%>
                   
-                  
+                  <% 
+		  if (subsetOption != null && subsetOption.compareTo("EnumerationOfCodes") == 0) {
+		  %>
+		      <tr>               
+					   <td align="right" class="textbody">
+					       Codes:
+					   </td>
+		      <td>  
+			  <textarea name="codes" cols="50" rows=10 tabindex="3" class="inputText" ></textarea>
+		      </td>
+		     </tr>
+	     
+	          <%}%>
+	     
 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
 
 <tr>

@@ -124,7 +124,7 @@ int lcv = 0;
                         <input type="radio" name="selected_mapping" value="<%=obj_id%>">
                      </td>
 		     <td>
-                        <%=label%>&nbsp;(created: <%=TimeStamp.getTimeStamp()%>)
+                        <%=label%>&nbsp;(created: <%=obj.getCreationDate()%>)
                      </td>
 		     <td>
                         <%=from%>

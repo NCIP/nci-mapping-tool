@@ -61,9 +61,19 @@ public class TimeStamp {
 	  }
   }
 
+  public static String formatter(int i) {
+	  if (i < 10) {
+		  return "0" + new Integer(i).toString();
+	  }
+	  return new Integer(i).toString();
+  }
+
 
   public static String getTimeStamp() {
+
 	  Calendar calender = Calendar.getInstance();
+
+
 	  String timestamp = toString(calender.get(Calendar.DAY_OF_MONTH))
 	                   + "/"
 	                   + toString(calender.get(Calendar.MONTH))
@@ -72,7 +82,7 @@ public class TimeStamp {
 	                   + " "
 	                   + toString(calender.get(Calendar.HOUR))
 	                   + ":"
-	                   + toString(calender.get(Calendar.MINUTE))
+	                   + formatter(calender.get(Calendar.MINUTE))
 	                   + AMorPM(calender.get(Calendar.AM_PM));
 	  return timestamp;
   }
