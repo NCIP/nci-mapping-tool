@@ -199,7 +199,7 @@ public class MappingBean {
 
         String type = (String) request.getParameter("type");
 
-System.out.println("createMappingAction type: " + type);
+System.out.println("createMappingAction at: " + TimeStamp.getTimeStamp());
 
         if (type == null) {
 
@@ -1511,6 +1511,55 @@ System.out.println("cloneMappingAction exiting ...");
 	}
 
 
+    public String importDataAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
 
+		String type = (String) request.getParameter("type");
+		String source_scheme = (String) request.getParameter("source_scheme");
+		String source_version = (String) request.getParameter("source_version");
+
+
+		System.out.println("importDataAction source_scheme: " + source_scheme);
+		System.out.println("importDataAction source_version: " + source_version);
+
+
+		request.getSession().setAttribute("dictionary", source_scheme);
+		request.getSession().setAttribute("version", source_version);
+		request.getSession().setAttribute("action", "import");
+
+		return "codingscheme";
+	}
+
+
+    public String saveComponentSubsetAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		String type = (String) request.getParameter("type");
+		String source_scheme = (String) request.getParameter("source_scheme");
+		String source_version = (String) request.getParameter("source_version");
+
+
+		System.out.println("importDataAction source_scheme: " + source_scheme);
+		System.out.println("importDataAction source_version: " + source_version);
+
+
+		request.getSession().setAttribute("dictionary", source_scheme);
+		request.getSession().setAttribute("version", source_version);
+		request.getSession().setAttribute("action", "import");
+
+		return "codingscheme";
+	}
+
+    public String cancelComponentSubsetAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		return "codingscheme";
+	}
 }
 

@@ -10,8 +10,12 @@
 
 <% String contextPath = request.getContextPath(); %>
 
-
+<!--
 	<table cellpadding="0" cellspacing="0" border="0" width="715">
+-->
+
+	<table>
+	
 	  <tr>
 	    <td align="left"><font size="4"><b>WELCOME TO NCI EVS Mapping Tool</b></font></td>
 	  </tr>
@@ -120,7 +124,7 @@ int lcv = 0;
                         <input type="radio" name="selected_mapping" value="<%=obj_id%>">
                      </td>
 		     <td>
-                        <%=label%>
+                        <%=label%>&nbsp;(created: <%=TimeStamp.getTimeStamp()%>)
                      </td>
 		     <td>
                         <%=from%>

@@ -11,9 +11,9 @@ String basePath = request.getContextPath();
 String message = (String) request.getSession().getAttribute("message");
 request.getSession().removeAttribute("message");
 
-String option_1 = "Map from one NCI Metathesaurus source to another";
-String option_2 = "Map from one terminology to another";
-String option_3 = "Map from one terminology to an existing value set on the server";
+String option_1 = "Mapping based on sources in NCI Metathesaurus";
+String option_2 = "Mapping from one terminology to another";
+String option_3 = "Mapping from one terminology to a value set";
 
 
 %>
