@@ -259,6 +259,8 @@ System.out.println("createMappingAction at: " + TimeStamp.getTimeStamp());
 
         mapping_obj.setData(list);
 
+        mapping_obj.setCreationDate(TimeStamp.getTimeStamp());
+
         return mapping_obj;
 	}
 

@@ -76,6 +76,8 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 		private HashMap _mapping_hmap = new HashMap();
 		private List _data = new ArrayList();
 
+		private String _creation_date = null;
+
 
         /**
          * Constructor
@@ -98,6 +100,15 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
 		public String getType() {
 			return this._type;
+		}
+
+
+        public void setCreationDate(String creationDate) {
+			this._creation_date = creationDate;
+		}
+
+		public String getCreationDate() {
+			return this._creation_date;
 		}
 
 
