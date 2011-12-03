@@ -405,9 +405,14 @@ Iterator it = mapping_hmap.keySet().iterator();
  
              <% if (batch_status != null) { %>
                  <p class="textbodyred">&nbsp;<%=batch_status%></p>
-            <% } %>       
+            <% } %> 
+            
+         <!--   
          <table border="0" width="700px">
-
+          -->
+          
+         <table> 
+          
 	  
 	  <%  
 	  if (type.compareTo("ncimeta") == 0) {

@@ -99,10 +99,14 @@ if (target_property != null && target_property.compareTo("null") == 0) {
 String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
 
+System.out.println("codingscheme_data source_scheme = " + source_scheme);
+System.out.println("codingscheme_data source_version = " + source_version);
 
 String target_scheme = DataUtils.key2CodingSchemeName(target_cs);
 String target_version = DataUtils.key2CodingSchemeVersion(target_cs);
 
+System.out.println("codingscheme_data target_scheme = " + target_scheme);
+System.out.println("codingscheme_data target_version = " + target_version);
 
 Vector properties = OntologyBean.getSupportedPropertyNames(target_scheme, target_version);
 
@@ -157,7 +161,7 @@ Vector target_properties = OntologyBean.getSupportedPropertyNames(target_scheme,
                 <tr>
 		  <td align="left" class="textbody">
 		      <b>To</b>:&nbsp;<%=target_cs%>&nbsp;
-		         <a href="<%=request.getContextPath()%>/pages/apply_restriction.jsf" >
+		         <a href="<%=request.getContextPath()%>/pages/addComponent.jsf?dictionary=<%=target_scheme%>&version=<%=target_version%>&action=restrict" >
 			     Apply Restriction
 			</a> 
 		  </td>
@@ -375,6 +379,11 @@ if (input_option.compareToIgnoreCase("Property") == 0) {
      <input type="hidden" name="target_cs" id="target_cs" value="<%=target_cs%>">
      <input type="hidden" name="input_option" id="type" value="<%=input_option%>">
      <input type="hidden" name="mapping_version" id="mapping_version" value="<%=mapping_version%>">
+     
+     
+     <input type="hidden" name="source_scheme" id="source_scheme" value="<%=source_scheme%>">
+     <input type="hidden" name="source_version" id="source_version" value="<%=source_version%>">
+
     
      
      <%

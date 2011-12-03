@@ -97,6 +97,8 @@ public class ValueSetBean {
     private static Vector _coding_scheme_vec = null;
     private static Vector _concept_domain_vec = null;
 
+    private static List _directionList = null;
+
 
 
     public void ValueSetBean() {
@@ -1490,4 +1492,13 @@ System.out.println("ref.getConceptCode(): " + ref.getConceptCode());
         request.getSession().setAttribute("message", message);
         return "message";
     }
+
+	public List getDirctionList() {
+		if (_directionList != null) return _directionList;
+		_directionList = new ArrayList();
+		_directionList.add(new SelectItem("forward"));
+		_directionList.add(new SelectItem("backward"));
+		return _directionList;
+	}
+
 }

@@ -668,3 +668,11 @@ a.hideLink
   height: 170px;
   font-size: 11px;
 }
+.dataTableHeaderWithBackground{ /* for the horizontal column headers */
+  font-family:arial,helvetica,verdana,sans-serif;
+  background-color:#CCCCCC; /* constant: medium gray */
+  color:#000000; /* constant: black */
+  font-weight:bold;
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+}  

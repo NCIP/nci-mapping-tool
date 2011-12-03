@@ -188,6 +188,12 @@
  
       <navigation-rule>
           <from-view-id>/pages/codingscheme_data.jsp</from-view-id>
+  
+           <navigation-case>
+               <from-action>#{mappingBean.importDataAction}</from-action>
+               <from-outcome>codingscheme</from-outcome>
+               <to-view-id>/pages/addComponent.jsp</to-view-id>
+          </navigation-case>
  
           <navigation-case>
               <from-action>#{mappingBean.showFormAction}</from-action>
@@ -480,6 +486,24 @@
          
      </navigation-rule>  
      
+ 
+     <navigation-rule>
+          <from-view-id>/pages/addComponent.jsp</from-view-id>
+        
+          <navigation-case>
+              <from-action>#{mappingBean.cancelComponentSubsetAction}</from-action>
+              <from-outcome>codingscheme</from-outcome>
+              <to-view-id>/pages/codingscheme_data.jsp</to-view-id>
+          </navigation-case>
+ 
+          <navigation-case>
+              <from-action>#{mappingBean.saveComponentSubsetAction}</from-action>
+              <from-outcome>nomatch</from-outcome>
+              <to-view-id>/pages/codingscheme_data.jsp</to-view-id>
+          </navigation-case>
+          
+          
+     </navigation-rule>  
      
 
     <!-- Managed Beans ===================================================== -->
@@ -496,6 +520,7 @@
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 
+   
     <managed-bean>
         <managed-bean-name>ValueSetBean</managed-bean-name>
         <managed-bean-class>gov.nih.nci.evs.browser.bean.ValueSetBean</managed-bean-class>
