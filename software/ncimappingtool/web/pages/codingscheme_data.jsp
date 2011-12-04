@@ -7,6 +7,10 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 
+<%@ page import="org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator" %>
+<%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
+
+
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
@@ -113,6 +117,16 @@ Vector properties = OntologyBean.getSupportedPropertyNames(target_scheme, target
 Vector src_properties = OntologyBean.getSupportedPropertyNames(source_scheme, source_version);
 Vector target_properties = OntologyBean.getSupportedPropertyNames(target_scheme, target_version);
 
+String codes = "";
+ResolvedConceptReferencesIterator iterator = null;
+iterator = (ResolvedConceptReferencesIterator) request.getSession().getAttribute("rcr_iterator");
+if (iterator != null) {
+   request.getSession().removeAttribute("rcr_iterator");
+   while (iterator.hasNext()) {
+       ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
+       codes = codes + rcr.getConceptCode() + "\n";
+   }
+}
 
 %>
 <f:view>
@@ -345,7 +359,7 @@ if (input_option.compareToIgnoreCase("Property") == 0) {
              <table>
              <tr>
 		     <td valign=top>    
-			     <textarea name="codes" cols="50" rows=10 tabindex="3"></textarea>
+			     <textarea name="codes" cols="50" rows=10 tabindex="3"><%=codes%></textarea>
 			     &nbsp;
 			    <h:commandButton id="import" value="import" action="#{mappingBean.importDataAction}"
 			      image="#{basePath}/images/import.gif"
