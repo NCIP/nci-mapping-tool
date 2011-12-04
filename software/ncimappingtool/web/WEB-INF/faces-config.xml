@@ -498,6 +498,12 @@
  
           <navigation-case>
               <from-action>#{mappingBean.saveComponentSubsetAction}</from-action>
+              <from-outcome>codingscheme</from-outcome>
+              <to-view-id>/pages/codingscheme_data.jsp</to-view-id>
+          </navigation-case>
+
+          <navigation-case>
+              <from-action>#{mappingBean.saveComponentSubsetAction}</from-action>
               <from-outcome>nomatch</from-outcome>
               <to-view-id>/pages/codingscheme_data.jsp</to-view-id>
           </navigation-case>

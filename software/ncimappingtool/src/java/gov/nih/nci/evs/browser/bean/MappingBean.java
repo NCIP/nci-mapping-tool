@@ -266,37 +266,54 @@ System.out.println("createMappingAction at: " + TimeStamp.getTimeStamp());
 
 
 
+
+
+
     public String submitMetadataAction() {
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
         String message = null;
+		String identifier = (String) request.getParameter("identifier");
+		identifier = identifier.trim();
+		if (identifier.compareTo("") == 0) {
+			message = "Please provide an identifier for the mapping.";
+			request.getSession().setAttribute("message", message);
+			return "message";
+		}
+
+		String mapping_version = (String) request.getParameter("mapping_version");
+		mapping_version = mapping_version.trim();
+		if (mapping_version.compareTo("") == 0) {
+			message = "Please provide a version for the mapping.";
+			request.getSession().setAttribute("message", message);
+			return "message";
+		}
+
+		String key = MappingObject.computeKey(identifier, mapping_version);
+		HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
+		if (mappings == null) {
+			mappings = new HashMap();
+			request.getSession().setAttribute("mappings", mappings);
+		}
+		Iterator it = mappings.keySet().iterator();
+		while (it.hasNext()) {
+			String obj_id = (String) it.next();
+			if (obj_id.compareTo(key) == 0) {
+				message = "WARNING: A mapping with the same name and version already exists.";
+				request.getSession().setAttribute("message", message);
+				return "message";
+			}
+        }
+
         String type = (String) request.getParameter("type");
-System.out.println("submitMetadataAction type: " + type);
-
-
 
         if (type == null) {
 			message = "Please specify the type of mapping by clicking on a radio button below.";
 			request.getSession().setAttribute("message", message);
 			return "message";
 		} else if (type.compareTo("ncimeta") == 0) {
-			String identifier = (String) request.getParameter("identifier");
-			identifier = identifier.trim();
-			if (identifier.compareTo("") == 0) {
-				message = "Please provide an identifier for the mapping.";
-				request.getSession().setAttribute("message", message);
-				return "message";
-			}
-
-			String mapping_version = (String) request.getParameter("mapping_version");
-			mapping_version = mapping_version.trim();
-			if (mapping_version.compareTo("") == 0) {
-				message = "Please provide a version for the mapping.";
-				request.getSession().setAttribute("message", message);
-				return "message";
-			}
 
 			String ncim_version = (String) request.getParameter("ncim_version");
 			ncim_version = ncim_version.trim();
@@ -308,13 +325,6 @@ System.out.println("submitMetadataAction type: " + type);
 
 			String source_abbrev = (String) request.getParameter("source_abbrev");
 			source_abbrev = source_abbrev.trim();
-			/*
-			if (source_abbrev.compareTo("") == 0) {
-				message = "Please select a source.";
-				request.getSession().setAttribute("message", message);
-				return "message";
-			}
-			*/
 
 			String target_abbrev = (String) request.getParameter("target_abbrev");
 			target_abbrev = target_abbrev.trim();
@@ -353,22 +363,6 @@ request.getSession().setAttribute("expanded_hset", expanded_hset);
 		    return "ncimeta";
 		} else if (type.compareTo("codingscheme") == 0) {
 
-			String identifier = (String) request.getParameter("identifier");
-			identifier = identifier.trim();
-			if (identifier.compareTo("") == 0) {
-				message = "Please provide an identifier for the mapping.";
-				request.getSession().setAttribute("message", message);
-				return "message";
-			}
-
-			String mapping_version = (String) request.getParameter("mapping_version");
-			mapping_version = mapping_version.trim();
-			if (mapping_version.compareTo("") == 0) {
-				message = "Please provide a version for the mapping.";
-				request.getSession().setAttribute("message", message);
-				return "message";
-			}
-
 			String source_cs = (String) request.getParameter("source_cs");
 			source_cs = source_cs.trim();
 			if (!codingSchemeSelected(source_cs)) {
@@ -405,22 +399,6 @@ request.getSession().setAttribute("expanded_hset", expanded_hset);
 
 		    return "codingscheme";
 		} else if (type.compareTo("valueset") == 0) {
-
-			String identifier = (String) request.getParameter("identifier");
-			identifier = identifier.trim();
-			if (identifier.compareTo("") == 0) {
-				message = "Please provide an identifier for the mapping.";
-				request.getSession().setAttribute("message", message);
-				return "message";
-			}
-
-			String mapping_version = (String) request.getParameter("mapping_version");
-			mapping_version = mapping_version.trim();
-			if (mapping_version.compareTo("") == 0) {
-				message = "Please provide a version for the mapping.";
-				request.getSession().setAttribute("message", message);
-				return "message";
-			}
 
 			String source_cs = (String) request.getParameter("source_cs");
 			source_cs = source_cs.trim();
@@ -470,8 +448,9 @@ request.getSession().setAttribute("expanded_hset", expanded_hset);
         String type = (String) request.getParameter("type");
 System.out.println("submitMetadataAction type: " + type);
 
+        String message = null;
         if (type == null) {
-			String message = "Please specify the type of mapping by clicking on a radio button below.";
+			message = "Please specify the type of mapping by clicking on a radio button below.";
 			request.getSession().setAttribute("message", message);
 			return "message";
 		} else if (type.compareTo("ncimeta") == 0) {
@@ -489,7 +468,7 @@ System.out.println("submitMetadataAction type: " + type);
 			}
 			codes = codes.trim();
 			if (codes.compareTo("") == 0) {
-				String message = "No data has been entered.";
+				message = "No data has been entered.";
 				request.getSession().setAttribute("message", message);
 				return "message";
 			}
@@ -518,7 +497,7 @@ System.out.println("submitMetadataAction type: " + type);
 			request.getSession().setAttribute("algorithm", algorithm);
 
 			if (list == null) {
-				String message = "No match";
+				message = "No match";
 				request.getSession().setAttribute("message", message);
 				return "message";
 			}
@@ -541,7 +520,7 @@ System.out.println("submitMetadataAction type: " + type);
 			}
 			codes = codes.trim();
 			if (codes.compareTo("") == 0) {
-				String message = "No data has been entered.";
+				message = "No data has been entered.";
 				request.getSession().setAttribute("message", message);
 				return "message";
 			}
@@ -550,7 +529,7 @@ System.out.println("submitMetadataAction type: " + type);
 			for(int i = 0; i < lines.length; i++) {
 				String t = lines[i];
 				if (t.indexOf("|") == -1) {
-					String message = "Input format error -- each line should contains a code, a bar '|' delimiter, and a value";
+					message = "Input format error -- each line should contains a code, a bar '|' delimiter, and a value";
 					request.getSession().setAttribute("message", message);
 					return "message";
 				}
@@ -574,11 +553,10 @@ System.out.println("submitMetadataAction type: " + type);
 			request.getSession().setAttribute("algorithm", algorithm);
 
 			if (list == null) {
-				String message = "No match";
+				message = "No match";
 				request.getSession().setAttribute("message", message);
 				return "message";
 			}
-
 
 		    return "codingscheme";
 		} else if (type.compareTo("valueset") == 0) {
@@ -1534,6 +1512,13 @@ System.out.println("cloneMappingAction exiting ...");
 		return "codingscheme";
 	}
 
+    public String cancelComponentSubsetAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		return "codingscheme";
+	}
 
     public String saveComponentSubsetAction() {
         HttpServletRequest request =
@@ -1545,23 +1530,139 @@ System.out.println("cloneMappingAction exiting ...");
 		String source_version = (String) request.getParameter("source_version");
 
 
-		System.out.println("importDataAction source_scheme: " + source_scheme);
-		System.out.println("importDataAction source_version: " + source_version);
-
-
 		request.getSession().setAttribute("dictionary", source_scheme);
 		request.getSession().setAttribute("version", source_version);
-		request.getSession().setAttribute("action", "import");
+
+		String action = (String) request.getParameter("action");
+		request.getSession().setAttribute("action", action);
+
+		String dictionary = (String) request.getParameter("dictionary");
+		String version = (String) request.getParameter("version");
+
+
+		System.out.println("saveComponentSubsetAction action: " + action);
+		System.out.println("saveComponentSubsetAction dictionary: " + dictionary);
+		System.out.println("saveComponentSubsetAction version: " + version);
+
+
+		ComponentObject ob = new ComponentObject();
+		String subsetType = (String) request.getParameter("subsetType");
+		ob.setType(subsetType);
+
+		String label = "TBD";
+		ob.setLabel(label);
+
+		String description = "TBD";
+		ob.setDescription(description);
+
+
+
+		//String dictionary = (String) request.getParameter("dictionary"); // to be added to addComponent
+		//String version = (String) request.getParameter("version");
+
+		ob.setVocabulary(dictionary);// + " (version: " + version + ")");
+
+        if (subsetType.compareTo("Property") == 0) {
+
+			String matchText = (String) request.getParameter("matchText");
+			ob.setMatchText(matchText);
+
+			String propertyName = (String) request.getParameter("selectProperty");
+			ob.setPropertyName(propertyName);
+
+			String algorithm = (String) request.getParameter("search_algorithm");
+			ob.setAlgorithm(algorithm);
+
+		} else if (subsetType.compareTo("Relationship") == 0) {
+
+			String focusConceptCode = (String) request.getParameter("focusConceptCode");
+			ob.setFocusConceptCode(focusConceptCode);
+
+			String include_focus_node = (String) request.getParameter("include_focus_node_checkbox");
+			ob.setInclude_focus_node(include_focus_node);
+
+			String rel_search_association = (String) request.getParameter("rel_search_association");
+			ob.setRel_search_association(rel_search_association);
+
+
+			String transitivity = (String) request.getParameter("transitivity");
+			ob.setTransitivity(transitivity);
+
+			String direction = (String) request.getParameter("direction");
+			ob.setSelectedDirection(direction);
+
+		} else if (subsetType.compareTo("EnumerationOfCodes") == 0) {
+
+			String codes = (String) request.getParameter("codes");
+			ob.setCodes(codes);
+
+	    }
+
+        // VSD (import, restriction)
+
+        dumpComponentObject(ob);
+
+        ValueSetDefinition vsd = ValueSetUtils.generateValueSetDefinition(ob);
+
+        ResolvedConceptReferencesIterator iterator = null;
+        try {
+			iterator = ValueSetUtils.resolveValueSetDefinition(vsd, dictionary, version);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			String message = "Exception thrown???";
+			request.getSession().setAttribute("message", message);
+			return "codingscheme";
+		}
+
+        if (iterator != null) {
+			try {
+				int numRemaining = iterator.numberRemaining();
+				System.out.println("Number of matches: " + numRemaining);
+
+				request.getSession().setAttribute("rcr_iterator", iterator);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				ex.printStackTrace();
+				String message = "Exception thrown???";
+				request.getSession().setAttribute("message", message);
+				return "codingscheme";
+
+			}
+		}
 
 		return "codingscheme";
 	}
 
-    public String cancelComponentSubsetAction() {
-        HttpServletRequest request =
-            (HttpServletRequest) FacesContext.getCurrentInstance()
-                .getExternalContext().getRequest();
 
-		return "codingscheme";
+    public static void dumpComponentObject(ComponentObject ob) {
+        System.out.println("Type: " + ob.getType());
+        System.out.println("Label: " + ob.getLabel());
+        System.out.println("Description: " + ob.getDescription());
+        System.out.println("Vocabulary: " + ob.getVocabulary());
+        System.out.println("PropertyName: " + ob.getPropertyName());
+        System.out.println("MatchText: " + ob.getMatchText());
+        System.out.println("Algorithm: " + ob.getAlgorithm());
+        System.out.println("FocusConceptCode: " + ob.getFocusConceptCode());
+        System.out.println("Rel_search_association: " + ob.getRel_search_association());
+        System.out.println("Include_focus_node: " + ob.getInclude_focus_node());
+        System.out.println("Transitivity: " + ob.getTransitivity());
+        System.out.println("SelectedDirection: " + ob.getSelectedDirection());
+        System.out.println("ValueSetReference: " + ob.getValueSetReference());
+        System.out.println("Codes: " + ob.getCodes());
 	}
 }
 
+/*
+12:25:11,168 ERROR [STDERR] Caused by: java.lang.NoSuchMethodException: org.lexg
+rid.valuesets.impl.LexEVSValueSetDefinitionServicesImpl.resolveValueSetDefinitio
+n(org.LexGrid.valueSets.ValueSetDefinition, org.LexGrid.LexBIG.DataModel.Collect
+ions.AbsoluteCodingSchemeVersionReferenceList, java.lang.String, java.util.HashM
+ap, org.LexGrid.LexBIG.DataModel.Collections.SortOptionList)
+12:25:11,183 ERROR [STDERR]     at java.lang.Class.getMethod(Class.java:1605)
+12:25:11,183 ERROR [STDERR]     at org.LexGrid.LexBIG.caCore.applicationservice.
+impl.LexEVSApplicationServiceImpl.executeRemotely(LexEVSApplicationServiceImpl.j
+ava:176)
+12:25:11,183 ERROR [STDERR]     ... 126 more
+12:25:11,183 INFO  [STDOUT] Error: vsd_service.resolveValueSetDefinition throws
+exception.
+*/

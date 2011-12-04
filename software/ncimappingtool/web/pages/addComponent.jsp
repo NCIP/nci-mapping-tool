@@ -47,11 +47,11 @@
     
      function refresh() {
 
-      var subsetOption = "Property";
-      var subsetOptionObj = document.forms["addComponentForm"].subsetOption;
-      for (var i=0; i<subsetOptionObj.length; i++) {
-        if (subsetOptionObj[i].checked) {
-          subsetOption = subsetOptionObj[i].value;
+      var subsetType = "Property";
+      var subsetTypeObj = document.forms["addComponentForm"].subsetType;
+      for (var i=0; i<subsetTypeObj.length; i++) {
+        if (subsetTypeObj[i].checked) {
+          subsetType = subsetTypeObj[i].value;
         }
       }
       
@@ -66,7 +66,7 @@
       }  
       
       var algorithm = "exactMatch";
-      if (subsetOption != 'EntireVocabulary' && subsetOption != 'EnumerationOfCodes') {
+      if (subsetType != 'EntireVocabulary' && subsetType != 'EnumerationOfCodes') {
               var textObj = document.forms["addComponentForm"].matchText;
               if (textObj != null) {
 		      text = document.forms["addComponentForm"].matchText.value;
@@ -83,17 +83,17 @@
       }
       
       var rel_search_association = "";
-      if (subsetOption == "Relationship" && document.forms["addComponentForm"].rel_search_association != null) {
+      if (subsetType == "Relationship" && document.forms["addComponentForm"].rel_search_association != null) {
           rel_search_association = document.forms["addComponentForm"].rel_search_association.value;
       }
       
       var selectProperty = "";
-      if (subsetOption == "Property" && document.forms["addComponentForm"].selectProperty != null) {
+      if (subsetType == "Property" && document.forms["addComponentForm"].selectProperty != null) {
            selectProperty = document.forms["addComponentForm"].selectProperty.value;
       }
 
       var selectValueSetReference = "";
-      if (subsetOption == "ValueSetReference" && document.forms["addComponentForm"].selectValueSetReference != null) {
+      if (subsetType == "ValueSetReference" && document.forms["addComponentForm"].selectValueSetReference != null) {
            selectValueSetReference = document.forms["addComponentForm"].selectValueSetReference.value;
       }
       
@@ -124,7 +124,7 @@
       }
        
       window.location.href="/ncimappingtool/pages/addComponent.jsf?refresh=1"
-          + "&opt="+ subsetOption
+          + "&opt="+ subsetType
           + "&action="+ action
           + "&label="+ label
           + "&description="+ description
@@ -220,7 +220,7 @@ System.out.println("addComponent: adv_search_version " +  adv_search_version);
     
     String label = null;
     String description = null;
-    String subsetOption = null;
+    String subsetType = null;
     String direction = null;
         
     String preview = (String) request.getSession().getAttribute("preview");
@@ -232,7 +232,7 @@ System.out.println("addComponent: adv_search_version " +  adv_search_version);
     if (preview != null && preview.compareTo("true") == 0) {
     
         adv_search_vocabulary = (String) request.getSession().getAttribute("preview_adv_search_vocabulary");
-        subsetOption = (String) request.getSession().getAttribute("preview_subsetOption");
+        subsetType = (String) request.getSession().getAttribute("preview_subsetType");
         label = (String) request.getSession().getAttribute("preview_label");
         
         action = (String) request.getSession().getAttribute("preview_action");
@@ -262,7 +262,7 @@ System.out.println("********************** REFRESH PAGE");
 
                 action = (String) request.getParameter("action");
 		adv_search_vocabulary = (String) request.getParameter("dictionary");
-		subsetOption = (String) request.getParameter("opt");
+		subsetType = (String) request.getParameter("opt");
 		label = (String) request.getParameter("label");
 		description = (String) request.getParameter("description");
 		search_string = (String) request.getParameter("text");
@@ -275,7 +275,7 @@ System.out.println("********************** REFRESH PAGE");
 
 
 System.out.println("REFRESH PAGE adv_search_vocabulary " + adv_search_vocabulary);
-System.out.println("REFRESH PAGE subsetOption " + subsetOption);
+System.out.println("REFRESH PAGE subsetType " + subsetType);
 System.out.println("REFRESH PAGE label " + label);
 
 System.out.println("REFRESH PAGE action " + action);
@@ -292,13 +292,13 @@ System.out.println("REFRESH PAGE selectValueSetReference " + selectValueSetRefer
 
 	    } 
 
-	    if (subsetOption == null || subsetOption.compareTo("null") == 0) {
-		subsetOption = "Property";
+	    if (subsetType == null || subsetType.compareTo("null") == 0) {
+		subsetType = "Property";
 	    }
 
 
 
-System.out.println("------------ addComponent.jsp subsetOption: " + subsetOption);
+System.out.println("------------ addComponent.jsp subsetType: " + subsetType);
 
 
 
@@ -317,7 +317,7 @@ System.out.println("------------ addComponent.jsp subsetOption: " + subsetOption
     String code_enumeration = "";
 
 
-    adv_search_type = subsetOption;
+    adv_search_type = subsetType;
 
     if (selectProperty == null) selectProperty = "";
     if (search_string == null) search_string = "";
@@ -333,19 +333,19 @@ System.out.println("------------ addComponent.jsp subsetOption: " + subsetOption
 
     String check_n2 = "", check_c2 = "", check_p2 = "" , check_c3 = "" , check_cs = "" , check_r2 ="",  check_vs ="";
 
-    if (subsetOption == null || subsetOption.compareTo("Name") == 0)
+    if (subsetType == null || subsetType.compareTo("Name") == 0)
       check_n2 = "checked";
-    else if (subsetOption.compareTo("Code") == 0)
+    else if (subsetType.compareTo("Code") == 0)
         check_c2 = "checked";
-    else if (subsetOption.compareTo("Property") == 0)
+    else if (subsetType.compareTo("Property") == 0)
       check_p2 = "checked";
-    else if (subsetOption.compareTo("Relationship") == 0)
+    else if (subsetType.compareTo("Relationship") == 0)
       check_r2 = "checked";
-    else if (subsetOption.compareTo("EnumerationOfCodes") == 0)
+    else if (subsetType.compareTo("EnumerationOfCodes") == 0)
       check_c3 = "checked";   
-    else if (subsetOption.compareTo("EntireVocabulary") == 0)
+    else if (subsetType.compareTo("EntireVocabulary") == 0)
       check_cs = "checked";    
-    else if (subsetOption.compareTo("ValueSetReference") == 0)
+    else if (subsetType.compareTo("ValueSetReference") == 0)
       check_vs = "checked";           
     else check_n2 = "checked";
 
@@ -395,13 +395,13 @@ if (adv_search_vocabulary == null) {
  
                      <td class="textbody">
                      
- 			<input type="radio" id="subsetOption" name="subsetOption" value="Property" alt="Property" <%=check_p2%> onclick="javascript:refresh()" tabindex="5">Property&nbsp;
- 			<input type="radio" id="subsetOption" name="subsetOption" value="Relationship" alt="Relationship" <%=check_r2%> onclick="javascript:refresh()" tabindex="5">Relationship&nbsp;
+ 			<input type="radio" id="subsetType" name="subsetType" value="Property" alt="Property" <%=check_p2%> onclick="javascript:refresh()" tabindex="5">Property&nbsp;
+ 			<input type="radio" id="subsetType" name="subsetType" value="Relationship" alt="Relationship" <%=check_r2%> onclick="javascript:refresh()" tabindex="5">Relationship&nbsp;
  			
  <%
  if (action.compareTo("import") != 0) {
  %> 			
- 			<input type="radio" id="subsetOption" name="subsetOption" value="EnumerationOfCodes" alt="Enumeration of Codes" <%=check_c3%> onclick="javascript:refresh()" tabindex="5">Enumeration of Codes&nbsp;
+ 			<input type="radio" id="subsetType" name="subsetType" value="EnumerationOfCodes" alt="Enumeration of Codes" <%=check_c3%> onclick="javascript:refresh()" tabindex="5">Enumeration of Codes&nbsp;
  <%
  }
  %>
@@ -415,14 +415,30 @@ if (adv_search_vocabulary == null) {
 
 
      String match_text_label = "Match Text";
-     if (subsetOption.compareTo("Code") == 0) {
+     if (subsetType.compareTo("Code") == 0) {
          match_text_label = "Code";
      }
 
 
-System.out.println("subsetOption: " + subsetOption);
+System.out.println("subsetType: " + subsetType);
 
-     if (subsetOption.equals("Property")) { 
+     if (subsetType.equals("Property")) {
+     
+     
+    
+	    MappingUtils util = new MappingUtils();
+	    Vector algorithms = new Vector();
+	    try {
+		algorithms = util.getSupportedSearchTechniqueNames();
+	    } catch (Exception ex) {
+		ex.printStackTrace();
+	    }
+  
+     
+     
+     
+     
+     
      %>
                     <input type="hidden" name="rel_search_association" id="rel_search_association" value="<%=rel_search_association%>">
 
@@ -478,8 +494,33 @@ System.out.println("subsetOption: " + subsetOption);
                         </td>
                     </tr>
 
+
+                  <tr>
+                  
+                        <td align="right" class="textbody">
+                            Match Algorithm:
+                        </td>
+                  
+                 
+			<td>
+			     <table border="0" cellspacing="0" cellpadding="0">
+			       <tr valign="top" align="left">
+			       <td align="left" class="textbody">
+				      <input type="radio" name="search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="4">Exact Match&nbsp;
+				      <input type="radio" name="search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="4">Begins With&nbsp;
+				      <input type="radio" name="search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="4">Contains
+			       </td>
+                                </tr>     
+
+                            </table>
+                  
+                        </td>
+                  </tr>
+                  
+
+
                   <% 
-                  } else if (subsetOption.equals("Relationship")) { 
+                  } else if (subsetType.equals("Relationship")) { 
                  %>
                   <input type="hidden" name="selectProperty" id="selectProperty" value="<%=selectProperty%>">
                   
@@ -575,7 +616,7 @@ System.out.println("addComponent.jsp OntologyBean.getSupportedAssociationNames  
 <%
 if (include_focus_node_checkbox != null && include_focus_node_checkbox.compareTo("true") == 0) {
 %>
-    <input type="checkbox" name="include_focus_node_checkbox" value="true" checked="yes" />
+    <input type="checkbox" name="include_focus_node_checkbox" value="true" checked />
 <%
 } else {
 %>
@@ -629,7 +670,7 @@ if (transitivity_checkbox != null && transitivity_checkbox.compareTo("true") == 
                   <% }%>
                   
                   <% 
-		  if (subsetOption != null && subsetOption.compareTo("EnumerationOfCodes") == 0) {
+		  if (subsetType != null && subsetType.compareTo("EnumerationOfCodes") == 0) {
 		  %>
 		      <tr>               
 					   <td align="right" class="textbody">
