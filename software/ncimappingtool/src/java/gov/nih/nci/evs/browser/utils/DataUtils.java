@@ -172,6 +172,7 @@ public class DataUtils {
     public String _ncitAnthillBuildTagBuilt = null;
     public String _evsServiceURL = null;
     public String _ncimURL = null;
+    public String _ncitURL = null;
 
     public static HashMap _namespace2CodingScheme = null;
 
@@ -2640,6 +2641,25 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
         return _ncitAnthillBuildTagBuilt;
     }
+
+    public String getNCItURL() {
+        if (_ncitURL != null) {
+            return _ncitURL;
+        }
+        String default_info = "N/A";
+        NCImtBrowserProperties properties = null;
+        try {
+            properties = NCImtBrowserProperties.getInstance();
+            _ncimURL = properties.getProperty(NCImtBrowserProperties.NCIT_URL);
+            if (_ncitURL == null) {
+                _ncitURL = default_info;
+            }
+        } catch (Exception ex) {
+
+        }
+        return _ncitURL;
+    }
+
 
     public String getNCImURL() {
         if (_ncimURL != null) {

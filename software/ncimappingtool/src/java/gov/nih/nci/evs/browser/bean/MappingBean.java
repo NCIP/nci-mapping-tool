@@ -198,25 +198,30 @@ public class MappingBean {
                 .getExternalContext().getRequest();
 
         String type = (String) request.getParameter("type");
-
-System.out.println("createMappingAction at: " + TimeStamp.getTimeStamp());
-
         if (type == null) {
-
 			String value = (String) request.getParameter("new");
 			if (value != null && value.compareTo("true") == 0) return "new";
 
 			String message = "Please specify the type of mapping by clicking on a radio button below.";
 			request.getSession().setAttribute("message", message);
 			return "message";
-		} else if (type.compareTo("ncimeta") == 0) {
-		    return "ncimeta";
-		} else if (type.compareTo("codingscheme") == 0) {
-		    return "codingscheme";
-		} else if (type.compareTo("valueset") == 0) {
-		    return "valueset";
 		}
-		return null;
+
+		// initialize
+		request.getSession().removeAttribute("identifier");
+		request.getSession().removeAttribute("version");
+		request.getSession().removeAttribute("source_cs");
+		request.getSession().removeAttribute("target_cs");
+
+		request.getSession().removeAttribute("source_scheme");
+		request.getSession().removeAttribute("source_version");
+
+		request.getSession().removeAttribute("target_scheme");
+		request.getSession().removeAttribute("target_version");
+
+		request.getSession().removeAttribute("mapping_version");
+
+		return type;
 	}
 
 

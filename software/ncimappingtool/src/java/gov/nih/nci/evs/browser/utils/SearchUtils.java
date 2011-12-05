@@ -4080,10 +4080,6 @@ System.out.println("QuickUnionIterator " + cns_vec.size());
 			LocalNameList propertyNames = new LocalNameList();
 			if (propertyName.compareToIgnoreCase("ALL") != 0) {
 				propertyNames.addEntry(propertyName);
-
-
-				System.out.println("add propertyName: " + propertyName);
-
 			}
 
 			CodedNodeSet.PropertyType[] propertyTypes =
@@ -4091,7 +4087,7 @@ System.out.println("QuickUnionIterator " + cns_vec.size());
 
             for (int i = 0; i < matchText_vec.size(); i++) {
 				String matchText = (String) matchText_vec.elementAt(i);
-int j = i+1;
+				int j = i+1;
 				System.out.println("(" + j + ")" + matchText);
 
 				matchText = matchText.trim();
@@ -4107,7 +4103,6 @@ int j = i+1;
 						cns = null;
 					}
                 }
-
                 if (cns != null) {
                     cns_vec.add(cns);
 				}

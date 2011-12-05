@@ -527,7 +527,7 @@ System.out.println("subsetType: " + subsetType);
 
                        &nbsp; 
 				 
-		      <a href="<%=request.getContextPath()%>/pages/search.jsf?">
+		      <a href="<%=request.getContextPath()%>/pages/search.jsf?action=<%=action%>">
 			<img src="<%= request.getContextPath() %>/images/search.png" width="15" height="15" alt="Search" border="0">
 		      </a>   			     
 			     

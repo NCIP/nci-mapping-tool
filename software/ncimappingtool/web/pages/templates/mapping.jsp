@@ -10,10 +10,6 @@
 
 <% String contextPath = request.getContextPath(); %>
 
-<!--
-	<table cellpadding="0" cellspacing="0" border="0" width="715">
--->
-
 	<table>
 	
 	  <tr>

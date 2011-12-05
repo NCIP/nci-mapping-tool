@@ -39,6 +39,8 @@
 String basePath = request.getContextPath(); 
 String message = (String) request.getSession().getAttribute("message");
 
+String action = (String) request.getParameter("action");
+
 request.getSession().removeAttribute("message");
 
 String identifier = (String) request.getSession().getAttribute("identifier");
@@ -299,13 +301,19 @@ Vector target_properties = OntologyBean.getSupportedPropertyNames(target_scheme,
      
      <input type="hidden" name="refresh" id="refresh" value="true">
      <input type="hidden" name="input_option" id="input_option" value="Property">
+      
+     <input type="hidden" name="target_scheme" id="target_scheme" value="<%=target_scheme%>">
+     <input type="hidden" name="target_version" id="target_version" value="<%=target_version%>">
+      
+      
+<%
+if (action != null) {
+%>
+<input type="hidden" name="action" id="action" value="<%=action%>">
+<%
+}
+%>
 
-   
-      
-      
-      <input type="hidden" name="target_scheme" id="target_scheme" value="<%=target_scheme%>">
-      <input type="hidden" name="target_version" id="target_version" value="<%=target_version%>">
-      
 
 </h:form>
 
