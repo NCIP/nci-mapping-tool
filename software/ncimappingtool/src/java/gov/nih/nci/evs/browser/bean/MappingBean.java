@@ -1584,11 +1584,14 @@ System.out.println("cloneMappingAction exiting ...");
 			ob.setRel_search_association(rel_search_association);
 
 
-			String transitivity = (String) request.getParameter("transitivity");
+			String transitivity = (String) request.getParameter("transitivity_checkbox");
 			ob.setTransitivity(transitivity);
 
 			String direction = (String) request.getParameter("direction");
 			ob.setSelectedDirection(direction);
+
+
+			System.out.println("(*) Relationship focusConceptCode: " + focusConceptCode);
 
 		} else if (subsetType.compareTo("EnumerationOfCodes") == 0) {
 
@@ -1601,6 +1604,7 @@ System.out.println("cloneMappingAction exiting ...");
 
         dumpComponentObject(ob);
         ResolvedConceptReferencesIterator iterator = null;
+        /*
         if (subsetType.compareTo("Property") == 0) {
 			iterator = ob.toIterator();
 		} else {
@@ -1614,6 +1618,8 @@ System.out.println("cloneMappingAction exiting ...");
 				return "codingscheme";
 			}
 		}
+		*/
+		iterator = ob.toIterator();
 
         if (iterator != null) {
 			try {
@@ -1629,6 +1635,10 @@ System.out.println("cloneMappingAction exiting ...");
 				return "codingscheme";
 
 			}
+		} else {
+				String message = "No match";
+				request.getSession().setAttribute("message", message);
+				return "codingscheme";
 		}
 
 		return "codingscheme";
