@@ -1482,7 +1482,7 @@ System.out.println("cloneMappingAction cloning ..." + mapping_id);
 				clone.setKey();
 
 System.out.println("cloneMappingAction clone.getKey() ..." + clone.getKey());
-
+				clone.setCreationDate(TimeStamp.getTimeStamp());
 				mappings.put(clone.getKey(), clone);
 
 				request.getSession().setAttribute("mappings", mappings);
