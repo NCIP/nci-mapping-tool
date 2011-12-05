@@ -165,7 +165,7 @@ if (iterator != null) {
            
                 <tr>
 		  <td align="left" class="textbody">
-		      <b>From</b>:&nbsp;<%=source_cs%> 
+		      <b>From</b>:&nbsp;<%=source_scheme%>&nbsp;(<%=source_version%>) 
 		  </td>
                           <td>
                       &nbsp;
@@ -174,7 +174,7 @@ if (iterator != null) {
                 
                 <tr>
 		  <td align="left" class="textbody">
-		      <b>To</b>:&nbsp;<%=target_cs%>&nbsp;
+		      <b>To</b>:&nbsp;<%=target_scheme%>&nbsp;(<%=target_version%>) 
 		         <a href="<%=request.getContextPath()%>/pages/addComponent.jsf?dictionary=<%=target_scheme%>&version=<%=target_version%>&action=restrict" >
 			     Apply Restriction
 			</a> 

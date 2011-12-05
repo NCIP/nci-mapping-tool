@@ -13,6 +13,9 @@
 <%@ page import="org.LexGrid.valueSets.ValueSetDefinition" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList" %>
 
+<%@ page import="org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator" %>
+<%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
+
 
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
@@ -67,6 +70,11 @@ String codes = (String) request.getSession().getAttribute("codes");
 if (DataUtils.isNull(codes)) codes = "";
 
 String source_cs = (String) request.getSession().getAttribute("source_cs");
+
+String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
+String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
+
+
 String vsdURI = (String) request.getSession().getAttribute("vsdURI");
 
 String input_option = (String) request.getSession().getAttribute("input_option");
@@ -98,6 +106,17 @@ ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(vsdURI), valu
 String valueSetDefinitionName =	vsd.getValueSetDefinitionName(); 
 
 //AbsoluteCodingSchemeVersionReferenceList acsvrl = vsd_service.getCodingSchemesInValueSetDefinition(new URI(vsdURI));
+
+ResolvedConceptReferencesIterator iterator = null;
+iterator = (ResolvedConceptReferencesIterator) request.getSession().getAttribute("rcr_iterator");
+if (iterator != null) {
+   codes = "";
+   request.getSession().removeAttribute("rcr_iterator");
+   while (iterator.hasNext()) {
+       ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
+       codes = codes + rcr.getConceptCode() + "\n";
+   }
+}
 
 
 %>
@@ -321,7 +340,20 @@ String checked = "";
                           </td>
                           
      <td>  
-         <textarea name="codes" cols="50" rows=10 tabindex="3"><%=codes%></textarea>
+             <table>
+             <tr>
+		     <td valign=top>    
+			     <textarea name="codes" cols="50" rows=10 tabindex="3"><%=codes%></textarea>
+			     &nbsp;
+			    <h:commandButton id="import" value="import" action="#{mappingBean.importDataAction}"
+			      image="#{basePath}/images/import.gif"
+			      alt="Import"
+			      tabindex="2">
+			    </h:commandButton>             
+		     </td>
+             </tr>
+             </table>
+         
      </td>
      </tr>
      
@@ -349,6 +381,8 @@ String checked = "";
      
      <input type="hidden" name="valueSetDefinitionName" id="type" value="<%=valueSetDefinitionName%>">
      
+     <input type="hidden" name="source_scheme" id="source_scheme" value="<%=source_scheme%>">
+     <input type="hidden" name="source_version" id="source_version" value="<%=source_version%>">
      
     
      

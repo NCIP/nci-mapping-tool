@@ -154,13 +154,16 @@
 <%
     String basePath = request.getContextPath(); 
 
+
     String action = (String) request.getParameter("action"); //through restriction link, or refresh
     if (action == null) {
     	action = (String) request.getSession().getAttribute("action"); //import button
     }
-    
-    System.out.println("addComponent #1 action: " + action);
-    
+   
+    String type = (String) request.getParameter("type"); //through restriction link, or refresh
+    if (type == null) {
+    	type = (String) request.getSession().getAttribute("type"); 
+    }
     
     String adv_search_vocabulary = request.getParameter("dictionary");
     String adv_search_version = request.getParameter("version");
@@ -178,12 +181,6 @@
 	 adv_search_version = (String) request.getSession().getAttribute("version");
     }
    
-    
-System.out.println("addComponent: #2 action " +  action);
-System.out.println("addComponent: adv_search_vocabulary " +  adv_search_vocabulary);
-System.out.println("addComponent: adv_search_version " +  adv_search_version);
-  
-    
     
     String refresh = (String) request.getParameter("refresh");
     boolean refresh_page = false;
@@ -261,7 +258,7 @@ System.out.println("********************** REFRESH PAGE");
 		selectValueSetReference = (String) request.getParameter("ref_uri");
 
 
-
+/*
 System.out.println("REFRESH PAGE adv_search_vocabulary " + adv_search_vocabulary);
 System.out.println("REFRESH PAGE subsetType " + subsetType);
 System.out.println("REFRESH PAGE label " + label);
@@ -275,7 +272,7 @@ System.out.println("REFRESH PAGE adv_search_source " + adv_search_source);
 System.out.println("REFRESH PAGE rel_search_association " + rel_search_association);
 System.out.println("REFRESH PAGE selectProperty " + selectProperty);
 System.out.println("REFRESH PAGE selectValueSetReference " + selectValueSetReference);
-
+*/
 
 
 	    } 
@@ -378,7 +375,7 @@ if (adv_search_vocabulary == null) {
                     
                  <tr>
                      <td align="right" class="textbody">
-                         Type:
+                         <b>Type</b>:
                      </td>
  
                      <td class="textbody">
@@ -433,7 +430,7 @@ System.out.println("subsetType: " + subsetType);
                     
                     <tr>
 		                              <td align="right" class="textbody">
-		                                  <%=match_text_label%>:
+		                                  <b><%=match_text_label%></b>:
 		                              </td>
 		    			  <td> 
 		    			     <input name="matchText" value="<%=search_string%>" tabindex="3">
@@ -444,7 +441,7 @@ System.out.println("subsetType: " + subsetType);
                     <tr>
                     
                         <td align="right" class="textbody">
-                            Property:
+                            <b>Property</b>:
                         </td>                   
                     
                      
@@ -485,7 +482,7 @@ System.out.println("subsetType: " + subsetType);
 
 		<tr>
 		    <td align="right" class="textbody">
-		      Algorithm:
+		      <b>Algorithm</b>:
                         </td>
                 
 			<td>		      
@@ -522,10 +519,18 @@ System.out.println("subsetType: " + subsetType);
                   
       <tr>               
                           <td align="right" class="textbody">
-                              Focus concept code:
+                              <b>Focus concept code</b>:
                           </td>
 			  <td>                   
 			     <input CLASS="textbody" name="focusConceptCode" value="<%=focusConceptCode%>" tabindex="3">
+			     
+
+                       &nbsp; 
+				 
+		      <a href="<%=request.getContextPath()%>/pages/search.jsf?">
+			<img src="<%= request.getContextPath() %>/images/search.png" width="15" height="15" alt="Search" border="0">
+		      </a>   			     
+			     
 			  </td>
      </tr>                 
                   
@@ -533,7 +538,7 @@ System.out.println("subsetType: " + subsetType);
                     <tr>
 
                         <td align="right" class="textbody">
-                            Association:
+                            <b>Association</b>:
                         </td> 
                         
                         <td class="inputItem">
@@ -575,7 +580,7 @@ System.out.println("addComponent.jsp OntologyBean.getSupportedAssociationNames  
                    <tr>
                    
                         <td align="right" class="textbody">
-                            Direction:
+                            <b>Direction</b>:
                         </td> 
                                      
 
@@ -604,7 +609,7 @@ System.out.println("addComponent.jsp OntologyBean.getSupportedAssociationNames  
                      <tr>
                     
                          <td align="right" class="textbody">
-                             Include focus concept?
+                             <b>Include focus concept</b>?
                          </td> 
  
                           <td>
@@ -625,7 +630,7 @@ if (include_focus_node_checkbox != null && include_focus_node_checkbox.compareTo
                      <tr>
                     
                          <td align="right" class="textbody">
-                             Transitive closure?
+                             <b>Transitive closure</b>?
                          </td> 
  
                           <td>
@@ -669,7 +674,7 @@ if (transitivity_checkbox != null && transitivity_checkbox.compareTo("true") == 
 		  %>
 		      <tr>               
 					   <td align="right" class="textbody">
-					       Codes:
+					       <b>Codes</b>:
 					   </td>
 		      <td>  
 			  <textarea name="codes" cols="50" rows=10 tabindex="3" class="inputText" ></textarea>
@@ -710,14 +715,14 @@ if (transitivity_checkbox != null && transitivity_checkbox.compareTo("true") == 
 
               </table>
               
-              <input type="hidden" name="referer" id="referer" value="HTTPUtils.getRefererParmEncode(request)">
+              <input type="hidden" name="referer" id="referer" value="HTTPUtils.getRefererParmEncode(request)" />
               
-              <input type="hidden" name="dictionary" id="dictionary" value="<%=adv_search_vocabulary%>">
-              <input type="hidden" name="version" id="version" value="<%=adv_search_version%>">
+              <input type="hidden" name="dictionary" id="dictionary" value="<%=adv_search_vocabulary%>" />
+              <input type="hidden" name="version" id="version" value="<%=adv_search_version%>" />
 
               <input type="hidden" name="adv_search_type" id="adv_search_type" value="<%=adv_search_type%>" />
             
-             
+              <input type="hidden" name="type" id="type" value="<%=type%>" />
               <input type="hidden" name="action" id="action" value="<%=action%>" />
 
               

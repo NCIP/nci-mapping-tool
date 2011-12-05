@@ -225,6 +225,13 @@
       <navigation-rule>
           <from-view-id>/pages/valueset_data.jsp</from-view-id>
  
+            <navigation-case>
+                <from-action>#{mappingBean.importDataAction}</from-action>
+                <from-outcome>valueset</from-outcome>
+                <to-view-id>/pages/addComponent.jsp</to-view-id>
+          </navigation-case>
+          
+          
           <navigation-case>
               <from-action>#{mappingBean.showFormAction}</from-action>
               <from-outcome>valueset</from-outcome>
@@ -390,25 +397,6 @@
          
     </navigation-rule>    
     
-    
-    
- <!--
-      <navigation-rule>
-          <from-view-id>/pages/ncimeta_manual_mapping.jsp</from-view-id>
-        
-          <navigation-case>
-              <from-action>#{mappingBean.manualMappingAction}</from-action>
-              <from-outcome>ncimeta</from-outcome>
-              <to-view-id>/pages/ncimeta_manual_mapping.jsp</to-view-id>
-          </navigation-case>
-          
-           <navigation-case>
-              <from-action>#{mappingBean.saveManualMappingAction}</from-action>
-              <from-outcome>ncimeta</from-outcome>
-              <to-view-id>/pages/ncimeta_manual_mapping.jsp</to-view-id>
-          </navigation-case>
-   </navigation-rule>     
--->
 
 
       <navigation-rule>
@@ -504,8 +492,26 @@
 
           <navigation-case>
               <from-action>#{mappingBean.saveComponentSubsetAction}</from-action>
-              <from-outcome>nomatch</from-outcome>
+              <from-outcome>codingscheme_nomatch</from-outcome>
               <to-view-id>/pages/codingscheme_data.jsp</to-view-id>
+          </navigation-case>
+          
+          <navigation-case>
+              <from-action>#{mappingBean.cancelComponentSubsetAction}</from-action>
+              <from-outcome>valueset</from-outcome>
+              <to-view-id>/pages/valueset_data.jsp</to-view-id>
+          </navigation-case>
+ 
+          <navigation-case>
+              <from-action>#{mappingBean.saveComponentSubsetAction}</from-action>
+              <from-outcome>valueset</from-outcome>
+              <to-view-id>/pages/valueset_data.jsp</to-view-id>
+          </navigation-case>
+
+          <navigation-case>
+              <from-action>#{mappingBean.saveComponentSubsetAction}</from-action>
+              <from-outcome>valueset_nomatch</from-outcome>
+              <to-view-id>/pages/valueset_data.jsp</to-view-id>
           </navigation-case>
           
           
