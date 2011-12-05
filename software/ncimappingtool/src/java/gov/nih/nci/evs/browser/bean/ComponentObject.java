@@ -1,10 +1,20 @@
 package gov.nih.nci.evs.browser.bean;
 
+import java.util.*;
+import gov.nih.nci.evs.browser.utils.*;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
+import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
+
+
+
     public class ComponentObject {
         private String _label = null;
         private String _description = null;
 
         private String _vocabulary = null;
+
+        private String _version = null;
 
         private String _type = null;
 
@@ -143,6 +153,15 @@ package gov.nih.nci.evs.browser.bean;
         	this._vocabulary = vocabulary;
         }
 
+        public String getVersion() {
+        	return _version;
+        }
+
+        public void setVersion(String version) {
+        	this._version = version;
+        }
+
+
         public String getType() {
         	return _type;
         }
@@ -166,6 +185,36 @@ package gov.nih.nci.evs.browser.bean;
         public void setAlgorithm(String algorithm) {
         	this._algorithm = algorithm;
         }
+
+        public ResolvedConceptReferencesIterator toIterator() {
+			Vector matchtext_vec = new Vector();
+			ResolvedConceptReferencesIterator iterator = null;
+			matchtext_vec.add(this._matchText);
+			if (_type.compareTo("Property") == 0) {
+
+				iterator = new SearchUtils().searchByProperty(
+						this._vocabulary, this._version, this._propertyName, matchtext_vec, this._algorithm);
+
+			} else if (_type.compareTo("Relationship") == 0) {
+
+                boolean resolveForward = true;
+                boolean resolveBackward = false;
+                if (this._selectedDirection.compareTo("Backward") == 0) {
+					resolveForward = false;
+					resolveBackward = true;
+				}
+
+				int resolveAssociationDepth = 1;
+				if (this._transitivity.compareTo("true") == 0) {
+					resolveAssociationDepth = -1;
+				}
+
+                iterator = new SearchUtils().searchByAssociation(
+					    this._vocabulary, this._version, this._focusConceptCode, this._rel_search_association,
+					    resolveForward, resolveBackward, resolveAssociationDepth, -1);
+			}
+		    return iterator;
+		}
 
         public String toString() {
 			return _label;

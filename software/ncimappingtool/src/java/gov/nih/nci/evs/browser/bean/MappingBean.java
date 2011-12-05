@@ -1555,12 +1555,11 @@ System.out.println("cloneMappingAction exiting ...");
 		String description = "TBD";
 		ob.setDescription(description);
 
-
-
 		//String dictionary = (String) request.getParameter("dictionary"); // to be added to addComponent
 		//String version = (String) request.getParameter("version");
 
 		ob.setVocabulary(dictionary);// + " (version: " + version + ")");
+		ob.setVersion(version);
 
         if (subsetType.compareTo("Property") == 0) {
 
@@ -1601,17 +1600,19 @@ System.out.println("cloneMappingAction exiting ...");
         // VSD (import, restriction)
 
         dumpComponentObject(ob);
-
-        ValueSetDefinition vsd = ValueSetUtils.generateValueSetDefinition(ob);
-
         ResolvedConceptReferencesIterator iterator = null;
-        try {
-			iterator = ValueSetUtils.resolveValueSetDefinition(vsd, dictionary, version);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			String message = "Exception thrown???";
-			request.getSession().setAttribute("message", message);
-			return "codingscheme";
+        if (subsetType.compareTo("Property") == 0) {
+			iterator = ob.toIterator();
+		} else {
+			ValueSetDefinition vsd = ValueSetUtils.generateValueSetDefinition(ob);
+			try {
+				iterator = ValueSetUtils.resolveValueSetDefinition(vsd, dictionary, version);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				String message = "Exception thrown???";
+				request.getSession().setAttribute("message", message);
+				return "codingscheme";
+			}
 		}
 
         if (iterator != null) {

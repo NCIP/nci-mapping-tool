@@ -4130,4 +4130,47 @@ int j = i+1;
         }
         return null;
     }
+
+     public ResolvedConceptReferencesIterator searchByAssociation(
+        String scheme, String version, String code, String assocName,
+        boolean resolveForward, boolean resolveBackward, int resolveAssociationDepth, int maxToReturn) {
+            /*
+            boolean resolveForward = false;
+            boolean resolveBackward = true;
+
+            int resolveAssociationDepth = 1;
+            int maxToReturn = 1000;
+            */
+        ResolvedConceptReferencesIterator iterator = null;
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			CodingSchemeVersionOrTag versionOrTag =
+				new CodingSchemeVersionOrTag();
+			if (version != null)
+				versionOrTag.setVersion(version);
+            String language = null;
+
+            CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, versionOrTag, null);
+            NameAndValueList nameAndValueList =
+                createNameAndValueList(new String[] { assocName }, null);
+
+            NameAndValueList nameAndValueList_qualifier = null;
+            cng =
+                cng.restrictToAssociations(nameAndValueList,
+                    nameAndValueList_qualifier);
+            ConceptReference graphFocus =
+                ConvenienceMethods.createConceptReference(code, scheme);
+
+            iterator = codedNodeGraph2CodedNodeSetIterator(
+				        cng, graphFocus, resolveForward, resolveBackward,
+                        resolveAssociationDepth, maxToReturn);
+			return iterator;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return iterator;
+    }
+
+
 }
