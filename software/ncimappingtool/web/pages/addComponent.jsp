@@ -691,7 +691,7 @@ if (transitivity_checkbox != null && transitivity_checkbox.compareTo("true") == 
 	id="Save"
 	value="Save"
 	action="#{mappingBean.saveComponentSubsetAction}" 
-	image="#{form_requestContextPath}/images/save.gif" alt="Save component subset data">
+	image="#{form_requestContextPath}/images/continue.gif" alt="Save component subset data">
 </h:commandButton>
 &nbsp;
 
