@@ -66,22 +66,10 @@
       }  
       
       var algorithm = "exactMatch";
-      if (subsetType != 'EntireVocabulary' && subsetType != 'EnumerationOfCodes') {
-              var textObj = document.forms["addComponentForm"].matchText;
-              if (textObj != null) {
-		      text = document.forms["addComponentForm"].matchText.value;
-              }
-	      
-	      var algorithmObj = document.forms["addComponentForm"].search_algorithm;
-	      if (algorithmObj != null) {
-		      for (var i=0; i<algorithmObj.length; i++) {
-			if (algorithmObj[i].checked) {
-			  algorithm = algorithmObj[i].value;
-			}
-		      }
-	      }
-      }
-      
+      if (subsetType == "Relationship" && document.forms["addComponentForm"].search_algorithm != null) {
+           algorithm = document.forms["addComponentForm"].search_algorithm.value;
+      }      
+     
       var rel_search_association = "";
       if (subsetType == "Relationship" && document.forms["addComponentForm"].rel_search_association != null) {
           rel_search_association = document.forms["addComponentForm"].rel_search_association.value;
@@ -495,29 +483,36 @@ System.out.println("subsetType: " + subsetType);
                     </tr>
 
 
-                  <tr>
-                  
-                        <td align="right" class="textbody">
-                            Match Algorithm:
+		<tr>
+		    <td align="right" class="textbody">
+		      Algorithm:
                         </td>
-                  
-                 
-			<td>
-			     <table border="0" cellspacing="0" cellpadding="0">
-			       <tr valign="top" align="left">
-			       <td align="left" class="textbody">
-				      <input type="radio" name="search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="4">Exact Match&nbsp;
-				      <input type="radio" name="search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="4">Begins With&nbsp;
-				      <input type="radio" name="search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="4">Contains
-			       </td>
-                                </tr>     
+                
+			<td>		      
 
-                            </table>
-                  
-                        </td>
-                  </tr>
-                  
-
+			    <select id="search_algorithm" name="search_algorithm" size="1" tabindex="4">
+			    <%
+			       if (algorithms != null) {
+				    for (int i=0; i<algorithms.size(); i++) {
+					 String t0 = (String) algorithms.elementAt(i);
+					 if (t0.compareTo(search_algorithm) == 0) {
+				    %>
+					   <option value="<%=t0%>" selected><%=t0%></option>
+				    <%
+					 } else {
+				    %>
+					   <option value="<%=t0%>"><%=t0%></option>
+				    <%
+					 }
+				    }
+			       }
+			    %>
+			    </select>
+		        </td>
+		 </tr>		    
+				    
+				    
+				    
 
                   <% 
                   } else if (subsetType.equals("Relationship")) { 
