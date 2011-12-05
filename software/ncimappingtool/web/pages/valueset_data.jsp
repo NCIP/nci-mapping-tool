@@ -137,7 +137,7 @@ if (iterator != null) {
 
 <h:form>        
 
-    <p class="texttitle-blue"><%=identifier%>&nbsp;(<%=mapping_version%>)</p> 
+    <p class="texttitle-blue"><b><%=identifier%>&nbsp;(<%=mapping_version%>)</b></p> 
   
              <% if (message != null) { request.getSession().removeAttribute("message"); %>
                  <p class="textbodyred">&nbsp;<%=message%></p>

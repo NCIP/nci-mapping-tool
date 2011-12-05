@@ -112,7 +112,8 @@ if (identifier != null && identifier.compareTo("null") == 0) {
     identifier = "";
 }
 
-
+//String ncit_url = new DataUtils().getNCItURL();
+String ncit_url = "http://nciterms.nci.nih.gov/";//new DataUtils().getNCItURL();
 
 String type = (String) request.getSession().getAttribute("type");
 
@@ -171,7 +172,7 @@ HashMap hmap_super = null;
 Entity src_concept    = null;
 if (source_scheme != null && source_code != null) {
 	src_concept = MappingUtils.getConceptByCode(source_scheme, source_version, null, source_code);
-	if (src_concept) != null) {
+	if (src_concept != null) {
 	     source_concept_name = src_concept.getEntityDescription().getContent();
 	     src_presentations = src_concept.getPresentation();
 	     src_definitions = src_concept.getDefinition();
@@ -414,7 +415,7 @@ SortUtils.quickSort(target_superconceptList);
     %>
           <tr class="<%=rowColor%>">
             <td class="dataCellText">
-              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%><%=source_version%>&code=<%=cCode%>">
+              <a href="<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%><%=source_version%>&code=<%=cCode%>">
                 <%=cName%>
               </a>
             </td>
@@ -620,7 +621,7 @@ SortUtils.quickSort(target_superconceptList);
     %>
           <tr class="<%=rowColor%>">
             <td class="dataCellText">
-              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%><%=target_version%>&code=<%=cCode%>">
+              <a href="<%=ncit_url%>ConceptReport.jsp?dictionary=<%=target_scheme%><%=target_version%>&code=<%=cCode%>">
                 <%=cName%>
               </a>
             </td>

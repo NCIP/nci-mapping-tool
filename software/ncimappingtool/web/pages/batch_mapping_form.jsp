@@ -30,6 +30,8 @@
   String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
   String evs_service_url = new DataUtils().getEVSServiceURL();
   
+  String ncit_url = "http://nciterms.nci.nih.gov/";//new DataUtils().getNCItURL();
+  
   session = request.getSession(true);
   boolean readonly = false;
 %>
@@ -886,9 +888,13 @@ if (!readonly) {
 			 <td class="datacoldark">
 <%
 if (source_code != null && source_code.compareTo("") != 0 && source_code.compareTo("N/A") != 0) {
+System.out.println("ncit_url: " + ncit_url);
+System.out.println("source_scheme: " + source_scheme);
+System.out.println("source_version: " + source_version);
+
 %>
 				 <a href="#"
-				       onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>'">
+				       onclick="javascript:window.location='<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>'">
 				       <%=source_code%>
 				 </a>
 <%				 
@@ -956,7 +962,7 @@ if (source_code != null && source_code.compareTo("") != 0 && source_code.compare
 			 <td class="datacoldark">
 
 				 <a href="#"
-				       onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>'">
+				       onclick="javascript:window.location='<%=ncit_url%>ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>'">
 				       <%=target_code%>
 				 </a>
 
