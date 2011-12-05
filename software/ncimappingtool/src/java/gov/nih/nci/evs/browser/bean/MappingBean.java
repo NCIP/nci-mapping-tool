@@ -1499,25 +1499,27 @@ System.out.println("cloneMappingAction exiting ...");
 		String type = (String) request.getParameter("type");
 		String source_scheme = (String) request.getParameter("source_scheme");
 		String source_version = (String) request.getParameter("source_version");
-
-
-		System.out.println("importDataAction source_scheme: " + source_scheme);
-		System.out.println("importDataAction source_version: " + source_version);
-
-
 		request.getSession().setAttribute("dictionary", source_scheme);
 		request.getSession().setAttribute("version", source_version);
-		request.getSession().setAttribute("action", "import");
 
-		return "codingscheme";
+		if (type.compareTo("valueset") == 0) {
+			String vsdURI = (String) request.getParameter("vsdURI");
+			String valueSetDefinitionName = (String) request.getParameter("valueSetDefinitionName");
+			request.getSession().setAttribute("vsdURI", vsdURI);
+			request.getSession().setAttribute("valueSetDefinitionName", "valueSetDefinitionName");
+		}
+
+		request.getSession().setAttribute("action", "import");
+		request.getSession().setAttribute("type", type);
+		return type;
 	}
 
     public String cancelComponentSubsetAction() {
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
-
-		return "codingscheme";
+		String type = (String) request.getParameter("type");
+		return type;
 	}
 
     public String saveComponentSubsetAction() {
@@ -1526,9 +1528,13 @@ System.out.println("cloneMappingAction exiting ...");
                 .getExternalContext().getRequest();
 
 		String type = (String) request.getParameter("type");
+
+System.out.println("saveComponentSubsetAction input type: " + type);
+
+
+
 		String source_scheme = (String) request.getParameter("source_scheme");
 		String source_version = (String) request.getParameter("source_version");
-
 
 		request.getSession().setAttribute("dictionary", source_scheme);
 		request.getSession().setAttribute("version", source_version);
@@ -1538,7 +1544,6 @@ System.out.println("cloneMappingAction exiting ...");
 
 		String dictionary = (String) request.getParameter("dictionary");
 		String version = (String) request.getParameter("version");
-
 
 		System.out.println("saveComponentSubsetAction action: " + action);
 		System.out.println("saveComponentSubsetAction dictionary: " + dictionary);
@@ -1629,19 +1634,20 @@ System.out.println("cloneMappingAction exiting ...");
 				request.getSession().setAttribute("rcr_iterator", iterator);
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				ex.printStackTrace();
 				String message = "Exception thrown???";
 				request.getSession().setAttribute("message", message);
-				return "codingscheme";
+				return type;
 
 			}
 		} else {
-				String message = "No match";
-				request.getSession().setAttribute("message", message);
-				return "codingscheme";
+			String message = "No match";
+			request.getSession().setAttribute("message", message);
+			return type + "_nomatch";
 		}
 
-		return "codingscheme";
+System.out.println("saveComponentSubsetAction returning " + type);
+
+		return type;
 	}
 
 

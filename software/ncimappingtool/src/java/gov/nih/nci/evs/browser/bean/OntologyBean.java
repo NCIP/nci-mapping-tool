@@ -73,6 +73,9 @@ public class OntologyBean {
     private static Vector _property_type_vec = null;
     private static Vector _source_vec = null;
 
+    private static HashMap _csnv2SupportedAssociationNames = null;
+    private static HashMap _csnv2SupportedPropertyNames = null;
+
     public static List getRELAList(String codingSchemeName) {
         if (_rela_list != null)
             return _rela_list;
@@ -415,8 +418,24 @@ public class OntologyBean {
 
     public static Vector<String> getSupportedPropertyNames(
         String codingSchemeName, String version) {
+
+		if (_csnv2SupportedPropertyNames == null) {
+			_csnv2SupportedPropertyNames = new HashMap();
+		}
+
+		if (version == null) {
+			version = DataUtils.getVocabularyVersionByTag(codingSchemeName, "PRODUCTION");
+		}
+
+		String key = codingSchemeName + "|" + version;
+		if (_csnv2SupportedPropertyNames.containsKey(key)) {
+			return (Vector) _csnv2SupportedPropertyNames.get(key);
+		}
+
         CodingScheme cs = getCodingScheme(codingSchemeName, version);
-        return getSupportedPropertyNames(cs);
+        Vector v = getSupportedPropertyNames(cs);
+        _csnv2SupportedPropertyNames.put(key, v);
+        return v;
     }
 
     public static Vector<String> getSupportedAssociationQualifier(
@@ -528,9 +547,23 @@ public class OntologyBean {
         return association;
     }
 
-
+//csnv2SupportedAssociationNames
 
     public static Vector getSupportedAssociationNames(String codingSchemeName, String version) {
+
+		if (_csnv2SupportedAssociationNames == null) {
+			_csnv2SupportedAssociationNames = new HashMap();
+		}
+
+		if (version == null) {
+			version = DataUtils.getVocabularyVersionByTag(codingSchemeName, "PRODUCTION");
+		}
+
+		String key = codingSchemeName + "|" + version;
+		if (_csnv2SupportedAssociationNames.containsKey(key)) {
+			return (Vector) _csnv2SupportedAssociationNames.get(key);
+		}
+
         _association_name_vec = new Vector();
 
         LexBIGServiceConvenienceMethodsImpl lbscm = null;
@@ -561,6 +594,7 @@ public class OntologyBean {
 
 			}
 			_association_name_vec = SortUtils.quickSort(_association_name_vec);
+			_csnv2SupportedAssociationNames.put(key, _association_name_vec);
 			return _association_name_vec;
 		} catch (Exception ex) {
 			ex.printStackTrace();
