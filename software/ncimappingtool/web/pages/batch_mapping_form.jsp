@@ -1164,7 +1164,7 @@ if (type.compareTo("ncimeta") == 0) {
 %>
 
 
-     <input type="hidden" name="source_cs" id="identifier" value="<%=identifier%>" />
+     <input type="hidden" name="identifier" id="identifier" value="<%=identifier%>" />
      <input type="hidden" name="mapping_version" id="mapping_version" value="<%=mapping_version%>" />
 
 </h:form>
