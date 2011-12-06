@@ -1384,13 +1384,13 @@ System.out.println("Creating MappingObject ... valueset ");
 		String target_property = (String) request.getParameter("target_property");
 		String matchText = (String) request.getParameter("input");
 
-
+/*
 System.out.println("targetCodingScheme: " + targetCodingScheme);
 System.out.println("targetCodingSchemeVersion: " + targetCodingSchemeVersion);
 System.out.println("target_property: " + target_property);
 System.out.println("algorithm: " + algorithm);
 System.out.println("matchText: " + matchText);
-
+*/
 
 
 		Vector matchText_vec = new Vector();
@@ -1415,7 +1415,9 @@ System.out.println("matchText: " + matchText);
 			}
 
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
+			System.out.println("searchAction -- Exception thrown");
+
 		}
 
 		request.getSession().setAttribute("match_results", iterator);
@@ -1474,14 +1476,11 @@ System.out.println("matchText: " + matchText);
 			if (obj_id.compareTo(mapping_id) == 0) {
 		    // to be implemented
 
-System.out.println("cloneMappingAction cloning ..." + mapping_id);
-
 				MappingObject clone = (MappingObject) obj.clone();
 				clone.setName("copy of " + obj.getName());
 				//String clone_key = MappingObject.computeKey(clone.getName(), clone.getVersion());
 				clone.setKey();
 
-System.out.println("cloneMappingAction clone.getKey() ..." + clone.getKey());
 				clone.setCreationDate(TimeStamp.getTimeStamp());
 				mappings.put(clone.getKey(), clone);
 
@@ -1489,8 +1488,6 @@ System.out.println("cloneMappingAction clone.getKey() ..." + clone.getKey());
 				break;
 			}
 		}
-
-System.out.println("cloneMappingAction exiting ...");
 
 		return "clone";
 	}
@@ -1533,10 +1530,6 @@ System.out.println("cloneMappingAction exiting ...");
                 .getExternalContext().getRequest();
 
 		String type = (String) request.getParameter("type");
-
-System.out.println("saveComponentSubsetAction input type: " + type);
-
-
 
 		String source_scheme = (String) request.getParameter("source_scheme");
 		String source_version = (String) request.getParameter("source_version");
@@ -1649,8 +1642,6 @@ System.out.println("saveComponentSubsetAction input type: " + type);
 			request.getSession().setAttribute("message", message);
 			return type + "_nomatch";
 		}
-
-System.out.println("saveComponentSubsetAction returning " + type);
 
 		return type;
 	}

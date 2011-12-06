@@ -140,6 +140,7 @@ if (type.compareTo("ncimeta") == 0) {
 	target_scheme = DataUtils.key2CodingSchemeName(target_cs);
 	target_version = DataUtils.key2CodingSchemeVersion(target_cs);
 	
+
 } 
 
 Entity src_concept = MappingUtils.getConceptByCode(source_scheme, source_version, null, source_code);

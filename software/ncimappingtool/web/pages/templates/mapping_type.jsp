@@ -13,7 +13,7 @@ request.getSession().removeAttribute("message");
 
 String option_1 = "Mapping based on sources in NCI Metathesaurus";
 String option_2 = "Mapping from one terminology to another";
-String option_3 = "Mapping from one terminology to a value set";
+String option_3 = "Mapping from a terminology to a value set";
 
 
 %>
