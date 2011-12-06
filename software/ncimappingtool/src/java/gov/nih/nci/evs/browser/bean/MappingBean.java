@@ -111,6 +111,8 @@ public class MappingBean {
 
 	private static int NULL_STRING_HASH_CODE = NULL_STRING.hashCode();
 
+	private HashMap<String, ComponentObject> _restrictions = null;
+
     public void MappingBean() {
 
 	}
@@ -140,6 +142,7 @@ public class MappingBean {
 
     private void _init() {
         if (_mappings == null) _mappings = new HashMap<String, MappingObject>();
+        if (_restrictions == null) _restrictions = new HashMap<String, ComponentObject>();
     }
 
 
@@ -1622,25 +1625,40 @@ System.out.println("matchText: " + matchText);
 			}
 		}
 		*/
-		iterator = ob.toIterator();
+		if (action.compareTo("import") == 0) {
+			iterator = ob.toIterator();
 
-        if (iterator != null) {
-			try {
-				int numRemaining = iterator.numberRemaining();
-				System.out.println("Number of matches: " + numRemaining);
+			if (iterator != null) {
+				try {
+					int numRemaining = iterator.numberRemaining();
+					System.out.println("Number of matches: " + numRemaining);
 
-				request.getSession().setAttribute("rcr_iterator", iterator);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				String message = "Exception thrown???";
+					request.getSession().setAttribute("rcr_iterator", iterator);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					String message = "Exception thrown???";
+					request.getSession().setAttribute("message", message);
+					return type;
+
+				}
+			} else {
+				String message = "No match";
 				request.getSession().setAttribute("message", message);
-				return type;
-
+				return type + "_nomatch";
 			}
-		} else {
-			String message = "No match";
+	    } else { // restriction
+	        HashMap restrictions = (HashMap) request.getSession().getAttribute("restrictions");
+	        if (restrictions == null) {
+				request.getSession().setAttribute("restrictions", _restrictions);
+			}
+
+			String identifier = (String) request.getSession().getAttribute("identifier");
+			String mapping_version = (String) request.getSession().getAttribute("mapping_version");
+
+			String mapping_key = MappingObject.computeKey(identifier, mapping_version);
+			restrictions.put(mapping_key, ob);
+			String message = "Restriction data saved.";
 			request.getSession().setAttribute("message", message);
-			return type + "_nomatch";
 		}
 
 		return type;

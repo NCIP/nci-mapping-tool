@@ -3910,12 +3910,16 @@ public class SearchUtils {
 
 
 
-
+    public ResolvedConceptReferencesIterator searchByName(
+        String scheme, String version, Vector matchText_vec,
+        String matchAlgorithm) {
+		return searchByName(scheme, version, matchText_vec, matchAlgorithm, null);
+	}
 
 
     public ResolvedConceptReferencesIterator searchByName(
         String scheme, String version, Vector matchText_vec,
-        String matchAlgorithm) {
+        String matchAlgorithm, CodedNodeSet restriction) {
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             Vector<CodedNodeSet> cns_vec = new Vector<CodedNodeSet>();
@@ -3925,17 +3929,21 @@ public class SearchUtils {
 				versionOrTag.setVersion(version);
             //int total = 0;
             String language = null;
-
-System.out.println("matchAlgorithm: " + matchAlgorithm);
-System.out.println("matchText_vec.size(): " + matchText_vec.size());
-
             for (int i = 0; i < matchText_vec.size(); i++) {
 				String matchText = (String) matchText_vec.elementAt(i);
-int j = i+1;
+				int j = i+1;
 				System.out.println("(" + j + ")" + matchText);
 
 				matchText = matchText.trim();
                 CodedNodeSet cns = getNodeSet(lbSvc, scheme, versionOrTag);
+                if (restriction != null) {
+					try {
+						cns = cns.intersect(restriction);
+					} catch (Exception ex) {
+						System.out.println("intersect throws exceptions???");
+						return null;
+					}
+				}
 
                 if (cns != null) {
 					try {
@@ -3990,6 +3998,8 @@ int j = i+1;
 
 				matchText = matchText.trim();
                 CodedNodeSet cns = vsd_cns; //getNodeSet(lbSvc, scheme, versionOrTag);
+
+
 
                 if (cns != null) {
 					try {
@@ -4064,10 +4074,16 @@ System.out.println("QuickUnionIterator " + cns_vec.size());
 	}
 
 
-
     public ResolvedConceptReferencesIterator searchByProperty(
         String scheme, String version, String propertyName, Vector matchText_vec,
         String matchAlgorithm) {
+		return searchByProperty(scheme, version, propertyName, matchText_vec, matchAlgorithm, null);
+	}
+
+
+    public ResolvedConceptReferencesIterator searchByProperty(
+        String scheme, String version, String propertyName, Vector matchText_vec,
+        String matchAlgorithm, CodedNodeSet restriction) {
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             Vector<CodedNodeSet> cns_vec = new Vector<CodedNodeSet>();
@@ -4092,6 +4108,15 @@ System.out.println("QuickUnionIterator " + cns_vec.size());
 
 				matchText = matchText.trim();
                 CodedNodeSet cns = getNodeSet(lbSvc, scheme, versionOrTag);
+
+                if (restriction != null) {
+					try {
+						cns = cns.intersect(restriction);
+					} catch (Exception ex) {
+						System.out.println("intersect throws exceptions???");
+						return null;
+					}
+				}
 
                 if (cns != null) {
 					try {

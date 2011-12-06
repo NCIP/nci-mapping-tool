@@ -457,7 +457,7 @@
 
         <ConfigurableItem>
                  <key>NCIT_URL</key>
-                 <value>@ncit.url@ncitbrowser</value>
+                 <value>@ncit.url@</value>
         </ConfigurableItem>
 
         <ConfigurableItem>

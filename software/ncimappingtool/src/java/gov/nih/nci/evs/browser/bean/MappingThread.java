@@ -492,6 +492,8 @@ public class MappingThread implements Runnable
 			input_list = (ArrayList) session.getAttribute("data");
 			String target_cs = null; //= (String) request.getParameter("target_cs");
 
+			CodedNodeSet restriction = null;
+
 			synchronized (session) {
 
 				//source_cs = (String) request.getParameter("source_cs");
@@ -500,6 +502,15 @@ public class MappingThread implements Runnable
 				source_cs = (String) session.getAttribute("source_cs");
 				target_cs = (String) session.getAttribute("target_cs");
 
+				HashMap restrictions = (HashMap) session.getAttribute("restrictions");
+
+				String identifier = (String) request.getSession().getAttribute("identifier");
+				String mapping_version = (String) request.getSession().getAttribute("mapping_version");
+
+				String mapping_key = MappingObject.computeKey(identifier, mapping_version);
+				if (restrictions != null && mapping_key != null) {
+					restriction = (CodedNodeSet) restrictions.get(mapping_key);
+				}
 				//session.setAttribute("source_cs", source_cs);
 				//session.setAttribute("target_cs", target_cs);
 			}
@@ -611,11 +622,12 @@ public class MappingThread implements Runnable
 								matchtext_vec.add(synonym);
 								System.out.println(sourceCode + " " + synonym);
 							}
-							iterator = new SearchUtils().searchByName(targetCodingScheme, targetCodingSchemeVersion, matchtext_vec, algorithm);
+							iterator = new SearchUtils().searchByName(targetCodingScheme, targetCodingSchemeVersion, matchtext_vec, algorithm, restriction);
 						}
 
 					} else if(input_option.compareTo("Name") == 0) {
 						iterator = mapping_utils.searchByName(targetCodingScheme, targetCodingSchemeVersion, matchtext, null, algorithm, false, -1);
+
 					} else if (sourceCodingScheme != null) {
 						Vector src_properties = mapping_utils.getPropertyValues(sourceCodingScheme, sourceCodingSchemeVersion,
 																			   sourceCode, src_property);
@@ -628,7 +640,7 @@ public class MappingThread implements Runnable
 						}
 
 						iterator = new SearchUtils().searchByProperty(
-								targetCodingScheme, targetCodingSchemeVersion, target_property, matchText_vec, algorithm);
+								targetCodingScheme, targetCodingSchemeVersion, target_property, matchText_vec, algorithm, restriction);
 
 					}
 

@@ -888,13 +888,10 @@ if (!readonly) {
 			 <td class="datacoldark">
 <%
 if (source_code != null && source_code.compareTo("") != 0 && source_code.compareTo("N/A") != 0) {
-System.out.println("ncit_url: " + ncit_url);
-System.out.println("source_scheme: " + source_scheme);
-System.out.println("source_version: " + source_version);
 
 %>
 				 <a href="#"
-				       onclick="javascript:window.location='<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>'">
+				       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>')">
 				       <%=source_code%>
 				 </a>
 <%				 
@@ -962,7 +959,7 @@ System.out.println("source_version: " + source_version);
 			 <td class="datacoldark">
 
 				 <a href="#"
-				       onclick="javascript:window.location='<%=ncit_url%>ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>'">
+				       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>')">
 				       <%=target_code%>
 				 </a>
 
