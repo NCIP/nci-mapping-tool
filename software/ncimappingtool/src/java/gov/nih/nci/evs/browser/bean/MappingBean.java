@@ -1384,6 +1384,9 @@ System.out.println("Creating MappingObject ... valueset ");
 		String targetCodingScheme = (String) request.getParameter("target_scheme");
 		String targetCodingSchemeVersion = (String) request.getParameter("target_version");
 		String algorithm = (String) request.getParameter("algorithm");
+
+System.out.println("algorithm: " + algorithm);
+
 		String target_property = (String) request.getParameter("target_property");
 		String matchText = (String) request.getParameter("input");
 

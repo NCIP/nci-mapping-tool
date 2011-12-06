@@ -105,6 +105,9 @@ String target_cs = null;
 source_code = (String) request.getParameter("src_cd");
 target_code = (String) request.getParameter("target_cd");
 
+System.out.println("************** concept_info.jsp ********************");
+
+
 String identifier = (String) request.getSession().getAttribute("identifier");
 if (identifier != null && identifier.compareTo("null") == 0) {
     identifier = "";
@@ -116,6 +119,11 @@ if (identifier != null && identifier.compareTo("null") == 0) {
 String ncit_url = "http://nciterms.nci.nih.gov/";//new DataUtils().getNCItURL();
 
 String type = (String) request.getSession().getAttribute("type");
+
+
+System.out.println("concept_info.jsp ******************** " + type);
+
+
 
 String ncim_version = null;
 if (type.compareTo("ncimeta") == 0) {
@@ -143,13 +151,11 @@ if (type.compareTo("ncimeta") == 0) {
 	source_cs = (String) request.getSession().getAttribute("source_cs");
 	target_cs = (String) request.getSession().getAttribute("target_cs");	
 
-System.out.println("source_cs: " + source_cs);
-System.out.println("target_cs: " + target_cs);
+System.out.println("******************** source_cs: " + source_cs);
+System.out.println("******************** target_cs: " + target_cs);
 
-        if (source_abbrev.compareTo("") != 0) {
-		source_scheme = DataUtils.key2CodingSchemeName(source_cs);
-		source_version = DataUtils.key2CodingSchemeVersion(source_cs);
-	}
+	source_scheme = DataUtils.key2CodingSchemeName(source_cs);
+	source_version = DataUtils.key2CodingSchemeVersion(source_cs);
 
 	target_scheme = DataUtils.key2CodingSchemeName(target_cs);
 	target_version = DataUtils.key2CodingSchemeVersion(target_cs);
