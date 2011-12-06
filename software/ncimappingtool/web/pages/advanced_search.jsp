@@ -64,7 +64,7 @@ String input_option_label = input_option;
 String algorithm = (String) request.getSession().getAttribute("algorithm");
 if (algorithm != null && algorithm.compareTo("null") == 0) {
     algorithm = "";
-} else if (algorithm == null) {
+} else if (Datatils.isNull(algorithm)) {
     algorithm = "exactMatch";
 }
 

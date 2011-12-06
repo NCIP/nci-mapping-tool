@@ -40,7 +40,6 @@ String basePath = request.getContextPath();
 String message = (String) request.getSession().getAttribute("message");
 
 String action = (String) request.getParameter("action");
-
 request.getSession().removeAttribute("message");
 
 String identifier = (String) request.getSession().getAttribute("identifier");
