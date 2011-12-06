@@ -5,6 +5,13 @@ import gov.nih.nci.evs.browser.utils.*;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
+import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
+import org.LexGrid.LexBIG.LexBIGService.*;
+import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
+import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
+
 
 
 
@@ -186,6 +193,80 @@ import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
         	this._algorithm = algorithm;
         }
 
+
+        public CodedNodeSet toCNS() {
+			if (_type.compareTo("EnumerationOfCodes") == 0) {
+				return codes2CodedNodeSet();
+			}
+
+			CodedNodeSet cns = null;
+			CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+			if (this._version != null)
+				csvt.setVersion(this._version);
+
+			try {
+				LexBIGService lbSvc = null;
+				lbSvc = new RemoteServerUtil().createLexBIGService();
+
+				LocalNameList entityTypes = new LocalNameList();
+				entityTypes.addEntry("concept");
+
+				cns = lbSvc.getNodeSet(this._vocabulary, csvt, entityTypes);
+				ResolvedConceptReferencesIterator iterator = toIterator();
+				ConceptReferenceList codeList = new ConceptReferenceList();
+				while (iterator.hasNext()) {
+					ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
+					codeList.addConceptReference(rcr);
+				}
+				cns.restrictToCodes(codeList);
+			} catch (Exception ex) {
+
+			}
+			return cns;
+		}
+
+
+		public CodedNodeSet codes2CodedNodeSet() {
+			if (_codes == null) return null;
+			CodedNodeSet cns = null;
+			CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+			if (this._version != null)
+				csvt.setVersion(this._version);
+
+			try {
+				LexBIGService lbSvc = null;
+				lbSvc = new RemoteServerUtil().createLexBIGService();
+
+				LocalNameList entityTypes = new LocalNameList();
+				entityTypes.addEntry("concept");
+
+				cns = lbSvc.getNodeSet(this._vocabulary, csvt, entityTypes);
+				ResolvedConceptReferencesIterator iterator = toIterator();
+				ConceptReferenceList codeList = new ConceptReferenceList();
+
+				String codes = _codes;
+				if (codes == null) {
+					codes = "";
+				}
+				codes = codes.trim();
+				if (codes.compareTo("") == 0) {
+					return null;
+				}
+
+				String lines[] = codes.split("\\n");
+				for(int i = 0; i < lines.length; i++) {
+					String t = lines[i];
+					ConceptReference cr = new ConceptReference();
+					cr.setConceptCode(t);
+					codeList.addConceptReference(cr);
+				}
+				cns.restrictToCodes(codeList);
+			} catch (Exception ex) {
+
+			}
+			return cns;
+		}
+
         public ResolvedConceptReferencesIterator toIterator() {
 			Vector matchtext_vec = new Vector();
 			ResolvedConceptReferencesIterator iterator = null;
@@ -212,7 +293,15 @@ import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
                 iterator = new SearchUtils().searchByAssociation(
 					    this._vocabulary, this._version, this._focusConceptCode, this._rel_search_association,
 					    resolveForward, resolveBackward, resolveAssociationDepth, -1);
+			} else {
+				CodedNodeSet cns = codes2CodedNodeSet();
+				try {
+					iterator = cns.resolve(null, null, null, null, false);
+				} catch (Exception ex) {
+
+				}
 			}
+
 		    return iterator;
 		}
 

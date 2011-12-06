@@ -415,9 +415,13 @@ SortUtils.quickSort(target_superconceptList);
     %>
           <tr class="<%=rowColor%>">
             <td class="dataCellText">
-              <a href="<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%><%=source_version%>&code=<%=cCode%>">
-                <%=cName%>
-              </a>
+
+	 <a href="#"
+	       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=cCode%>')">
+	       <%=cName%>
+	 </a>
+	 
+              
             </td>
           </tr>
     <%
@@ -621,9 +625,12 @@ SortUtils.quickSort(target_superconceptList);
     %>
           <tr class="<%=rowColor%>">
             <td class="dataCellText">
-              <a href="<%=ncit_url%>ConceptReport.jsp?dictionary=<%=target_scheme%><%=target_version%>&code=<%=cCode%>">
-                <%=cName%>
-              </a>
+
+	 <a href="#"
+	       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=cCode%>')">
+	       <%=cName%>
+	 </a>
+
             </td>
           </tr>
     <%

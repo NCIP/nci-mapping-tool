@@ -192,6 +192,9 @@ public class NCImtBrowserProperties {
                         _browserProperties
                             .getProperty(_browserProperties.NCIT_URL);
 
+//System.out.println("_ncit_url: " + _ncit_url);
+
+
                     String pagination_time_out_str =
                         _browserProperties
                             .getProperty(_browserProperties.PAGINATION_TIME_OUT);
