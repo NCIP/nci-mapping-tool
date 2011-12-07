@@ -812,6 +812,7 @@ System.out.println("submitMetadataAction type: " + type);
         String type = (String) request.getParameter("type");
 
         String mapping_version = (String) request.getParameter("mapping_version");
+        String identifier = (String) request.getParameter("identifier");
 
 
         request.getSession().setAttribute("type", type);
@@ -821,7 +822,7 @@ System.out.println("submitMetadataAction type: " + type);
 			request.getSession().setAttribute("message", message);
 			return "message";
 		} else if (type.compareTo("ncimeta") == 0) {
-			String identifier = (String) request.getParameter("identifier");
+
 			//String mapping_version = (String) request.getParameter("mapping_version");
 			String ncim_version = (String) request.getParameter("ncim_version");
 			String source_abbrev = (String) request.getParameter("source_abbrev");
@@ -872,8 +873,8 @@ System.out.println("submitMetadataAction type: " + type);
 		    return type;//"ncimeta";
 
 		} else if (type.compareTo("codingscheme") == 0) {
-			String identifier = (String) request.getParameter("identifier");
-			//String mapping_version = (String) request.getParameter("mapping_version");
+			mapping_version = (String) request.getParameter("mapping_version");
+
 			String source_cs = (String) request.getParameter("source_cs");
 			String target_cs = (String) request.getParameter("target_cs");
 			String src_property = (String) request.getParameter("src_property");
@@ -923,6 +924,8 @@ System.out.println("submitMetadataAction type: " + type);
 			}
 
 			request.getSession().setAttribute("identifier", identifier);
+			request.getSession().setAttribute("mapping_version", mapping_version);
+
 			request.getSession().setAttribute("source_cs", source_cs);
 			request.getSession().setAttribute("target_cs", target_cs);
 			request.getSession().setAttribute("input_option", input_option);
@@ -937,7 +940,7 @@ System.out.println("submitMetadataAction type: " + type);
 			request.getSession().setAttribute("suffix", suffix);
 
 			request.getSession().setAttribute("algorithm", algorithm);
-			request.getSession().setAttribute("mapping_version", mapping_version);
+
 
 
 			if (list == null) {
@@ -946,12 +949,18 @@ System.out.println("submitMetadataAction type: " + type);
 				return "message";
 			}
 
-
 String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
 
 String target_scheme = DataUtils.key2CodingSchemeName(target_cs);
 String target_version = DataUtils.key2CodingSchemeVersion(target_cs);
+
+			request.getSession().setAttribute("source_scheme", source_scheme);
+			request.getSession().setAttribute("source_version", source_version);
+			request.getSession().setAttribute("target_scheme", target_scheme);
+			request.getSession().setAttribute("target_version", target_version);
+
+
 
 System.out.println("Creating MappingObject ...codingscheme");
 
@@ -969,10 +978,6 @@ System.out.println("Creating MappingObject ...codingscheme");
 
 
 			String valueSetDefinitionName = (String) request.getParameter("valueSetDefinitionName");
-
-
-			String identifier = (String) request.getParameter("identifier");
-			//String mapping_version = (String) request.getParameter("mapping_version");
 			String source_cs = (String) request.getParameter("source_cs");
 			String property = (String) request.getParameter("property");
 			String vsdURI = (String) request.getParameter("vsdURI");
@@ -1217,7 +1222,11 @@ System.out.println("Creating MappingObject ... valueset ");
                 .getExternalContext().getRequest();
 
         String type = (String) request.getParameter("type");
+        String identifier = (String) request.getParameter("identifier");
+        String mapping_version = (String) request.getParameter("mapping_version");
         request.getSession().setAttribute("type", type);
+        request.getSession().setAttribute("identifier", identifier);
+        request.getSession().setAttribute("mapping_version", mapping_version);
 		return type;
 	}
 

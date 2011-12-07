@@ -133,11 +133,11 @@ int lcv = 0;
 		     <td class="textbody10">
 		        &#xA0;&#xA0;
 
-              <a href="<%= request.getContextPath() %>/pages/batch_mapping_form.jsf?mode=readonly&id=<%=obj_id%>" >
+              <a href="<%= request.getContextPath() %>/pages/batch_mapping_form.jsf?action=view&mode=readonly&id=<%=obj_id%>&identifier=<%=obj.getName()%>&version=<%=obj.getVersion()%>" >
                 View
               </a>
                         &#xA0; 
-              <a href="<%= request.getContextPath() %>/pages/batch_mapping_form.jsf?action=edit&id=<%=obj_id%>" >
+              <a href="<%= request.getContextPath() %>/pages/batch_mapping_form.jsf?action=edit&id=<%=obj_id%>&identifier=<%=obj.getName()%>&version=<%=obj.getVersion()%>" >
                 Edit
               </a>     
                      </td>
