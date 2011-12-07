@@ -734,7 +734,6 @@ public class MappingThread implements Runnable
 					obj.setData(input_list);
 					mappings.put(id, obj);
 
-
 					System.out.println("MAPPING DATA UPDATED.");
 					session.setAttribute("mappings", mappings);
 

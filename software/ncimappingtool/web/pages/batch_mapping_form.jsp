@@ -96,91 +96,6 @@
 
 <%
 
-String mode = (String) request.getParameter("mode");
-if (mode != null && mode.compareTo("readonly") == 0) {
-        readonly = true;
-} else {
-    mode = "edit";
-}
-
-
-    
-
-
-String action = (String) request.getParameter("action");
-String id = (String) request.getParameter("id");
-
-if (id == null) {
-    String mapping_name = (String) request.getSession().getAttribute("identifier");
-    String mapping_version = (String) request.getSession().getAttribute("mapping_version");
-    id = MappingObject.computeKey(mapping_name, mapping_version);
-}
-
-if ((mode != null && mode.compareTo("readonly") == 0) || (action != null && action.compareTo("edit") == 0)) {
-    
-    HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
-    if (mappings == null) {
-        mappings = new HashMap();
-        request.getSession().setAttribute("mappings", mappings);
-    } else {
-	    MappingObject obj = (MappingObject) mappings.get(id);
-
-	    request.getSession().setAttribute("identifier", obj.getName());
-	    request.getSession().setAttribute("mapping_version", obj.getVersion());
-
-	    request.getSession().setAttribute("type", obj.getType());
-
-	    request.getSession().setAttribute("ncim_version", obj.getNCIMVersion());
-	    request.getSession().setAttribute("source_abbrev", obj.getFromCS());
-	    request.getSession().setAttribute("target_abbrev", obj.getToCS());
-
-	    request.getSession().setAttribute("source_cs", obj.getFromCS());
-	    request.getSession().setAttribute("target_cs", obj.getToCS());
-
-
-	    request.getSession().setAttribute("vsdURI", obj.getVsdURI());
-	    request.getSession().setAttribute("valueSetDefinitionName", obj.getValueSetDefinitionName());
-
-	    request.getSession().setAttribute("data", obj.getData());
-	    request.getSession().setAttribute("mapping_hmap", obj.getMappingHashMap());
-	    
-	    request.getSession().setAttribute("algorithm", "exactMatch");
-	    request.getSession().setAttribute("input_option", "Code");
-	    
-	    request.getSession().setAttribute("id", id);
-	    
-    }
-
-}
-
-
-String batch_status = (String) request.getSession().getAttribute("batch_status");
-
-MappingData mappingData = null;
-String basePath = request.getContextPath(); 
-String message = (String) request.getSession().getAttribute("message");
-
-request.getSession().removeAttribute("message");
-String type = (String) request.getSession().getAttribute("type");
-
-String identifier = (String) request.getSession().getAttribute("identifier");
-if (identifier != null && identifier.compareTo("null") == 0) {
-    identifier = "";
-} else if (identifier == null) {
-    identifier = "";
-}
-
-
-String mapping_version = (String) request.getSession().getAttribute("mapping_version");
-if (mapping_version != null && mapping_version.compareTo("null") == 0) {
-    mapping_version = "";
-} else if (mapping_version == null) {
-    mapping_version = "";
-}
-
- 
-  
-  
 String source_scheme = null;
 String source_version = null;
 String source_namespace = null;
@@ -201,12 +116,147 @@ String target_abbrev = null;
 String source_cs = null;
 String target_cs = null;
 
+String target_verson = null;
+
 String vsdURI = null;
 String valueSetDefinitionName = null;
-			
+
+String identifier = null;
+String mapping_version = null;
+
+String batch_status = (String) request.getSession().getAttribute("batch_status");
+MappingData mappingData = null;
+String basePath = request.getContextPath(); 
+String message = (String) request.getSession().getAttribute("message");
+
+request.getSession().removeAttribute("message");
+String type = (String) request.getSession().getAttribute("type");
 
 String ncim_version = null;
-if (type.compareTo("ncimeta") == 0) {
+HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
+
+List selected_matches = null;
+HashMap code2name_hmap = null;
+HashMap mapping_hmap = null;
+
+String mode = (String) request.getParameter("mode");
+if (mode != null && mode.compareTo("readonly") == 0) {
+        readonly = true;
+} else {
+    mode = "edit";
+}
+
+String action = (String) request.getParameter("action");
+String id = (String) request.getParameter("id");
+
+
+	identifier = (String) request.getSession().getAttribute("identifier");
+	mapping_version = (String) request.getSession().getAttribute("mapping_version");
+
+
+/*
+identifier = (String) request.getParameter("identifier");
+mapping_version = (String) request.getParameter("version");
+if (mapping_version == null) {
+    mapping_version = (String) request.getParameter("mapping_version");
+}
+*/
+MappingObject obj = null;
+if (action != null && (action.compareTo("view") == 0 || action.compareTo("edit") == 0)) {
+	identifier = (String) request.getParameter("identifier");
+	mapping_version = (String) request.getParameter("version");
+	mappings = (HashMap) request.getSession().getAttribute("mappings");
+	obj = (MappingObject) mappings.get(id);
+	
+}
+
+System.out.println("identifier: " + identifier);
+System.out.println("mapping_version: " + mapping_version);
+
+
+//if ((mode != null && mode.compareTo("readonly") == 0) || (action != null && action.compareTo("edit") == 0)) {
+if (id != null) {
+    
+    System.out.println("id: " + id);
+    //id = MappingObject.computeKey(identifier, mapping_version);
+
+    mappings = (HashMap) request.getSession().getAttribute("mappings");
+    if (mappings == null) {
+        mappings = new HashMap();
+        request.getSession().setAttribute("mappings", mappings);
+    } 
+    obj = (MappingObject) mappings.get(id);
+
+	if (obj == null) {
+	    System.out.println("obj with id not found??? " + id);
+	} else {
+	            type = obj.getType();
+		    request.getSession().setAttribute("type", type);
+
+                    ncim_version = obj.getNCIMVersion();
+                    if (ncim_version != null) {
+		    	request.getSession().setAttribute("ncim_version", ncim_version);
+		    }
+		    
+		    source_abbrev = obj.getFromCS();
+		    if (source_abbrev != null) {
+		    	request.getSession().setAttribute("source_abbrev", source_abbrev);
+		    }
+		    
+		    target_abbrev = obj.getToCS();
+		    if (target_abbrev != null) {
+		    	request.getSession().setAttribute("target_abbrev", target_abbrev);
+		    }
+
+                    source_scheme = obj.getFromCS();
+		    if (source_scheme != null) {
+		    	request.getSession().setAttribute("source_scheme", source_scheme);
+		    }
+		    
+		    target_scheme = obj.getToCS();
+		    if (target_scheme != null) {
+		    	request.getSession().setAttribute("target_scheme", target_scheme);
+		    }
+
+                    source_version = obj.getFromVersion();
+                    if (source_version != null) {
+		        request.getSession().setAttribute("source_version", source_version);
+		    }
+		    
+		    
+		    target_version = obj.getToVersion();
+		    if (target_version != null) {
+		    	request.getSession().setAttribute("target_verson", target_version);
+		    }	
+
+		    source_cs = source_scheme + " (version: " + source_version + ")";
+		    request.getSession().setAttribute("source_cs", source_cs);
+
+		    target_cs = target_scheme + " (version: " + target_version + ")";
+		    request.getSession().setAttribute("target_cs", target_cs);
+
+                    vsdURI = obj.getVsdURI();
+                    if (vsdURI != null) {
+		    	request.getSession().setAttribute("vsdURI", vsdURI);
+		    }
+		    
+		    valueSetDefinitionName = obj.getValueSetDefinitionName();
+		    if (valueSetDefinitionName !- null) {
+		    	request.getSession().setAttribute("valueSetDefinitionName", valueSetDefinitionName);
+                    }
+                    
+		    request.getSession().setAttribute("data", obj.getData());
+		    
+		    mapping_hmap = obj.getMappingHashMap();
+		    request.getSession().setAttribute("mapping_hmap", mapping_hmap);
+
+		    request.getSession().setAttribute("algorithm", "exactMatch");
+		    request.getSession().setAttribute("input_option", "Code");
+
+		    request.getSession().setAttribute("id", id);
+	}
+
+} else if (type.compareTo("ncimeta") == 0) {
 	ncim_version = (String) request.getSession().getAttribute("ncim_version");
 	if (ncim_version != null && ncim_version.compareTo("null") == 0) {
 	    ncim_version = "";
@@ -230,22 +280,30 @@ if (type.compareTo("ncimeta") == 0) {
 	target_cs = (String) request.getSession().getAttribute("target_cs");	
 
 
+System.out.println("codingscheme source_cs: " + source_cs);
+System.out.println("codingscheme target_cs: " + target_cs);
+
+
 	source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 	source_version = DataUtils.key2CodingSchemeVersion(source_cs);
 
+System.out.println("codingscheme source_scheme: " + source_scheme);
+System.out.println("codingscheme source_version: " + source_version);
+
 	target_scheme = DataUtils.key2CodingSchemeName(target_cs);
 	target_version = DataUtils.key2CodingSchemeVersion(target_cs);
+
+System.out.println("codingscheme target_scheme: " + target_scheme);
+System.out.println("codingscheme target_version: " + target_version);
+
 	
 } else if (type.compareTo("valueset") == 0) {
-
 	source_cs = (String) request.getSession().getAttribute("source_cs");
 	vsdURI = (String) request.getSession().getAttribute("vsdURI");
 	valueSetDefinitionName = (String) request.getSession().getAttribute("valueSetDefinitionName");
 
-
 	source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 	source_version = DataUtils.key2CodingSchemeVersion(source_cs);
-	
 }  
 
 
@@ -264,9 +322,7 @@ if (expanded_hset == null) {
 } 
 
 
-List selected_matches = null;
-HashMap code2name_hmap = null;
-HashMap mapping_hmap = (HashMap) request.getSession().getAttribute("mapping_hmap");
+mapping_hmap = (HashMap) request.getSession().getAttribute("mapping_hmap");
 
 
 if (mapping_hmap == null) {
@@ -409,9 +465,6 @@ Iterator it = mapping_hmap.keySet().iterator();
                  <p class="textbodyred">&nbsp;<%=batch_status%></p>
             <% } %> 
             
-         <!--   
-         <table border="0" width="700px">
-          -->
           
          <table> 
           

@@ -388,11 +388,14 @@ if (input_option.compareToIgnoreCase("Property") == 0) {
      </table> 
 
      <input type="hidden" name="type" id="type" value="codingscheme">
+     
      <input type="hidden" name="identifier" id="identifier" value="<%=identifier%>">
+     <input type="hidden" name="mapping_version" id="mapping_version" value="<%=mapping_version%>">
+     
      <input type="hidden" name="source_cs" id="source_cs" value="<%=source_cs%>">
      <input type="hidden" name="target_cs" id="target_cs" value="<%=target_cs%>">
      <input type="hidden" name="input_option" id="input_option" value="<%=input_option%>">
-     <input type="hidden" name="mapping_version" id="mapping_version" value="<%=mapping_version%>">
+     
      
      
      <input type="hidden" name="source_scheme" id="source_scheme" value="<%=source_scheme%>">
