@@ -30,7 +30,7 @@
   String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
   String evs_service_url = new DataUtils().getEVSServiceURL();
   
-  String ncit_url = "http://nciterms.nci.nih.gov/";//new DataUtils().getNCItURL();
+  String ncit_url = new DataUtils().getNCItURL();
   
   session = request.getSession(true);
   boolean readonly = false;
@@ -241,7 +241,7 @@ if (id != null) {
 		    }
 		    
 		    valueSetDefinitionName = obj.getValueSetDefinitionName();
-		    if (valueSetDefinitionName !- null) {
+		    if (valueSetDefinitionName != null) {
 		    	request.getSession().setAttribute("valueSetDefinitionName", valueSetDefinitionName);
                     }
                     

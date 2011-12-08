@@ -2650,7 +2650,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
         NCImtBrowserProperties properties = null;
         try {
             properties = NCImtBrowserProperties.getInstance();
-            _ncimURL = properties.getProperty(NCImtBrowserProperties.NCIT_URL);
+            _ncitURL = properties.getProperty(NCImtBrowserProperties.NCIT_URL);
             if (_ncitURL == null) {
                 _ncitURL = default_info;
             }
