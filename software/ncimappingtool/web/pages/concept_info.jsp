@@ -157,7 +157,7 @@ System.out.println("target_scheme: " + target_scheme);
 System.out.println("target_version: " + target_version);
 
 
-        request.getSession().getAttribute("target_scheme", target_scheme);
+        request.getSession().setAttribute("target_scheme", target_scheme);
         
 
 	
