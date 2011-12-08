@@ -112,8 +112,8 @@ if (identifier != null && identifier.compareTo("null") == 0) {
     identifier = "";
 }
 
-//String ncit_url = new DataUtils().getNCItURL();
-String ncit_url = "http://nciterms.nci.nih.gov/";//new DataUtils().getNCItURL();
+String ncit_url = new DataUtils().getNCItURL();
+//String ncit_url = "http://nciterms.nci.nih.gov/";//new DataUtils().getNCItURL();
 
 String type = (String) request.getSession().getAttribute("type");
 
