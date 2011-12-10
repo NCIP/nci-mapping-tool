@@ -688,7 +688,7 @@ if (!readonly) {
 		id="Export_XML"
 		value="Export_XML"
 		image="#{basePath}/images/exportxml.gif"
-		action="#{MappingBean.exportMappingToXMLAction}" 
+		action="#{mappingBean.exportMappingToXMLAction}" 
 		onclick="javascript:cursor_wait();"
 		alt="Export to XML" >
 	</h:commandButton>  

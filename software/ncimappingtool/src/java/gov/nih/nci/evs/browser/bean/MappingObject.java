@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.browser.bean;
 
+import gov.nih.nci.evs.mapping.*;
 
 import java.util.*;
 import java.net.URI;
@@ -42,11 +43,11 @@ import org.LexGrid.concepts.Definition;
 import org.LexGrid.commonTypes.PropertyQualifier;
 import org.LexGrid.commonTypes.Property;
 
-
-
-
-
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 
     public class MappingObject implements Cloneable {
@@ -293,6 +294,107 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
             return obj;
         }
 
+        public String toXML() {
+           String m_description = this._name + " (version: " + this._version + ")";
+
+           List<MappingElement> mappingElements = new ArrayList();
+
+           Iterator it = _mapping_hmap.keySet().iterator();
+           while (it.hasNext()) {
+			   String input_data = (String) it.next();
+
+			   List<MappingEntry> entries = new ArrayList();
+
+
+			   List selected_matches = (ArrayList) _mapping_hmap.get(input_data);
+
+			   if (selected_matches != null) {
+				   for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
+						 MappingData mappingData = (MappingData) selected_matches.get(lcv2);
+
+						 String source_code = mappingData.getSourceCode();
+						 String source_name = mappingData.getSourceName();
+						 String source_namespace = mappingData.getSourceCodeNamespace();
+
+                         String associationName = "mapsTo";
+						 String rel = mappingData.getRel();
+						 if (DataUtils.isNull(rel)) rel = "";
+						 int score = mappingData.getScore();
+						 String target_code = mappingData.getTargetCode();
+						 String target_name = mappingData.getTargetName();
+						 String target_namespace = mappingData.getTargetCodeNamespace();
+
+						 String source_scheme = mappingData.getSourceCodingScheme();
+						 String source_version = mappingData.getSourceCodingSchemeVersion();
+						 String target_scheme = mappingData.getTargetCodingScheme();
+						 String target_version = mappingData.getTargetCodingSchemeVersion();
+
+						 source_scheme = DataUtils.getFormalName(source_scheme);
+						 target_scheme = DataUtils.getFormalName(target_scheme);
+
+/*
+	public MappingEntry(
+		String sourceCode,
+		String sourceName,
+		String sourceCodingScheme,
+		String sourceCodingSchemeVersion,
+		String sourceCodeNamespace,
+		String associationName,
+		String rel,
+		int score,
+		String targetCode,
+		String targetName,
+		String targetCodingScheme,
+		String targetCodingSchemeVersion,
+		String targetCodeNamespace) {
+*/
+
+						 MappingEntry mappingEntry = new MappingEntry(
+							source_code,
+							source_name,
+							source_scheme,
+							source_version,
+							source_namespace,
+							associationName,
+							rel,
+							score,
+							target_code,
+							target_name,
+							target_scheme,
+							target_version,
+							target_namespace);
+
+                         entries.add(mappingEntry);
+					 }
+				 }
+
+				 MappingElement element = new MappingElement(input_data, entries);
+				 mappingElements.add(element);
+			}
+
+		    Mapping mapping = new Mapping(
+				this._type,
+				this._name,
+				this._version,
+				m_description,
+				this._from_cs,
+				this._from_version,
+				this._to_cs,
+				this._ncim_version,
+				this._ncim_version,
+				this._vsdURI,
+				this._valueSetDefinitionName,
+				this._creation_date,
+				this._uuid,
+				this._status,
+				mappingElements);
+
+			XStream xstream_xml = new XStream(new DomDriver());
+			String xml = xstream_xml.toXML(mapping);
+			//System.out.println("\n\nxstream_xml.toXML(mapping):\n");
+			//System.out.println(xml);
+			return xml;
+		}
 
 
     }

@@ -392,7 +392,16 @@
              <from-action>#{mappingBean.removeMappingAction}</from-action>
              <from-outcome>valueset</from-outcome>
              <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
-         </navigation-case>           
+         </navigation-case>   
+         
+          <navigation-case>
+             <from-action>#{mappingBean.exportMappingToXMLAction}</from-action>
+             <from-outcome>export</from-outcome>
+             <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+         </navigation-case>   
+         
+         
+         
          
          
     </navigation-rule>    
