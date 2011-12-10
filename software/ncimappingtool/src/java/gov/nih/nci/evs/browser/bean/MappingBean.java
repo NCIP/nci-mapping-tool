@@ -44,6 +44,10 @@ import org.LexGrid.commonTypes.Property;
 
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -1693,19 +1697,62 @@ System.out.println("matchText: " + matchText);
         System.out.println("ValueSetReference: " + ob.getValueSetReference());
         System.out.println("Codes: " + ob.getCodes());
 	}
+
+
+    public String exportMappingToXMLAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		String type = (String) request.getParameter("type");
+
+
+        try {
+        	String xml = "xml";
+			StringBuffer sb = new StringBuffer(xml);
+
+			HttpServletResponse response = (HttpServletResponse) FacesContext
+					.getCurrentInstance().getExternalContext().getResponse();
+			response.setContentType("text/xml");
+
+			String mapping_name = (String) request.getParameter("identifier");
+			String mapping_version = (String) request.getParameter("mapping_version");
+
+			String key = MappingObject.computeKey(mapping_name, mapping_version);
+			HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
+			if (mappings == null) {
+				mappings = new HashMap();
+				request.getSession().setAttribute("mappings", mappings);
+			}
+
+			MappingObject obj = (MappingObject) mappings.get(key);
+			xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+
+			if (obj != null) {
+				sb = new StringBuffer(xml);
+				sb = sb.append(obj.toXML());
+			}
+
+			mapping_name = mapping_name.replaceAll(" ", "_");
+			mapping_name = mapping_name + ".xml";
+
+			response.setHeader("Content-Disposition", "attachment; filename="
+					+ mapping_name);
+
+			response.setContentLength(sb.length());
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+			ouputStream.flush();
+			ouputStream.close();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+        FacesContext.getCurrentInstance().responseComplete();
+		return "export";
+	}
+
+
 }
 
-/*
-12:25:11,168 ERROR [STDERR] Caused by: java.lang.NoSuchMethodException: org.lexg
-rid.valuesets.impl.LexEVSValueSetDefinitionServicesImpl.resolveValueSetDefinitio
-n(org.LexGrid.valueSets.ValueSetDefinition, org.LexGrid.LexBIG.DataModel.Collect
-ions.AbsoluteCodingSchemeVersionReferenceList, java.lang.String, java.util.HashM
-ap, org.LexGrid.LexBIG.DataModel.Collections.SortOptionList)
-12:25:11,183 ERROR [STDERR]     at java.lang.Class.getMethod(Class.java:1605)
-12:25:11,183 ERROR [STDERR]     at org.LexGrid.LexBIG.caCore.applicationservice.
-impl.LexEVSApplicationServiceImpl.executeRemotely(LexEVSApplicationServiceImpl.j
-ava:176)
-12:25:11,183 ERROR [STDERR]     ... 126 more
-12:25:11,183 INFO  [STDOUT] Error: vsd_service.resolveValueSetDefinition throws
-exception.
-*/
