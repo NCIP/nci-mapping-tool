@@ -272,7 +272,7 @@ public class NCImtBrowserProperties {
 
     private static void loadProperties() throws Exception {
         String propertyFile =
-            System.getProperty("gov.nih.nci.evs.browser.NCImtBrowserProperties");
+            System.getProperty("NCImtProperties");
         _logger.info("NCImtBrowserProperties File Location= " + propertyFile);
 
 System.out.println("propertyFile: " + propertyFile);

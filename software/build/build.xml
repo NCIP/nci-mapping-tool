@@ -305,14 +305,14 @@
         <bda:AddJBossProperty
             deploydir="${jboss.server.path}/server/default/deploy"
             backup="true"
-            name="gov.nih.nci.evs.browser.NCImtBrowserProperties"
+            name="NCImtProperties"
             value="${application.data.path}/${ncimappingtool.conf.path}/${webapp.prop.file}"
         />
 
         <bda:AddJBossProperty
             deploydir="${jboss.server.path}/server/default/deploy"
             backup="true"
-            name="gov.nih.nci.evs.browser.NCImtlog4jProperties"
+            name="NCImtlog4jProperties"
             value="${application.data.path}/${ncimappingtool.conf.path}/${project.short.name}-log4j.xml"
         />
 
@@ -359,13 +359,13 @@
                 <bda:RemoveJBossProperty
                     deploydir="${jboss.server.path}/server/default/deploy"
                     backup="true"
-                    name="gov.nih.nci.evs.browser.NCImtBrowserProperties"
+                    name="NCImtProperties"
                 />
 
                 <bda:RemoveJBossProperty
                     deploydir="${jboss.server.path}/server/default/deploy"
                     backup="true"
-                    name="gov.nih.nci.evs.browser.NCItlog4jProperties"
+                    name="NCImtlog4jProperties"
                 />
 
                 <delete file="${jboss.server.path}/server/default/deploy/${webapp.war.name}" quiet="true" />
