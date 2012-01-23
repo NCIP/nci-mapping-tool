@@ -286,7 +286,8 @@ import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
 				}
 
 				int resolveAssociationDepth = 1;
-				if (this._transitivity.compareTo("true") == 0) {
+
+				if (this._transitivity != null && this._transitivity.compareTo("true") == 0) {
 					resolveAssociationDepth = -1;
 				}
 
