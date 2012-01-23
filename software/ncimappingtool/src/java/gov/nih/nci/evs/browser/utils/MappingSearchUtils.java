@@ -975,4 +975,411 @@ System.out.println(s);
 	}
 
 
+    public List simpleSearch(String type,
+                             String input_option,
+                             String input_value,
+
+                             String ncim_version,
+                             String source_abbrev,
+                             String target_abbrev,
+
+                             String source_cs,
+                             String target_cs,
+
+                             String algorithm) {
+
+	         return simpleSearch(type,
+	                             input_option,
+	                             input_value,
+
+	                             ncim_version,
+	                             source_abbrev,
+	                             target_abbrev,
+
+	                             source_cs,
+	                             target_cs,
+
+	                             null,
+
+				                 null,
+				                 null,
+				                 null,
+
+				                 null,
+				                 null,
+				                 null,
+				                 null,
+
+	                             algorithm);
+
+    }
+
+    public List simpleSearch(String type,
+                             String input_option,
+                             String input_value,
+
+                             String ncim_version,
+                             String source_abbrev,
+                             String target_abbrev,
+
+                             String source_cs,
+                             String target_cs,
+
+                             CodedNodeSet vsd_cns,
+
+			                 String property,
+			                 String src_property,
+			                 String target_property,
+
+			                 String left_trim,
+			                 String right_trim,
+			                 String prefix,
+			                 String suffix,
+
+                             String algorithm
+
+                            ) {
+
+		List match_list = new ArrayList();
+		if (type.compareTo("valueset") == 0) {
+
+			String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
+			String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
+			String sourceCodingScheme = DataUtils.getFormalName(source_scheme);
+			if (sourceCodingScheme == null) sourceCodingScheme = source_scheme;
+			String sourceCodingSchemeVersion = null;
+			sourceCodingSchemeVersion = source_version;
+
+			HashSet hset = new HashSet();
+			String source = null;
+			boolean ranking = false;
+
+			int counter = 0;
+
+
+
+			String sourceCode = null;
+			String matchtext = null; //(String) values.elementAt(1);
+
+			if (input_option.compareToIgnoreCase("Code") == 0) {
+				sourceCode = input_value;
+
+			} else {
+				Vector values = DataUtils.parseData(input_value);
+				sourceCode = (String) values.elementAt(0);
+				matchtext = (String) values.elementAt(1);
+			}
+
+
+			ResolvedConceptReferencesIterator iterator = null;
+			String sourceName = "";
+			String sourceCodeNamespace = "";
+			String rel = "";
+			int score = 0;
+			String associationName = "mapsTo";
+
+			try {
+
+				Entity source_entity = MappingUtils.getConceptByCode(sourceCodingScheme,
+														sourceCodingSchemeVersion,
+														null,
+														sourceCode);
+
+				if (source_entity == null) {
+					//System.out.println("source_entity not found: " + sourceCode);
+				} else {
+					//System.out.println("source_entity found: " + sourceCode);
+					if (source_entity != null) {
+						sourceName = source_entity.getEntityDescription().getContent();
+						sourceCodeNamespace = source_entity.getEntityCodeNamespace();
+					}
+
+					if(input_option.compareToIgnoreCase("Code") == 0) {
+						System.out.println("calling getSynonyms: sourceCode " + sourceCode);
+
+						Vector matchtext_vec = new Vector();
+						Vector synonyms = DataUtils.getSynonyms(sourceCodingScheme, sourceCodingSchemeVersion, null, sourceCode);
+						if (synonyms != null) {
+							for (int k=0; k<synonyms.size(); k++) {
+								String synonym_str = (String) synonyms.elementAt(k);
+								Vector v = DataUtils.parseData(synonym_str);
+								String synonym = (String) v.elementAt(0);
+								matchtext_vec.add(synonym);
+								System.out.println(sourceCode + " " + synonym);
+							}
+							iterator = new SearchUtils().searchByName(vsd_cns, matchtext_vec, algorithm);
+						}
+
+					} else if(input_option.compareTo("Name") == 0) {
+						//iterator = MappingUtils.searchByName(targetCodingScheme, targetCodingSchemeVersion, matchtext, null, algorithm, false, 10);
+						Vector matchtext_vec = new Vector();
+						matchtext_vec.add(matchtext);
+						iterator = new SearchUtils().searchByName(vsd_cns, matchtext_vec, algorithm);
+
+					}
+
+				}
+				if (iterator != null) {
+					try {
+						 HashSet key_hset = new HashSet();
+						 int numRemaining = iterator.numberRemaining();
+
+						 while (iterator.hasNext()) {
+							 ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
+
+							 String targetCodingScheme = rcr.getCodingSchemeName();
+							 String targetCodingSchemeVersion = rcr.getCodingSchemeVersion();
+
+							 Entity target_entity = MappingUtils.getConceptByCode(targetCodingScheme, targetCodingSchemeVersion, null, rcr.getConceptCode());
+
+							 String targetCode = rcr.getConceptCode();
+							 String targetName = "";
+							 String targetCodeNamespace = "";
+							 if (target_entity != null) {
+								targetName = target_entity.getEntityDescription().getContent();
+								targetCodeNamespace = target_entity.getEntityCodeNamespace();
+							 }
+
+							 String key = sourceCode + "|" + targetCode;
+							 if (!key_hset.contains(key)) {
+								 key_hset.add(key);
+
+								 MappingData mappingData = new MappingData(
+									sourceCode,
+									sourceName,
+									sourceCodingScheme,
+									sourceCodingSchemeVersion,
+									sourceCodeNamespace,
+									associationName,
+									rel,
+									score,
+									targetCode,
+									targetName,
+									targetCodingScheme,
+									targetCodingSchemeVersion,
+									targetCodeNamespace);
+								 match_list.add(mappingData);
+							 }
+						 }
+						 key_hset.clear();
+
+					 } catch (Exception ex) {
+						ex.printStackTrace();
+					 }
+				  }
+
+			  } catch (Exception ex) {
+				  ex.printStackTrace();
+			  }
+
+	    } else if (type.compareTo("ncimeta") == 0) {
+
+			String source_scheme = null;
+			String source_version = null;
+			String source_namespace = null;
+			String target_scheme = null;
+			String target_version = null;
+
+			String source_code = null;
+			String source_name = null;
+			String rel = null;
+			String score = null;
+			String target_code = null;
+			String target_name = null;
+			String target_namespace = null;
+
+			MappingData mappingData = null;
+
+			if (source_abbrev != null && source_abbrev.compareTo("") != 0) {
+				source_scheme = DataUtils.getFormalName(source_abbrev);
+				source_version = DataUtils.getVocabularyVersionByTag(source_scheme, null);
+			} else {
+				source_scheme = "UNSPECIFIED";
+				source_version = "N/A";
+			}
+
+			target_scheme = DataUtils.getFormalName(target_abbrev);
+			target_version = DataUtils.getVocabularyVersionByTag(target_scheme, null);
+
+			int counter = 0;
+
+			try {
+				  match_list = MappingUtils.process_ncimeta_mapping(ncim_version,
+													source_abbrev,
+													target_abbrev,
+													input_option,
+													algorithm,
+													input_value);
+
+			} catch (Exception ex) {
+				  ex.printStackTrace();
+			}
+
+
+		} else if (type.compareTo("codingscheme") == 0) {
+
+			CodedNodeSet restriction = null;
+
+			String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
+			String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
+
+			String target_scheme = DataUtils.key2CodingSchemeName(target_cs);
+			String target_version = DataUtils.key2CodingSchemeVersion(target_cs);
+
+			String sourceCodingScheme = DataUtils.getFormalName(source_scheme);
+			if (sourceCodingScheme == null) sourceCodingScheme = source_scheme;
+
+			String sourceCodingSchemeVersion = null;
+			sourceCodingSchemeVersion = source_version;
+
+			String targetCodingScheme = DataUtils.getFormalName(target_scheme);
+			if (targetCodingScheme == null) targetCodingScheme = target_scheme;
+
+			String targetCodingSchemeVersion = null;
+			targetCodingSchemeVersion = target_version;
+
+			ArrayList list = new ArrayList();
+			HashSet hset = new HashSet();
+			String source = null;
+			boolean ranking = false;
+
+			MappingUtils mapping_utils = null;//
+			try {
+				mapping_utils = new MappingUtils();
+		    } catch (Exception ex) {
+				ex.printStackTrace();
+				return null;
+			}
+
+			int counter = 0;
+			String sourceCode = null;
+			String matchtext = null;
+
+			if (input_option.compareToIgnoreCase("Code") == 0) {
+				sourceCode = input_value;
+
+			} else if (input_option.compareToIgnoreCase("Name") == 0) {
+				Vector values = DataUtils.parseData(input_value);
+				sourceCode = (String) values.elementAt(0);
+				matchtext = (String) values.elementAt(1);
+			} else if (input_option.compareToIgnoreCase("Property") == 0) {
+				sourceCode = input_value;
+			}
+
+			ResolvedConceptReferencesIterator iterator = null;
+			String sourceName = "";
+			String sourceCodeNamespace = "";
+			String rel = "";
+			int score = 0;
+			String associationName = "mapsTo";
+
+			try {
+
+				Entity source_entity = null;
+				if (sourceCodingScheme != null) {
+					source_entity = MappingUtils.getConceptByCode(sourceCodingScheme,
+														sourceCodingSchemeVersion,
+														null,
+														sourceCode);
+				}
+				if (source_entity != null) {
+					if (source_entity != null) {
+						sourceName = source_entity.getEntityDescription().getContent();
+						sourceCodeNamespace = source_entity.getEntityCodeNamespace();
+					}
+				} else {
+						sourceName = matchtext;
+						sourceCodeNamespace = "UNSPECIFIED";
+						sourceCodingSchemeVersion = "N/A";
+						sourceCodeNamespace = "N/A";
+				}
+
+				if(input_option.compareToIgnoreCase("Code") == 0) {
+					Vector matchtext_vec = new Vector();
+					Vector synonyms = DataUtils.getSynonyms(sourceCodingScheme, sourceCodingSchemeVersion, null, sourceCode);
+					if (synonyms != null) {
+						for (int k=0; k<synonyms.size(); k++) {
+							String synonym_str = (String) synonyms.elementAt(k);
+							Vector v = DataUtils.parseData(synonym_str);
+							String synonym = (String) v.elementAt(0);
+							matchtext_vec.add(synonym);
+							System.out.println(sourceCode + " " + synonym);
+						}
+						iterator = new SearchUtils().searchByName(targetCodingScheme, targetCodingSchemeVersion, matchtext_vec, algorithm, restriction);
+					}
+
+				} else if(input_option.compareTo("Name") == 0) {
+					iterator = mapping_utils.searchByName(targetCodingScheme, targetCodingSchemeVersion, matchtext, null, algorithm, false, -1);
+
+				} else if (sourceCodingScheme != null) {
+					Vector src_properties = mapping_utils.getPropertyValues(sourceCodingScheme, sourceCodingSchemeVersion,
+																		   sourceCode, src_property);
+					Vector matchText_vec = new Vector();
+					for (int k=0; k<src_properties.size(); k++) {
+						String value = (String) src_properties.elementAt(k);
+						value = new SearchUtils().convertPropertyValue(value, right_trim, left_trim, prefix, suffix);
+						System.out.println(value);
+						matchText_vec.add(value);
+					}
+
+					iterator = new SearchUtils().searchByProperty(
+							targetCodingScheme, targetCodingSchemeVersion, target_property, matchText_vec, algorithm, restriction);
+
+				}
+
+
+				if (iterator == null) {
+					System.out.println("******************* search returns null???");
+				} else {
+
+					try {
+						 HashSet key_hset = new HashSet();
+						 int numRemaining = iterator.numberRemaining();
+						 while (iterator.hasNext()) {
+							 ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
+							 Entity target_entity = MappingUtils.getConceptByCode(targetCodingScheme, targetCodingSchemeVersion, null, rcr.getConceptCode());
+
+							 String targetCode = rcr.getConceptCode();
+							 String targetName = "";
+							 String targetCodeNamespace = "";
+							 if (target_entity != null) {
+								targetName = target_entity.getEntityDescription().getContent();
+								targetCodeNamespace = target_entity.getEntityCodeNamespace();
+							 }
+
+							 String key = sourceCode + "|" + targetCode;
+							 if (!key_hset.contains(key)) {
+								 key_hset.add(key);
+
+								 MappingData mappingData = new MappingData(
+									sourceCode,
+									sourceName,
+									sourceCodingScheme,
+									sourceCodingSchemeVersion,
+									sourceCodeNamespace,
+									associationName,
+									rel,
+									score,
+									targetCode,
+									targetName,
+									targetCodingScheme,
+									targetCodingSchemeVersion,
+									targetCodeNamespace);
+								 match_list.add(mappingData);
+							 }
+						 }
+						 key_hset.clear();
+
+					 } catch (Exception ex) {
+						ex.printStackTrace();
+					 }
+				  }
+
+			  } catch (Exception ex) {
+				  ex.printStackTrace();
+			  }
+
+		}
+		return match_list;
+	}
 }

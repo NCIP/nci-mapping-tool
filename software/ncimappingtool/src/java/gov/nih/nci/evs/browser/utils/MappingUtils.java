@@ -2285,7 +2285,7 @@ for (int i=0; i<u.size(); i++) {
 		String sourceCodingScheme = "UNSPECIFIED";
 		String sourceCodingSchemeVersion = "N/A";
 
-		if (source_abbrev.compareTo("") != 0) {
+		if (source_abbrev != null && source_abbrev.compareTo("") != 0) {
 		    sourceCodingScheme = DataUtils.getFormalName(source_abbrev);
 		    sourceCodingSchemeVersion = DataUtils.getVocabularyVersionByTag(sourceCodingScheme, null);
 		}

@@ -417,7 +417,11 @@ public class MappingThread implements Runnable
 
 			MappingData mappingData = null;
 
-			if (source_abbrev.compareTo("") != 0) {
+
+			System.out.println("MappingThread source_abbrev: " + source_abbrev);
+
+
+			if (source_abbrev != null && source_abbrev.compareTo("") != 0) {
 				source_scheme = DataUtils.getFormalName(source_abbrev);
 				source_version = DataUtils.getVocabularyVersionByTag(source_scheme, null);
 			} else {

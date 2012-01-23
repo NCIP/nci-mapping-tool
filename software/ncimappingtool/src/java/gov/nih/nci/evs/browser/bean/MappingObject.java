@@ -79,6 +79,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
         private HtmlSelectBooleanCheckbox _checkbox = null;
 		private String _status = null;
 		private HashMap _mapping_hmap = new HashMap();
+		private HashMap _status_hmap = new HashMap();
 		private List _data = new ArrayList();
 
 		private String _creation_date = null;
@@ -144,6 +145,14 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 			return this._mapping_hmap;
 		}
 
+		public void setStatusHashMap(HashMap status_hmap) {
+			this._status_hmap = status_hmap;
+		}
+
+		public HashMap getStatusHashMap() {
+			return this._status_hmap;
+		}
+
 		public void setData(List data) {
 			this._data = data;
 		}
@@ -171,6 +180,9 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 		}
 
+		public void setKey(String key) {
+			_key = key;
+		}
 
 
 		public void setKey() {
@@ -193,6 +205,14 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 		public String getKey() {
 			return _key;
+		}
+
+		public String getDescription() {
+			return _description;
+		}
+
+		public void setDescription(String description) {
+			_description = description;
 		}
 
 
@@ -304,8 +324,6 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 			   String input_data = (String) it.next();
 
 			   List<MappingEntry> entries = new ArrayList();
-
-
 			   List selected_matches = (ArrayList) _mapping_hmap.get(input_data);
 
 			   if (selected_matches != null) {
@@ -332,23 +350,6 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 						 source_scheme = DataUtils.getFormalName(source_scheme);
 						 target_scheme = DataUtils.getFormalName(target_scheme);
 
-/*
-	public MappingEntry(
-		String sourceCode,
-		String sourceName,
-		String sourceCodingScheme,
-		String sourceCodingSchemeVersion,
-		String sourceCodeNamespace,
-		String associationName,
-		String rel,
-		int score,
-		String targetCode,
-		String targetName,
-		String targetCodingScheme,
-		String targetCodingSchemeVersion,
-		String targetCodeNamespace) {
-*/
-
 						 MappingEntry mappingEntry = new MappingEntry(
 							source_code,
 							source_name,
@@ -364,13 +365,19 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 							target_version,
 							target_namespace);
 
+                         mappingEntry.setComment(mappingData.getComment());
                          entries.add(mappingEntry);
 					 }
 				 }
 
-				 MappingElement element = new MappingElement(input_data, entries);
+                 String status = null;
+                 if (_status_hmap.containsKey(input_data)) {
+	                 status = (String) _status_hmap.get(input_data);
+				 }
+				 MappingElement element = new MappingElement(input_data, status, entries);
 				 mappingElements.add(element);
 			}
+
 
 		    Mapping mapping = new Mapping(
 				this._type,
@@ -380,7 +387,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 				this._from_cs,
 				this._from_version,
 				this._to_cs,
-				this._ncim_version,
+				this._to_version,
 				this._ncim_version,
 				this._vsdURI,
 				this._valueSetDefinitionName,
@@ -391,10 +398,9 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 			XStream xstream_xml = new XStream(new DomDriver());
 			String xml = xstream_xml.toXML(mapping);
-			//System.out.println("\n\nxstream_xml.toXML(mapping):\n");
-			//System.out.println(xml);
 			return xml;
 		}
+
 
 
     }

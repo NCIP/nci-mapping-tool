@@ -3,6 +3,8 @@ package gov.nih.nci.evs.mapping;
 import java.io.*;
 import java.util.*;
 
+import gov.nih.nci.evs.browser.bean.MappingData;
+
 /**
   * <!-- LICENSE_TEXT_START -->
 * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -61,6 +63,8 @@ public class MappingEntry
 	private String targetCodingScheme;
 	private String targetCodingSchemeVersion;
 	private String targetCodeNamespace;
+
+	private String comment;
 
 // Default constructor
 	public MappingEntry() {
@@ -150,6 +154,9 @@ public class MappingEntry
 		this.targetCodeNamespace = targetCodeNamespace;
 	}
 
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
 // Get methods
 	public String getSourceCode() {
@@ -207,4 +214,29 @@ public class MappingEntry
 	public String getKey() {
 		return this.sourceCode + "|" + this.sourceCodeNamespace + "|" + this.targetCode + "|" + this.targetCodeNamespace;
 	}
+
+	public String getComment() {
+		return this.comment;
+	}
+
+	public MappingData toMappingData() {
+		MappingData obj = new MappingData(
+			this.sourceCode,
+			this.sourceName,
+			this.sourceCodingScheme,
+			this.sourceCodingSchemeVersion,
+			this.sourceCodeNamespace,
+			this.associationName,
+			this.rel,
+			this.score,
+			this.targetCode,
+			this.targetName,
+			this.targetCodingScheme,
+			this.targetCodingSchemeVersion,
+			this.targetCodeNamespace);
+
+		obj.setComment(this.comment);
+		return obj;
+	}
+
 }

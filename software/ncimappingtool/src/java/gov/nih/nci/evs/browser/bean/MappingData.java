@@ -62,6 +62,8 @@ public class MappingData
 	private String targetCodingSchemeVersion;
 	private String targetCodeNamespace;
 
+	private String comment;
+
 // Default constructor
 	public MappingData() {
 	}
@@ -150,7 +152,9 @@ public class MappingData
 		this.targetCodeNamespace = targetCodeNamespace;
 	}
 
-
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 // Get methods
 	public String getSourceCode() {
 		return this.sourceCode;
@@ -202,6 +206,10 @@ public class MappingData
 
 	public String getTargetCodeNamespace() {
 		return this.targetCodeNamespace;
+	}
+
+	public String getComment() {
+		return this.comment;
 	}
 
 	public String getKey() {
