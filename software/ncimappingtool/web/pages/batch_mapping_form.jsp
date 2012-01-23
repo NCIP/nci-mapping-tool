@@ -148,11 +148,8 @@ if (mode != null && mode.compareTo("readonly") == 0) {
 
 String action = (String) request.getParameter("action");
 String id = (String) request.getParameter("id");
-
-
-	identifier = (String) request.getSession().getAttribute("identifier");
-	mapping_version = (String) request.getSession().getAttribute("mapping_version");
-
+identifier = (String) request.getSession().getAttribute("identifier");
+mapping_version = (String) request.getSession().getAttribute("mapping_version");
 
 
 MappingObject obj = null;
@@ -161,8 +158,13 @@ if (action != null && (action.compareTo("view") == 0 || action.compareTo("edit")
 	mapping_version = (String) request.getParameter("version");
 	mappings = (HashMap) request.getSession().getAttribute("mappings");
 	obj = (MappingObject) mappings.get(id);
-	
 }
+
+
+System.out.println("batch_mapping_form.jsp action: " + action);
+System.out.println("batch_mapping_form.jsp identifier: " + identifier);
+System.out.println("batch_mapping_form.jsp mapping_version: " + mapping_version);
+System.out.println("batch_mapping_form.jsp id: " + id);
 
 
 if (id != null) {
@@ -177,7 +179,7 @@ if (id != null) {
 	if (obj == null) {
 	    System.out.println("obj with id not found??? " + id);
 	} else {
-	
+	    System.out.println("obj with id found: " + id);
 		identifier = obj.getName();
 		request.getSession().setAttribute("identifier", identifier);
 		mapping_version = obj.getVersion();
