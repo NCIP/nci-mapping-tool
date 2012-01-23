@@ -105,8 +105,6 @@ java.lang.String valueSetDefinitionRevisionId = null;
 ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(vsdURI), valueSetDefinitionRevisionId); 
 String valueSetDefinitionName =	vsd.getValueSetDefinitionName(); 
 
-//AbsoluteCodingSchemeVersionReferenceList acsvrl = vsd_service.getCodingSchemesInValueSetDefinition(new URI(vsdURI));
-
 ResolvedConceptReferencesIterator iterator = null;
 iterator = (ResolvedConceptReferencesIterator) request.getSession().getAttribute("rcr_iterator");
 if (iterator != null) {
@@ -116,7 +114,8 @@ if (iterator != null) {
        ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
        codes = codes + rcr.getConceptCode() + "\n";
    }
-}
+} 
+
 
 
 %>
@@ -319,42 +318,42 @@ String checked = "";
                      </select>
                 </td></tr>
                 
- <!--               
-                <tr>
-		  <td align="left" class="textbody">
-		      <b>Input Option</b>:&nbsp;<%=input_option%> 
-		  </td>
-                          <td>
-                      &nbsp;
-                          </td>
-                </tr>     
-                
-                
-                
-     <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
- -->
  
      <tr>               
                           <td align="left" class="textbody">
                               <b><%=input_option_label%>&nbsp;data:</b>
                           </td>
-                          
-     <td>  
-             <table>
-             <tr>
-		     <td valign=top>    
-			     <textarea name="codes" cols="50" rows=10 tabindex="3"><%=codes%></textarea>
-			     &nbsp;
-			    <h:commandButton id="import" value="import" action="#{mappingBean.importDataAction}"
-			      image="#{basePath}/images/import.gif"
-			      alt="Import"
-			      tabindex="2">
-			    </h:commandButton>             
-		     </td>
-             </tr>
-             </table>
-         
+ 
+      <td> 
+              <table>
+              <tr>
+ 		     <td valign=top>    
+ 			     <textarea name="codes" cols="50" rows=10 tabindex="3"><%=codes%></textarea>
+ 		     </td>
+ 		     
+ 		     <td>
+ 		         <table>
+ 		            <tr><td>
+ 			    <h:commandButton id="import" value="import" action="#{mappingBean.importDataAction}"
+ 			      image="#{basePath}/images/import.gif"
+ 			      alt="Import"
+ 			      tabindex="2">
+ 			    </h:commandButton> 
+ 			    </td></tr>
+ 			    <tr><td>
+ 			    <h:commandButton id="upload" value="upload" action="#{mappingBean.uploadDataAction}"
+ 			      image="#{basePath}/images/upload.gif"
+ 			      alt="upload"
+ 			      tabindex="2">
+ 			    </h:commandButton> 
+ 			    </td></tr>
+ 			 </table>    
+ 		     </td>
+              </tr>
+              </table>
      </td>
+     
+
      </tr>
      
 

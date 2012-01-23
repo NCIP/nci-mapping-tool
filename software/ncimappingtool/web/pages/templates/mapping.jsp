@@ -3,8 +3,6 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.beans.*" %>
 
-
-
 <%@ page import="java.util.*" %>
 
 
@@ -40,6 +38,11 @@
 					 value="create_mapping" action="#{mappingBean.createMappingAction}"
 					 image="#{contextPath}/images/new.gif" alt="Create a new mapping" />
 					&#xA0;&#xA0;
+
+				      <h:commandButton
+					 value="create_mapping" action="#{mappingBean.uploadMappingAction}"
+					 image="#{contextPath}/images/upload.gif" alt="Upload a mapping" />
+					&#xA0;&#xA0;
 					
 				      <h:commandButton
 					value="clone_mapping" action="#{mappingBean.cloneMappingAction}"
@@ -62,6 +65,13 @@
 
 		
 <%
+
+//MappingObject mappingObj = (MappingObject) request.getSession().getAttribute("mappingObj");
+//if (mappingObj != null) {
+//    request.getSession().removeAttribute("MappingObject");
+//}
+
+
 HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
 if (mappings == null) {
     mappings = new HashMap();
@@ -116,35 +126,40 @@ int lcv = 0;
 				    lcv++;
 				%>
 
-	             <td>
-                        <input type="radio" name="selected_mapping" value="<%=obj_id%>">
-                     </td>
-		     <td>
-                        <%=label%>&nbsp;(created: <%=obj.getCreationDate()%>)
-                     </td>
-		     <td>
-                        <%=from%>
-                     </td>
-		     <td>
-                        <%=to%>
-                     </td>
-                     
-	     
-		     <td class="textbody10">
-		        &#xA0;&#xA0;
+				     <td>
+					<input type="radio" name="selected_mapping" value="<%=obj_id%>">
+				     </td>
+				     <td>
+					<%=label%>&nbsp;(created: <%=obj.getCreationDate()%>)
+				     </td>
+				     <td>
+					<%=from%>
+				     </td>
+				     <td>
+					<%=to%>
+				     </td>
 
-              <a href="<%= request.getContextPath() %>/pages/batch_mapping_form.jsf?action=view&mode=readonly&id=<%=obj_id%>&identifier=<%=obj.getName()%>&version=<%=obj.getVersion()%>" >
-                View
-              </a>
-                        &#xA0; 
-              <a href="<%= request.getContextPath() %>/pages/batch_mapping_form.jsf?action=edit&id=<%=obj_id%>&identifier=<%=obj.getName()%>&version=<%=obj.getVersion()%>" >
-                Edit
-              </a>     
-                     </td>
-		</tr>
+
+				     <td class="textbody10">
+					&#xA0;&#xA0;
+
+			      <a href="<%= request.getContextPath() %>/pages/batch_mapping_form.jsf?action=view&mode=readonly&id=<%=obj_id%>&identifier=<%=obj.getName()%>&version=<%=obj.getVersion()%>" >
+				View
+			      </a>
+					&#xA0; 
+			      <a href="<%= request.getContextPath() %>/pages/batch_mapping_form.jsf?action=edit&id=<%=obj_id%>&identifier=<%=obj.getName()%>&version=<%=obj.getVersion()%>" >
+				Edit
+			      </a>     
+				     </td>
+				</tr>
 						
 <%
 }
+%>
+
+
+
+<%
 
 if (mappings.keySet().size() == 0) {
 %>
@@ -157,6 +172,15 @@ if (mappings.keySet().size() == 0) {
 <%
 }
 %>
+
+
+
+
+
+
+
+
+
 
 					
 			

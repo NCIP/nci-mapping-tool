@@ -7,6 +7,9 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 
+<%@ page import="org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator" %>
+<%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
+
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
@@ -90,6 +93,29 @@ if (!DataUtils.isNull(source_abbrev)) {
 String target_scheme = DataUtils.getFormalName(target_abbrev);
 String target_version = DataUtils.getVocabularyVersionByTag(target_scheme, null);
 
+
+String codes = "";
+
+String action = (String) request.getSession().getAttribute("action");
+if (action != null && action.compareTo("upload_data") == 0) {
+   codes = (String) request.getSession().getAttribute("codes");
+}
+
+else {
+
+	ResolvedConceptReferencesIterator iterator = null;
+	iterator = (ResolvedConceptReferencesIterator) request.getSession().getAttribute("rcr_iterator");
+	if (iterator != null) {
+	   request.getSession().removeAttribute("rcr_iterator");
+	   while (iterator.hasNext()) {
+	       ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
+	       codes = codes + rcr.getConceptCode() + "\n";
+	   }
+	}
+}
+
+
+
 %>
 <f:view>
   <!-- Begin Skip Top Navigation -->
@@ -161,17 +187,6 @@ String target_version = DataUtils.getVocabularyVersionByTag(target_scheme, null)
                       &nbsp;
                           </td>
                 </tr>
-<!--                
-                <tr>
-		  <td align="left" class="textbody">
-		      <b>Input Option</b>:&nbsp;<%=input_option%> 
-		  </td>
-                          <td>
-                      &nbsp;
-                          </td>
-                </tr>                
--->
-
 
      </table>
      
@@ -213,9 +228,8 @@ if (input_option.compareTo("Name") == 0) {
 %>
      
      
-     
-     <tr>          
-
+ 
+      <tr>               
                 <%
                 if (source_scheme != null) {
                 %>
@@ -234,13 +248,32 @@ if (input_option.compareTo("Name") == 0) {
 		
 		<%
 		}
-		%>                         
-                          
-                          
-     <td>  
-         <textarea name="codes" cols="50" rows=10 tabindex="3"></textarea>
-     </td>
+		%>          
+                           
+                           
+      <td> 
+              <table>
+              <tr>
+ 		     <td valign=top>    
+ 			     <textarea name="codes" cols="50" rows=10 tabindex="3"><%=codes%></textarea>
+ 		     </td>
+ 		     
+ 		     <td>
+ 		         <table>
+ 			    <tr><td>
+ 			    <h:commandButton id="upload" value="upload" action="#{mappingBean.uploadDataAction}"
+ 			      image="#{basePath}/images/upload.gif"
+ 			      alt="upload"
+ 			      tabindex="2">
+ 			    </h:commandButton> 
+ 			    </td></tr>
+ 			 </table>    
+ 		     </td>
+              </tr>
+              </table>
+      </td>
      </tr>
+     
      
      
 <tr><td>&nbsp;</td></tr>

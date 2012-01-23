@@ -36,9 +36,15 @@
              <from-action>#{mappingBean.cloneMappingAction}</from-action>
              <from-outcome>clone</from-outcome>
              <to-view-id>/pages/home.jsp</to-view-id>
-         </navigation-case>         
+         </navigation-case>   
          
+          <navigation-case>
+             <from-action>#{mappingBean.uploadMappingAction}</from-action>
+             <from-outcome>upload</from-outcome>
+             <to-view-id>/pages/uploadData.jsp</to-view-id>
+         </navigation-case>  
          
+          
     </navigation-rule>
     
     
@@ -120,6 +126,13 @@
      <navigation-rule>
          <from-view-id>/pages/ncimeta_data.jsp</from-view-id>
 
+          <navigation-case>
+                 <from-action>#{mappingBean.uploadDataAction}</from-action>
+                 <from-outcome>ncimeta</from-outcome>
+                 <to-view-id>/pages/uploadData.jsp</to-view-id>
+          </navigation-case>
+          
+          
          <navigation-case>
              <from-action>#{mappingBean.showFormAction}</from-action>
              <from-outcome>ncimeta</from-outcome>
@@ -189,6 +202,12 @@
       <navigation-rule>
           <from-view-id>/pages/codingscheme_data.jsp</from-view-id>
   
+          <navigation-case>
+                 <from-action>#{mappingBean.uploadDataAction}</from-action>
+                 <from-outcome>codingscheme</from-outcome>
+                 <to-view-id>/pages/uploadData.jsp</to-view-id>
+          </navigation-case>
+          
            <navigation-case>
                <from-action>#{mappingBean.importDataAction}</from-action>
                <from-outcome>codingscheme</from-outcome>
@@ -225,6 +244,12 @@
       <navigation-rule>
           <from-view-id>/pages/valueset_data.jsp</from-view-id>
  
+           <navigation-case>
+                  <from-action>#{mappingBean.uploadDataAction}</from-action>
+                  <from-outcome>valueset</from-outcome>
+                  <to-view-id>/pages/uploadData.jsp</to-view-id>
+          </navigation-case>
+          
             <navigation-case>
                 <from-action>#{mappingBean.importDataAction}</from-action>
                 <from-outcome>valueset</from-outcome>
@@ -258,6 +283,31 @@
        
      </navigation-rule>
  
+  
+     <navigation-rule>
+           <from-view-id>/pages/search_results.jsp</from-view-id>
+         
+           <navigation-case>
+               <from-action>#{mappingBean.saveMappingAction}</from-action>
+               <from-outcome>ncimeta</from-outcome>
+               <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+           </navigation-case>
+  
+           <navigation-case>
+               <from-action>#{mappingBean.saveMappingAction}</from-action>
+               <from-outcome>codingscheme</from-outcome>
+               <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+           </navigation-case>
+           
+            <navigation-case>
+               <from-action>#{mappingBean.saveMappingAction}</from-action>
+               <from-outcome>valueset</from-outcome>
+               <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+           </navigation-case>          
+           
+    </navigation-rule> 
+    
+    
     
 
      <navigation-rule>
@@ -306,7 +356,30 @@
          
     </navigation-rule>     
     
+     <navigation-rule>
+         <from-view-id>/pages/entry_notes.jsp</from-view-id>
+       
+         <navigation-case>
+             <from-action>#{mappingBean.saveCommentAction}</from-action>
+             <from-outcome>ncimeta</from-outcome>
+             <to-view-id>/pages/entry_notes.jsp</to-view-id>
+         </navigation-case>
 
+         <navigation-case>
+             <from-action>#{mappingBean.saveCommentAction}</from-action>
+             <from-outcome>codingscheme</from-outcome>
+             <to-view-id>/pages/entry_notes.jsp</to-view-id>
+         </navigation-case>
+         
+         <navigation-case>
+             <from-action>#{mappingBean.saveCommentAction}</from-action>
+             <from-outcome>valueset</from-outcome>
+             <to-view-id>/pages/entry_notes.jsp</to-view-id>
+         </navigation-case>
+         
+    </navigation-rule>   
+    
+    
      <navigation-rule>
          <from-view-id>/pages/ncimeta_batch_mapping_form.jsp</from-view-id>
        
@@ -318,14 +391,14 @@
 
          <navigation-case>
              <from-action>#{mappingBean.refreshFormAction}</from-action>
-             <from-outcome>ncimeta</from-outcome>
+             <from-outcome>codingscheme</from-outcome>
              <to-view-id>/pages/ncimeta_batch_mapping_form.jsp</to-view-id>
          </navigation-case>
          
          
          <navigation-case>
              <from-action>#{mappingBean.removeMappingAction}</from-action>
-             <from-outcome>ncimeta</from-outcome>
+             <from-outcome>valueset</from-outcome>
              <to-view-id>/pages/ncimeta_batch_mapping_form.jsp</to-view-id>
          </navigation-case>         
          
@@ -400,8 +473,23 @@
              <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
          </navigation-case>   
          
+         <navigation-case>
+             <from-action>#{mappingBean.saveAllMappingAction}</from-action>
+             <from-outcome>ncimeta</from-outcome>
+             <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+         </navigation-case>         
+ 
+          <navigation-case>
+              <from-action>#{mappingBean.saveAllMappingAction}</from-action>
+              <from-outcome>codingscheme</from-outcome>
+              <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+         </navigation-case>   
          
-         
+         <navigation-case>
+             <from-action>#{mappingBean.saveAllMappingAction}</from-action>
+             <from-outcome>valueset</from-outcome>
+             <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+         </navigation-case>            
          
          
     </navigation-rule>    

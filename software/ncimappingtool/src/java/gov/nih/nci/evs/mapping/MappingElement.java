@@ -77,6 +77,7 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
     public class MappingElement {
 
 	    private String data = null;
+	    private String status = null;
 
 	    private List<MappingEntry> entries = null;
 
@@ -85,11 +86,19 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
          */
         public MappingElement() {
             this.data = null;
+            this.status = null;
             this.entries = null;
 		}
 
         public MappingElement(String data, List<MappingEntry> entries) {
             this.data = data;
+            this.status = null;
+            this.entries = entries;
+		}
+
+        public MappingElement(String data, String status, List<MappingEntry> entries) {
+            this.data = data;
+            this.status = status;
             this.entries = entries;
 		}
 
@@ -99,6 +108,14 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
 		public void setData(String data) {
 			this.data = data;
+		}
+
+		public String getStatus() {
+			return this.status;
+		}
+
+		public void setStatus(String status) {
+			this.status = status;
 		}
 
 		public List getEntries() {

@@ -49,6 +49,7 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 
 <%
+boolean show_rank_column = true;
 MappingData mappingData = null;
 String basePath = request.getContextPath(); 
 String message = (String) request.getSession().getAttribute("message");
@@ -121,11 +122,19 @@ if (DataUtils.isNull(algorithm)) {
 String input_option = (String) request.getSession().getAttribute("input_option");
 String input_option_label = input_option;
 input_option_label = input_option_label.toLowerCase();
-List list = (ArrayList) request.getSession().getAttribute("data");
+List input_list = (ArrayList) request.getSession().getAttribute("data");
 
 
 String idx_str = (String) request.getParameter("idx");
-String option = (String) request.getParameter("opt");
+String option = input_option;
+
+System.out.println("(search_results.jsp *) type: " + type);
+System.out.println("(search_results.jsp *) idx_str: " + idx_str);
+System.out.println("(search_results.jsp *) option: " + option);
+
+
+
+
 int idx = Integer.parseInt(idx_str);
 String data = (String) input_list.get(idx-1);
 
@@ -165,16 +174,7 @@ System.out.println("data: " + data);
                 <td></td>
               </tr>
             <% } %>    
- 
-             <% if (batch_status != null) { %>
-               <tr class="textbodyred">
-                 <td>
-                 <p class="textbodyred">&nbsp;<%=batch_status%></p>
-                 </td>              
-                 <td></td>
-               </tr>
-            <% } %>  
-            
+           
             
 	  <tr>
 	    <td><div class="texttitle-blue"><%=identifier%></div></td>
@@ -294,12 +294,25 @@ System.out.println("data: " + data);
 
 
 <%
-      List list = MappingUtils.process_ncimeta_mapping(ncim_version,
-                                        source_abbrev,
-                                        target_abbrev,
-                                        input_option,
-                                        algorithm,
-                                        data);
+      List list = null;
+      
+      if (type.compareTo("valueset") != 0) {
+      
+          list = new MappingSearchUtils().simpleSearch(type,
+                             input_option,
+                             data,
+                             ncim_version,
+                             source_abbrev,
+                             target_abbrev,
+                             source_cs,
+                             target_cs,
+                             algorithm);
+                         
+      } else if (type.compareTo("valueset") == 0) { 
+          // to be implemented
+          list = new ArrayList();           
+      
+      }
                                         
 %>
           <table class="datatable">
@@ -352,6 +365,17 @@ if (show_rank_column) {
   System.out.println("list == null???");
  } else {
 
+ %>
+      request.getSession().setAttribute("search_results", list);
+ <%
+ 
+ 
+ if (list != null && list.size() == 1) {
+ 
+      request.getSession().setAttribute("mappingData", (MappingData) list.get(0));
+ }
+ 
+ 
  
   for (int lcv=0; lcv<list.size(); lcv++) {
         String item_label = new Integer(lcv).toString();
@@ -382,6 +406,7 @@ target_scheme = DataUtils.getFormalName(target_scheme);
 <tr>
 <td>
 <input type="checkbox" name="selected_list" value="<%=item_label%>"/>
+
 </td>
 
                     <td class="datacoldark"><%=source_namespace%></td>
@@ -453,6 +478,11 @@ tabindex="2">
      <input type="hidden" name="source_abbrev" id="type" value="<%=source_abbrev%>">
      <input type="hidden" name="target_abbrev" id="type" value="<%=target_abbrev%>">
      <input type="hidden" name="input_option" id="type" value="<%=input_option%>">
+     <input type="hidden" name="input_value" id="type" value="<%=data%>">
+     
+     <input type="hidden" name="idx_str" id="idx_str" value="<%=idx%>">
+     
+     
                  
                   
 </h:form>

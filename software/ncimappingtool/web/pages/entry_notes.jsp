@@ -74,19 +74,27 @@ if (mapping_hmap == null) {
 } 
 List list = (ArrayList) request.getSession().getAttribute("data");
 String idx1_str = request.getParameter("idx1");
+if (idx1_str == null) {
+    idx1_str = (String) request.getSession().getAttribute("idx1");
+}
+
+
+
 int idx1 = Integer.parseInt(idx1_str);
 String data_value = (String) list.get(idx1);
 
 String idx2_str = request.getParameter("idx2");
+if (idx2_str == null) {
+    idx2_str = (String) request.getSession().getAttribute("idx2");
+}
 int idx2 = Integer.parseInt(idx2_str);
 
 List selected_matches = null;
 selected_matches = (ArrayList) mapping_hmap.get(data_value);
 
 MappingData mappingData = (MappingData) selected_matches.get(idx2);
-
-
-
+String comment = mappingData.getComment();
+if (comment == null) comment = "";
 
 String source_code = mappingData.getSourceCode();
 String source_name = mappingData.getSourceName();
@@ -192,8 +200,7 @@ System.out.println("target_version: " + target_version);
 				      <b>Comments</b>:
                                      </td>
 				     <td>  
-					 <textarea name="codes" cols="50" rows=10 tabindex="3">
-					 </textarea>
+					 <textarea name="comment" cols="50" rows=10 tabindex="3"><%=comment%></textarea>
 				     </td>
 				</tr>
                           
@@ -214,6 +221,11 @@ System.out.println("target_version: " + target_version);
 			  </tr>	
 
                           </table>
+                          
+                          
+     <input type="hidden" name="idx1" id="idx1" value="<%=idx1_str%>" />
+     <input type="hidden" name="idx2" id="idx2" value="<%=idx2_str%>" />
+                         
 		  </h:form>  
           
           </table>

@@ -103,14 +103,10 @@ if (target_property != null && target_property.compareTo("null") == 0) {
 String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
 
-System.out.println("codingscheme_data source_scheme = " + source_scheme);
-System.out.println("codingscheme_data source_version = " + source_version);
 
 String target_scheme = DataUtils.key2CodingSchemeName(target_cs);
 String target_version = DataUtils.key2CodingSchemeVersion(target_cs);
 
-System.out.println("codingscheme_data target_scheme = " + target_scheme);
-System.out.println("codingscheme_data target_version = " + target_version);
 
 Vector properties = OntologyBean.getSupportedPropertyNames(target_scheme, target_version);
 
@@ -118,14 +114,23 @@ Vector src_properties = OntologyBean.getSupportedPropertyNames(source_scheme, so
 Vector target_properties = OntologyBean.getSupportedPropertyNames(target_scheme, target_version);
 
 String codes = "";
-ResolvedConceptReferencesIterator iterator = null;
-iterator = (ResolvedConceptReferencesIterator) request.getSession().getAttribute("rcr_iterator");
-if (iterator != null) {
-   request.getSession().removeAttribute("rcr_iterator");
-   while (iterator.hasNext()) {
-       ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
-       codes = codes + rcr.getConceptCode() + "\n";
-   }
+
+String action = (String) request.getSession().getAttribute("action");
+if (action != null && action.compareTo("upload_data") == 0) {
+   codes = (String) request.getSession().getAttribute("codes");
+}
+
+else {
+
+	ResolvedConceptReferencesIterator iterator = null;
+	iterator = (ResolvedConceptReferencesIterator) request.getSession().getAttribute("rcr_iterator");
+	if (iterator != null) {
+	   request.getSession().removeAttribute("rcr_iterator");
+	   while (iterator.hasNext()) {
+	       ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
+	       codes = codes + rcr.getConceptCode() + "\n";
+	   }
+	}
 }
 
 %>
@@ -360,12 +365,25 @@ if (input_option.compareToIgnoreCase("Property") == 0) {
              <tr>
 		     <td valign=top>    
 			     <textarea name="codes" cols="50" rows=10 tabindex="3"><%=codes%></textarea>
-			     &nbsp;
+		     </td>
+		     
+		     <td>
+		         <table>
+		            <tr><td>
 			    <h:commandButton id="import" value="import" action="#{mappingBean.importDataAction}"
 			      image="#{basePath}/images/import.gif"
 			      alt="Import"
 			      tabindex="2">
-			    </h:commandButton>             
+			    </h:commandButton> 
+			    </td></tr>
+			    <tr><td>
+			    <h:commandButton id="upload" value="upload" action="#{mappingBean.uploadDataAction}"
+			      image="#{basePath}/images/upload.gif"
+			      alt="upload"
+			      tabindex="2">
+			    </h:commandButton> 
+			    </td></tr>
+			 </table>    
 		     </td>
              </tr>
              </table>

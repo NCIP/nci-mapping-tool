@@ -154,13 +154,7 @@ String id = (String) request.getParameter("id");
 	mapping_version = (String) request.getSession().getAttribute("mapping_version");
 
 
-/*
-identifier = (String) request.getParameter("identifier");
-mapping_version = (String) request.getParameter("version");
-if (mapping_version == null) {
-    mapping_version = (String) request.getParameter("mapping_version");
-}
-*/
+
 MappingObject obj = null;
 if (action != null && (action.compareTo("view") == 0 || action.compareTo("edit") == 0)) {
 	identifier = (String) request.getParameter("identifier");
@@ -170,15 +164,8 @@ if (action != null && (action.compareTo("view") == 0 || action.compareTo("edit")
 	
 }
 
-System.out.println("identifier: " + identifier);
-System.out.println("mapping_version: " + mapping_version);
 
-
-//if ((mode != null && mode.compareTo("readonly") == 0) || (action != null && action.compareTo("edit") == 0)) {
 if (id != null) {
-    
-    System.out.println("id: " + id);
-    //id = MappingObject.computeKey(identifier, mapping_version);
 
     mappings = (HashMap) request.getSession().getAttribute("mappings");
     if (mappings == null) {
@@ -190,6 +177,12 @@ if (id != null) {
 	if (obj == null) {
 	    System.out.println("obj with id not found??? " + id);
 	} else {
+	
+		identifier = obj.getName();
+		request.getSession().setAttribute("identifier", identifier);
+		mapping_version = obj.getVersion();
+		request.getSession().setAttribute("mapping_version", mapping_version);
+	
 	            type = obj.getType();
 		    request.getSession().setAttribute("type", type);
 
@@ -254,6 +247,8 @@ if (id != null) {
 		    request.getSession().setAttribute("input_option", "Code");
 
 		    request.getSession().setAttribute("id", id);
+		    request.getSession().setAttribute("status_hmap", obj.getStatusHashMap());
+		    
 	}
 
 } else if (type.compareTo("ncimeta") == 0) {
@@ -263,11 +258,23 @@ if (id != null) {
 	} else if (ncim_version == null) {
 	    ncim_version = "";
 	}
+	
 	source_abbrev = (String) request.getSession().getAttribute("source_abbrev");
 	target_abbrev = (String) request.getSession().getAttribute("target_abbrev");
 	
-        source_scheme = DataUtils.getFormalName(source_abbrev);
-        source_version = DataUtils.getVocabularyVersionByTag(source_scheme, null);
+	source_scheme = "";
+	source_version = "";
+	
+	try {
+		if (source_abbrev != null && source_abbrev.compareTo("") != 0) {
+			source_scheme = DataUtils.getFormalName(source_abbrev);
+			if (source_scheme != null) {
+			    source_version = DataUtils.getVocabularyVersionByTag(source_scheme, null);
+			}
+		}
+	} catch (Exception ex) {
+	
+	}
 
         target_scheme = DataUtils.getFormalName(target_abbrev);
         target_version = DataUtils.getVocabularyVersionByTag(target_scheme, null);
@@ -280,21 +287,12 @@ if (id != null) {
 	target_cs = (String) request.getSession().getAttribute("target_cs");	
 
 
-System.out.println("codingscheme source_cs: " + source_cs);
-System.out.println("codingscheme target_cs: " + target_cs);
-
-
 	source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 	source_version = DataUtils.key2CodingSchemeVersion(source_cs);
-
-System.out.println("codingscheme source_scheme: " + source_scheme);
-System.out.println("codingscheme source_version: " + source_version);
 
 	target_scheme = DataUtils.key2CodingSchemeName(target_cs);
 	target_version = DataUtils.key2CodingSchemeVersion(target_cs);
 
-System.out.println("codingscheme target_scheme: " + target_scheme);
-System.out.println("codingscheme target_version: " + target_version);
 
 	
 } else if (type.compareTo("valueset") == 0) {
@@ -332,8 +330,12 @@ if (mapping_hmap == null) {
 
 
 if (list != null && list.size() > 0) {
-    code2name_hmap =DataUtils.code2Name(source_scheme, source_version, list);
-    request.getSession().setAttribute("code2name_hmap", code2name_hmap);
+    if (input_option.compareToIgnoreCase("Code") == 0) {
+	    if (source_scheme != null && source_scheme.compareTo("") != 0) {
+		    code2name_hmap = DataUtils.code2Name(source_scheme, source_version, list);
+		    request.getSession().setAttribute("code2name_hmap", code2name_hmap);
+	    }
+    }
 }
     
 
@@ -410,8 +412,19 @@ if(!hasContent) {
 
 
 String record_idx = null;
+
+
+HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
+if (status_hmap == null) {
+	status_hmap = new HashMap();
+	request.getSession().setAttribute("status_hmap", status_hmap);
+}
+
 if (action != null && action.compareTo("approve") == 0) {
     record_idx  = (String) request.getParameter("idx");
+    int approved_idx = Integer.parseInt(record_idx);
+    status_hmap.put(list.get(approved_idx), "approved"); 
+    request.getSession().setAttribute("status_hmap", status_hmap);
 }
 
 
@@ -704,19 +717,22 @@ if (!readonly) {
   </td></tr>
   
 <%
-  
+  String idx1_str = null;
+  String item_label = null;
+  String input_data = null;
+  int lcv=0;
+  for (lcv=0; lcv<list.size(); lcv++) {
+        idx1_str = new Integer(lcv).toString();
  
-  for (int lcv=0; lcv<list.size(); lcv++) {
-        String idx1_str = new Integer(lcv).toString();
- 
-        String input_data = (String) list.get(lcv);
+        input_data = (String) list.get(lcv);
         selected_matches = (ArrayList) mapping_hmap.get(input_data);
         
         int k = lcv+1;
-        String item_label = new Integer(k).toString();
+        item_label = new Integer(k).toString();
         
         if (input_option.compareToIgnoreCase("Name") == 0) {
             source_name = input_data;
+            source_code = "N/A";
         } else {
             source_code = input_data;
         }
@@ -724,6 +740,8 @@ if (!readonly) {
         if (DataUtils.isNull(input_data)) input_data = "";
         if (DataUtils.isNull(source_code)) source_code = "";
         if (DataUtils.isNull(source_name)) source_name = "";
+        
+       
 
 %>
 
@@ -757,14 +775,19 @@ if (input_option.compareToIgnoreCase("Code") == 0) {
 
 
 <%	
-if (!readonly) {	
+if (!readonly) {
+   if (type.compareTo("valueset") != 0) {
+
 %>				 
-				      <a href="<%=request.getContextPath()%>/pages/ncimeta_interactive_search_results.jsf?type=ncimeta&opt=<%=input_option%>&idx=<%=k%>">
+				      <a href="<%=request.getContextPath()%>/pages/search_results.jsf?type=<%=type%>&opt=<%=input_option%>&idx=<%=item_label%>">
 					<img src="<%= request.getContextPath() %>/images/search.png" width="15" height="15" alt="Search" border="0">
 				      </a>      				 
 
                                       &nbsp;
-                                      
+   <%
+   }  
+   %>
+         
 <%
 if (type.compareTo("codingscheme") == 0) {
 %>
@@ -793,7 +816,7 @@ if (!readonly) {
 %>
 
                                       &nbsp;
-				      <a href="<%=request.getContextPath()%>/pages/batch_mapping_form.jsf?action=approve&idx=<%=k%>&mode=<%=mode%>">
+				      <a href="<%=request.getContextPath()%>/pages/batch_mapping_form.jsf?action=approve&idx=<%=lcv%>&mode=<%=mode%>">
 					<img src="<%= request.getContextPath() %>/images/approve_details.gif" width="15" height="15" alt="Approve Details" border="0">
 				      </a>  				
 
@@ -838,12 +861,13 @@ if (!readonly) {
 				
 if (!readonly) {				
 				
-				if (record_idx != null) {
-				     if (Integer.parseInt(record_idx) == k) {
+				     
+				if (status_hmap.containsKey(input_data)) {     
+				     
 				     %>
 					<img src="<%= request.getContextPath() %>/images/small_checkmark__16_red.png" width="15" height="15" alt="Approved" border="0">
 				     <%
-				     }
+				     
 				}
 }				
 				
@@ -906,14 +930,21 @@ if (!readonly) {
                    String checkbox_name = "checkbox" + idx1_str;
 		   for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
 		   
+		         String rel_id = "rel" + "_" + lcv + "_" + lcv2;
+		         String score_id = "score" + "_" + lcv + "_" + lcv2;
+		         
+		   
 		         String idx2_str = new Integer(lcv2).toString();
 
 			 mappingData = (MappingData) selected_matches.get(lcv2);
 			 source_code = mappingData.getSourceCode();
 			 source_name = mappingData.getSourceName();
+		 
 			 source_namespace = mappingData.getSourceCodeNamespace();
 
 			 rel = mappingData.getRel();
+			 
+			 
 			 if (DataUtils.isNull(rel)) rel = "";
 			 score = new Integer(mappingData.getScore()).toString();
 			 target_code = mappingData.getTargetCode();
@@ -938,32 +969,30 @@ if (!readonly) {
 
 			 <td class="datacoldark"><%=source_namespace%></td>
 			 
-			 <td class="datacoldark">
+			 
 <%
-if (source_code != null && source_code.compareTo("") != 0 && source_code.compareTo("N/A") != 0) {
+if (source_code.compareTo("N/A") != 0) {
 
 %>
+                                 <td class="datacoldark">
 				 <a href="#"
 				       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>')">
 				       <%=source_code%>
 				 </a>
+				 </td>
 <%				 
 } else {
 %>
 
-     <td class="datacoldark"><%=source_code%></td>
+                                 <td class="datacoldark"><%=source_code%></td>
 <%    
 }
 %>
-
-				 
-				 
-			 </td>
 			 
 			 <td class="datacoldark"><%=source_name%></td>
 
 		         <td class="textbody">
-			    <select id="rel" name="rel" size="1" tabindex="4">
+			    <select id="<%=rel_id%>" name="<%=rel_id%>" size="1" tabindex="4">
 			    <%
 
 				    String[] rel_options = DataUtils.rel_options;
@@ -986,7 +1015,7 @@ if (source_code != null && source_code.compareTo("") != 0 && source_code.compare
 
 
 		         <td class="textbody">
-			    <select id="score" name="score" size="1" tabindex="4">
+			    <select id="<%=score_id%>" name="<%=score_id%>" size="1" tabindex="4">
 			    <%
 
 				    String[] score_options = DataUtils.score_options;

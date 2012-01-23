@@ -41,6 +41,13 @@ import org.LexGrid.commonTypes.Property;
 
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+
+import gov.nih.nci.evs.browser.bean.*;
+
 /**
   * <!-- LICENSE_TEXT_START -->
 * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -74,6 +81,8 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
  */
 
     public class Mapping {
+		private static String NULL_STRING = "NULL";
+	    private static int NULL_STRING_HASH_CODE = NULL_STRING.hashCode();
 
 	    private String type = null;
 	    private String mappingName = null;
@@ -94,6 +103,7 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
         private String creationDate = null;
         private int UUID = 0;
+        private String key = null;
 		private String status = null;
 
         //private List data = new ArrayList();
@@ -251,6 +261,112 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 		}
 		public void setTargetCodingSchemeVersion(String targetCodingSchemeVersion) {
 			targetCodingSchemeVersion = targetCodingSchemeVersion;
+		}
+
+		public static String computeKey(String name, String version) {
+			int uuid = 0;
+
+			if(name != null){
+				uuid += name.hashCode();
+			} else {
+				uuid += NULL_STRING_HASH_CODE;
+			}
+
+			if(version != null){
+				uuid += version.hashCode();
+			} else {
+				uuid += NULL_STRING_HASH_CODE;
+			}
+			String key = "M" + new Integer(uuid).toString();
+			return key;
+
+		}
+
+		public void setKey(String key) {
+			this.key = key;
+		}
+
+
+		public void setKey() {
+			this.key = computeKey(mappingName, mappingVersion);
+		}
+
+		public String getKey() {
+			return this.key;
+		}
+
+
+		public Mapping toMapping(String mapping_xml_stream) {
+			if (mapping_xml_stream == null) return null;
+
+			String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+			int idx = mapping_xml_stream.indexOf(xml);
+			if (idx != -1) {
+				mapping_xml_stream = mapping_xml_stream.substring(idx+1, mapping_xml_stream.length());
+			}
+
+			XStream xstream_xml = new XStream(new DomDriver());
+
+			Mapping mapping_from_xml = (Mapping) xstream_xml.fromXML(mapping_xml_stream);
+			if (mapping_from_xml != null) {
+				System.out.println("mapping_from_xml name: " + mapping_from_xml.getMappingName());
+			}
+            return mapping_from_xml;
+
+		}
+
+		public MappingObject toMappingObject() {
+            MappingObject obj = new MappingObject();
+            obj.setType(this.type);
+            obj.setName(this.mappingName);
+            obj.setVersion(this.mappingVersion);
+
+            obj.setDescription(this.description);
+            obj.setFromCS(this.sourceCodingSchemeName);
+            obj.setFromVersion(this.sourceCodingSchemeVersion);
+
+            obj.setToCS(this.targetCodingSchemeName);
+            obj.setToVersion(this.targetCodingSchemeVersion);
+
+            obj.setNCIMVersion(this.NCImVersion);
+
+            obj.setVsdURI(this.valueSetDefinitionURI);
+            obj.setValueSetDefinitionName(this.valueSetDefinitionName);
+
+            obj.setCreationDate(this.creationDate);
+
+            setKey();
+            obj.setKey(this.key);
+            obj.setStatus(this.status);
+
+            List data = new ArrayList();
+            List<MappingData> mappingData_list = null;
+
+            HashMap status_hmap = new HashMap();
+            HashMap mapping_hmap = new HashMap();
+
+            for (int k=0; k<mappingElements.size(); k++) {
+				MappingElement element = (MappingElement) mappingElements.get(k);
+				String input_value = element.getData();
+				if (element.getStatus() != null) {
+					status_hmap.put(input_value, element.getStatus());
+				}
+
+				data.add(input_value);
+
+				mappingData_list = new ArrayList();
+				List<MappingEntry> entries = element.getEntries();
+
+				for (int m=0; m<entries.size(); m++) {
+					MappingEntry entry = (MappingEntry) entries.get(m);
+					mappingData_list.add(entry.toMappingData());
+				}
+				mapping_hmap.put(input_value, mappingData_list);
+			}
+			obj.setMappingHashMap(mapping_hmap);
+			obj.setStatusHashMap(status_hmap);
+            obj.setData(data);
+            return obj;
 		}
 
     }

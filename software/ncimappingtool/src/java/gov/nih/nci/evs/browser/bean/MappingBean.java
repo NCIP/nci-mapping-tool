@@ -180,8 +180,12 @@ public class MappingBean {
         }
         if (obj == null) return false;
         String key = obj.getKey();//obj.getName() + "|" + obj.getVersion();
-        if (key == null || key.length() < 1)
+        if (key == null || key.length() < 1) {
         	return false;
+		}
+
+		//dumpMappingObject(obj);
+
         _mappings.put(key, obj);
         return true;
     }
@@ -240,8 +244,28 @@ public class MappingBean {
 	}
 
 
+    public void dumpMappingObject(MappingObject mapping_obj) {
+		if (mapping_obj == null) return;
 
-    public MappingObject createMappingObject(String type, String identifier, String version, String from_cs, String from_version, String to_cs,
+        System.out.println("type: " + mapping_obj.getType());
+        System.out.println("name: " + mapping_obj.getName());
+        System.out.println("version: " + mapping_obj.getVersion());
+        System.out.println("ncim version: " + mapping_obj.getNCIMVersion());
+
+        System.out.println("from cs: " + mapping_obj.getFromCS());
+        System.out.println("from version: " + mapping_obj.getFromVersion());
+
+        System.out.println("to cs: " + mapping_obj.getToCS());
+        System.out.println("to version: " + mapping_obj.getToVersion());
+
+        System.out.println("creation date: " + mapping_obj.getCreationDate());
+
+	}
+
+
+    public MappingObject createMappingObject(String type, String identifier, String version,
+                                             String ncim_version,
+                                             String from_cs, String from_version, String to_cs,
                                              String to_version, List list) {
 
 		MappingObject mapping_obj = getMapping(identifier + "|" + version);
@@ -254,15 +278,17 @@ public class MappingBean {
         mapping_obj.setName(identifier);
         mapping_obj.setVersion(version);
 
+        mapping_obj.setNCIMVersion(ncim_version);
+
         mapping_obj.setFromCS(from_cs);
         mapping_obj.setFromVersion(from_version);
 
         mapping_obj.setToCS(to_cs);
+        mapping_obj.setToVersion(to_version);
 
         if (type.compareTo("valueset") == 0) {
 			mapping_obj.setValueSetDefinitionName(to_version);
-		} else {
-			mapping_obj.setToVersion(to_version);
+			mapping_obj.setToVersion(null);
 		}
 
         mapping_obj.setStatus(_status);
@@ -727,31 +753,39 @@ System.out.println("submitMetadataAction type: " + type);
 
 
 
+
     public String saveMappingAction() {
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-		List input_list = (ArrayList) request.getSession().getAttribute("selection_list");
+
+		String type = (String) request.getParameter("type");
+
+		List search_results = (ArrayList) request.getSession().getAttribute("search_results");
 		List selected_matches = new ArrayList();
+
 
         String[] selected_list = request.getParameterValues("selected_list");
 
-        if (selected_list == null) {
-			selected_list = new String[] {"0"};
-		}
+		if (selected_list != null && search_results != null) {
+				for (int i=0; i<selected_list.length; i++) {
+					String s = selected_list[i];
+					int k = Integer.parseInt(s);
+					MappingData mappingData = (MappingData) search_results.get(k);
+					selected_matches.add(mappingData);
+				}
+		} else {
 
-
-        for (int i=0; i<selected_list.length; i++) {
-			String s = selected_list[i];
-			int k = Integer.parseInt(s);
-			MappingData mappingData = (MappingData) input_list.get(k);
-			selected_matches.add(mappingData);
+			MappingData mappingData = (MappingData) request.getSession().getAttribute("mappingData");
+			if (mappingData != null) {
+				selected_matches.add(mappingData);
+			}
 		}
 
 		System.out.println("saveMappingAction selected_matches: " + selected_matches.size());
-		String data_value = (String) request.getParameter("data_value");
-		System.out.println("saveMappingAction data_value: " + data_value);
+		String data_value = (String) request.getParameter("input_value");
+		System.out.println("saveMappingAction input_value: " + data_value);
 
 		HashMap mapping_hmap = (HashMap) request.getSession().getAttribute("mapping_hmap");
 		if (mapping_hmap == null) {
@@ -775,12 +809,10 @@ System.out.println("submitMetadataAction type: " + type);
 			if (selected_matches != null) {
 				System.out.println("\n(***) saveMappingAction selected_matches.size(): " + selected_matches.size());
 			}
-
 		 }
 
-
 		request.getSession().setAttribute("mapping_hmap", mapping_hmap);
-        return "ncimeta";
+        return type;
 	}
 
     public String saveCommentAction() {
@@ -788,10 +820,37 @@ System.out.println("submitMetadataAction type: " + type);
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+		HashMap mapping_hmap = (HashMap) request.getSession().getAttribute("mapping_hmap");
+		if (mapping_hmap == null) {
+			mapping_hmap = new HashMap();
+			request.getSession().setAttribute("mapping_hmap", mapping_hmap);
+		}
+
+		String type = (String) request.getSession().getAttribute("type");
+
+		List list = (ArrayList) request.getSession().getAttribute("data");
+		String idx1_str = (String) request.getParameter("idx1");
+		int idx1 = Integer.parseInt(idx1_str);
+		String data_value = (String) list.get(idx1);
+
+		String idx2_str = (String) request.getParameter("idx2");
+		int idx2 = Integer.parseInt(idx2_str);
+
+		List selected_matches = null;
+		selected_matches = (ArrayList) mapping_hmap.get(data_value);
+
+		MappingData mappingData = (MappingData) selected_matches.get(idx2);
+		String comment = (String) request.getParameter("comment");
+		mappingData.setComment(comment);
+
 		String message = "Comment saved successfully.";
 		request.getSession().setAttribute("message", message);
 
-        return "ncimeta";
+		request.getSession().setAttribute("idx1", idx1_str);
+		request.getSession().setAttribute("idx2", idx2_str);
+
+
+        return type;
 	}
 
     public String ncimetaSearchAction() {
@@ -855,17 +914,24 @@ System.out.println("submitMetadataAction type: " + type);
 				list.add(t);
 			}
 
+			System.out.println("MappingBean source_abbrev: " + source_abbrev);
+
 			request.getSession().setAttribute("identifier", identifier);
+			request.getSession().setAttribute("mapping_version", mapping_version);
+
 			request.getSession().setAttribute("ncim_version", ncim_version);
+
 			request.getSession().setAttribute("source_abbrev", source_abbrev);
 			request.getSession().setAttribute("target_abbrev", target_abbrev);
+
 			request.getSession().setAttribute("input_option", input_option);
 			request.getSession().setAttribute("data", list);
 			request.getSession().setAttribute("algorithm", algorithm);
-			request.getSession().setAttribute("mapping_version", mapping_version);
 
 
-            MappingObject mappingObj = createMappingObject(type, identifier, mapping_version, source_abbrev, null, target_abbrev, null, list);
+			System.out.println("MappingBean calling createMappingObject ncim_version: " + ncim_version);
+
+            MappingObject mappingObj = createMappingObject(type, identifier, mapping_version, ncim_version, source_abbrev, null, target_abbrev, null, list);
             if (mappingObj == null) {
 				String message = "Unable to create mapping -- mapping with the same identifier and version already exists.";
 				request.getSession().setAttribute("message", message);
@@ -965,10 +1031,7 @@ String target_version = DataUtils.key2CodingSchemeVersion(target_cs);
 			request.getSession().setAttribute("target_version", target_version);
 
 
-
-System.out.println("Creating MappingObject ...codingscheme");
-
-            MappingObject mappingObj = createMappingObject(type, identifier, mapping_version, source_scheme, source_version, target_scheme, target_version, list);
+            MappingObject mappingObj = createMappingObject(type, identifier, mapping_version, null, source_scheme, source_version, target_scheme, target_version, list);
             if (mappingObj == null) {
 				String message = "Unable to create mapping -- mapping with the same identifier and version already exists.";
 				request.getSession().setAttribute("message", message);
@@ -1083,7 +1146,7 @@ String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
 
 System.out.println("Creating MappingObject ... valueset ");
 
-            MappingObject mappingObj = createMappingObject(type, identifier, mapping_version, source_scheme, source_version, vsdURI, valueSetDefinitionName, list);
+            MappingObject mappingObj = createMappingObject(type, identifier, mapping_version, null, source_scheme, source_version, vsdURI, valueSetDefinitionName, list);
             if (mappingObj == null) {
 				String message = "Unable to create mapping -- mapping with the same identifier and version already exists.";
 				request.getSession().setAttribute("message", message);
@@ -1211,14 +1274,7 @@ System.out.println("Creating MappingObject ... valueset ");
 	}
 
 
-    public String saveAllMappingAction() {
-        HttpServletRequest request =
-            (HttpServletRequest) FacesContext.getCurrentInstance()
-                .getExternalContext().getRequest();
 
-
-		return "ncimeta";
-	}
 
     public String refreshFormAction() {
         HttpServletRequest request =
@@ -1704,12 +1760,13 @@ System.out.println("matchText: " + matchText);
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        updateMapping(request);
 		String type = (String) request.getParameter("type");
 
 
         try {
-        	String xml = "xml";
-			StringBuffer sb = new StringBuffer(xml);
+        	String xml = null;
+			StringBuffer sb = null;
 
 			HttpServletResponse response = (HttpServletResponse) FacesContext
 					.getCurrentInstance().getExternalContext().getResponse();
@@ -1725,10 +1782,15 @@ System.out.println("matchText: " + matchText);
 				request.getSession().setAttribute("mappings", mappings);
 			}
 
+			HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
+
+
 			MappingObject obj = (MappingObject) mappings.get(key);
-			xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+			//xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+			xml = "";
 
 			if (obj != null) {
+				obj.setStatusHashMap(status_hmap);
 				sb = new StringBuffer(xml);
 				sb = sb.append(obj.toXML());
 			}
@@ -1751,6 +1813,81 @@ System.out.println("matchText: " + matchText);
 
         FacesContext.getCurrentInstance().responseComplete();
 		return "export";
+	}
+
+    public String uploadDataAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		String type = (String) request.getParameter("type");
+		String source_scheme = (String) request.getParameter("source_scheme");
+		String source_version = (String) request.getParameter("source_version");
+		request.getSession().setAttribute("dictionary", source_scheme);
+		request.getSession().setAttribute("version", source_version);
+
+		if (type.compareTo("valueset") == 0) {
+			String vsdURI = (String) request.getParameter("vsdURI");
+			String valueSetDefinitionName = (String) request.getParameter("valueSetDefinitionName");
+			request.getSession().setAttribute("vsdURI", vsdURI);
+			request.getSession().setAttribute("valueSetDefinitionName", "valueSetDefinitionName");
+		}
+
+		request.getSession().setAttribute("action", "upload_data");
+		request.getSession().setAttribute("type", type);
+		return type;
+	}
+
+    public String uploadMappingAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		String type = (String) request.getParameter("type");
+        request.getSession().setAttribute("action", "upload_mapping");
+		request.getSession().setAttribute("type", type);
+
+
+System.out.println("uploadMappingAction set action to upload_mapping ");
+
+		return "upload";
+	}
+
+
+
+    public void updateMapping(HttpServletRequest request) {
+		String type = (String) request.getParameter("type");
+        HashMap mapping_hmap = (HashMap) request.getSession().getAttribute("mapping_hmap");
+
+		// update rel and score values for all mapping entries
+
+        List list = (ArrayList) request.getSession().getAttribute("data");
+        for (int lcv=0; lcv<list.size(); lcv++) {
+		   String input_data = (String) list.get(lcv);
+		   List selected_matches = (ArrayList) mapping_hmap.get(input_data);
+
+		   for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
+		       String rel_id = "rel" + "_" + lcv + "_" + lcv2;
+		       String score_id = "score" + "_" + lcv + "_" + lcv2;
+			   MappingData mappingData = (MappingData) selected_matches.get(lcv2);
+               String rel = (String) request.getParameter(rel_id);
+               mappingData.setRel(rel);
+               String score = (String) request.getParameter(score_id);
+               int score_int = Integer.parseInt(score);
+               mappingData.setScore(score_int);
+		   }
+		}
+
+	}
+
+
+    public String saveAllMappingAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+        String type = (String) request.getParameter("type");
+        updateMapping(request);
+        return type;
 	}
 
 
