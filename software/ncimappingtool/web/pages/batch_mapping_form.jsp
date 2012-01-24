@@ -160,12 +160,12 @@ if (action != null && (action.compareTo("view") == 0 || action.compareTo("edit")
 	obj = (MappingObject) mappings.get(id);
 }
 
-
+/*
 System.out.println("batch_mapping_form.jsp action: " + action);
 System.out.println("batch_mapping_form.jsp identifier: " + identifier);
 System.out.println("batch_mapping_form.jsp mapping_version: " + mapping_version);
 System.out.println("batch_mapping_form.jsp id: " + id);
-
+*/
 
 if (id != null) {
 
@@ -179,7 +179,7 @@ if (id != null) {
 	if (obj == null) {
 	    System.out.println("obj with id not found??? " + id);
 	} else {
-	    System.out.println("obj with id found: " + id);
+	    //System.out.println("obj with id found: " + id);
 		identifier = obj.getName();
 		request.getSession().setAttribute("identifier", identifier);
 		mapping_version = obj.getVersion();
