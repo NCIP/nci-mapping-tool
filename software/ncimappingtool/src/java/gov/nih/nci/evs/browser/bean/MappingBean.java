@@ -232,6 +232,8 @@ public class MappingBean {
 
 		request.getSession().removeAttribute("mapping_version");
 
+		request.getSession().removeAttribute("codes");
+
 		return type;
 	}
 

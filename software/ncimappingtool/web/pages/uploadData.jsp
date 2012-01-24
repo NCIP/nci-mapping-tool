@@ -92,9 +92,7 @@
  <b>Upload mapping data from file</b></font><br/>
  <%
  }
- 
- System.out.println("(*) updateData.jsp : " + action);
- 
+
  
  %>
 
