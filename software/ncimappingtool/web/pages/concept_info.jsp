@@ -117,7 +117,6 @@ String ncit_url = new DataUtils().getNCItURL();
 
 String type = (String) request.getSession().getAttribute("type");
 
-
 String ncim_version = null;
 if (type.compareTo("ncimeta") == 0) {
 	ncim_version = (String) request.getSession().getAttribute("ncim_version");
@@ -144,18 +143,11 @@ if (type.compareTo("ncimeta") == 0) {
 	source_cs = (String) request.getSession().getAttribute("source_cs");
 	target_cs = (String) request.getSession().getAttribute("target_cs");	
 
-System.out.println("source_cs: " + source_cs);
-System.out.println("target_cs: " + target_cs);
-
 	source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 	source_version = DataUtils.key2CodingSchemeVersion(source_cs);
 
 	target_scheme = DataUtils.key2CodingSchemeName(target_cs);
 	target_version = DataUtils.key2CodingSchemeVersion(target_cs);
-
-System.out.println("target_scheme: " + target_scheme);
-System.out.println("target_version: " + target_version);
-
 
         request.getSession().setAttribute("target_scheme", target_scheme);
         
@@ -163,8 +155,19 @@ System.out.println("target_version: " + target_version);
 	
 } else if (type.compareTo("valueset") == 0) {
 
-	target_scheme = (String) request.getSession().getAttribute(target_scheme);
-	target_version = (String) request.getSession().getAttribute(target_version);
+	source_cs = (String) request.getSession().getAttribute("source_cs");
+
+	source_scheme = DataUtils.key2CodingSchemeName(source_cs);
+	source_version = DataUtils.key2CodingSchemeVersion(source_cs);
+
+	
+	target_scheme = (String) request.getParameter("target_scheme");
+	target_version = (String) request.getParameter("target_version");
+	
+	
+	System.out.println("concept_info.jsp target_scheme: " + target_scheme);
+	System.out.println("concept_info.jsp target_version: " + target_version);
+	
 
 }
 
@@ -210,7 +213,20 @@ if (source_scheme != null && source_code != null) {
 
 
 
+System.out.println("Calling getConceptByCode target_scheme: " + target_scheme);
+System.out.println("Calling getConceptByCode target_version: " + target_version);
+System.out.println("Calling getConceptByCode target_code: " + target_code);
+
+
 Entity target_concept = MappingUtils.getConceptByCode(target_scheme, target_version, null, target_code);
+
+
+if (target_concept == null) {
+	System.out.println("getConceptByCode return null??? ");
+}
+
+
+
 
 String target_concept_name = target_concept.getEntityDescription().getContent();
 

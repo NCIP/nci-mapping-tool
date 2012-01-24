@@ -160,12 +160,10 @@ if (action != null && (action.compareTo("view") == 0 || action.compareTo("edit")
 	obj = (MappingObject) mappings.get(id);
 }
 
-/*
-System.out.println("batch_mapping_form.jsp action: " + action);
-System.out.println("batch_mapping_form.jsp identifier: " + identifier);
-System.out.println("batch_mapping_form.jsp mapping_version: " + mapping_version);
-System.out.println("batch_mapping_form.jsp id: " + id);
-*/
+
+String target_codingscheme = (String) request.getParameter("target_scheme");
+String target_codingschemeversion = (String) request.getParameter("target_version");	
+
 
 if (id != null) {
 
@@ -304,6 +302,12 @@ if (id != null) {
 
 	source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 	source_version = DataUtils.key2CodingSchemeVersion(source_cs);
+	
+	
+	target_codingscheme = (String) request.getParameter("target_scheme");
+	target_codingschemeversion = (String) request.getParameter("target_version");	
+	
+	
 }  
 
 
@@ -363,6 +367,9 @@ if (DataUtils.isNull(algorithm)) {
 
 
 String refresh_on = (String) request.getSession().getAttribute("refresh");
+
+
+
 boolean show_refresh_button = true;
 if (DataUtils.isNull(refresh_on)) {
     show_refresh_button = false;
@@ -959,7 +966,11 @@ if (!readonly) {
 			 target_version = mappingData.getTargetCodingSchemeVersion();
 
 			 source_scheme = DataUtils.getFormalName(source_scheme);        
-			 target_scheme = DataUtils.getFormalName(target_scheme);    
+			 target_scheme = DataUtils.getFormalName(target_scheme);  
+			 
+target_codingscheme = target_scheme;
+target_codingschemeversion = target_version;
+			 
 			 
 			     %>
 
@@ -1066,13 +1077,16 @@ if (!readonly) {
       &nbsp;
 
 <%	
-}	
+}
+
+
+
 %>
 
 
 
       
-      <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_info.jsf?target_scheme=<%=target_scheme%>&target_version=<%=target_version%>&src_cd=<%=input_data%>&target_cd=<%=target_code%>',
+      <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_info.jsf?target_scheme=<%=target_codingscheme%>&target_version=<%=target_codingschemeversion%>&src_cd=<%=input_data%>&target_cd=<%=target_code%>',
         '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="13">
         <img src="<%= request.getContextPath() %>/images/Info.gif" style="border: none">
       </a>       
@@ -1245,6 +1259,12 @@ if (type.compareTo("ncimeta") == 0) {
      <input type="hidden" name="source_cs" id="source_cs" value="<%=source_cs%>" />
      <input type="hidden" name="vsdURI" id="vsdURI" value="<%=vsdURI%>" />
      <input type="hidden" name="valueSetDefinitionName" id="valueSetDefinitionName" value="<%=valueSetDefinitionName%>" />
+     
+     
+     <input type="hidden" name="target_scheme" id="target_scheme" value="<%=target_codingscheme%>" />
+     <input type="hidden" name="target_version" id="target_version" value="<%=target_codingschemeversion%>" />
+     
+     
 <%
 }
 %>
