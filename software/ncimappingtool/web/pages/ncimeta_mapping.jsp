@@ -37,8 +37,6 @@
 
 <%
 
-System.out.println("ncimeta_mapping.jsp ...");
-
 String basePath = request.getContextPath(); 
 String message = (String) request.getSession().getAttribute("message");
 request.getSession().removeAttribute("message");

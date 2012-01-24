@@ -118,6 +118,14 @@ String codes = "";
 String action = (String) request.getSession().getAttribute("action");
 if (action != null && action.compareTo("upload_data") == 0) {
    codes = (String) request.getSession().getAttribute("codes");
+   
+	if (codes != null && codes.compareTo("null") == 0) {
+	    codes = "";
+	} else if (codes == null) {
+	    codes = "";
+	}      
+   
+   
 }
 
 else {
