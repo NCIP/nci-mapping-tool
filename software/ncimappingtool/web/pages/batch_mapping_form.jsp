@@ -1069,8 +1069,10 @@ if (!readonly) {
 }	
 %>
 
+
+
       
-      <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_info.jsf?src_cd=<%=input_data%>&target_cd=<%=target_code%>',
+      <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_info.jsf?target_scheme=<%=target_scheme%>&target_version=<%=target_version%>&src_cd=<%=input_data%>&target_cd=<%=target_code%>',
         '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="13">
         <img src="<%= request.getContextPath() %>/images/Info.gif" style="border: none">
       </a>       
