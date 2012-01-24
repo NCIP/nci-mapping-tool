@@ -161,7 +161,12 @@ System.out.println("target_version: " + target_version);
         
 
 	
-} 
+} else if (type.compareTo("valueset") == 0) {
+
+	target_scheme = (String) request.getSession().getAttribute(target_scheme);
+	target_version = (String) request.getSession().getAttribute(target_version);
+
+}
 
 
 String input_option = (String) request.getSession().getAttribute("input_option");
@@ -203,7 +208,10 @@ if (source_scheme != null && source_code != null) {
 	}
 }
 
+
+
 Entity target_concept = MappingUtils.getConceptByCode(target_scheme, target_version, null, target_code);
+
 String target_concept_name = target_concept.getEntityDescription().getContent();
 
 Presentation[] target_presentations = null;
