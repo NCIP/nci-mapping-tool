@@ -239,7 +239,18 @@ SortUtils.quickSort(target_superconceptList);
                   
                 <tr>
 		  <td align="left" class="textbody">
+
+<%
+if (source_scheme == null) {
+%>
+    <b>Source</b>:&nbsp;UNSPECIFIED
+<%    
+} else {
+%>
 		      <b>Source</b>:&nbsp;<%=source_scheme%>&nbsp;(<%=source_version%>)
+<%
+}		      
+%>		      
 		  </td>
 		</tr> 
 	
@@ -265,7 +276,8 @@ SortUtils.quickSort(target_superconceptList);
 		   <th class="dataTableHeader" scope="col" align="left">
 			  &nbsp;
 		   </th>
-<%		   
+<%
+if (src_presentations != null) {
          for (int i = 0; i < src_presentations.length; i++) {
              String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight";
              Presentation p = src_presentations[i];
@@ -282,6 +294,7 @@ SortUtils.quickSort(target_superconceptList);
                 </tr>
 <%
          }
+}         
 %>         
                    </table>
           
@@ -302,7 +315,8 @@ SortUtils.quickSort(target_superconceptList);
 		   <th class="dataTableHeader" scope="col" align="left">
 			  &nbsp;
 		   </th>
-<%		   
+<%
+if (src_definitions != null) {
          for (int i = 0; i < src_definitions.length; i++) {
              String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight";
              Definition p = src_definitions[i];
@@ -322,6 +336,7 @@ SortUtils.quickSort(target_superconceptList);
                 </tr>
 <%
          }
+
          if (src_definitions.length == 0) {
 
 %>
@@ -336,6 +351,7 @@ SortUtils.quickSort(target_superconceptList);
                 </tr>
 <%                 
          }
+}
          
 %>               
         
@@ -361,6 +377,7 @@ SortUtils.quickSort(target_superconceptList);
         
         
 <%
+if (src_properties != null) {
          for (int i = 0; i < src_properties.length; i++) {
              String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight";
              Property p = src_properties[i];
@@ -392,6 +409,7 @@ SortUtils.quickSort(target_superconceptList);
                 </tr>
 <%                 
          }
+}
          
 %>               
         
@@ -413,6 +431,7 @@ SortUtils.quickSort(target_superconceptList);
         
         
     <%
+if (src_superconceptList != null) {    
         for (int i=0; i<src_superconceptList.size(); i++) {
           String s = (String) src_superconceptList.get(i);
           Vector ret_vec = DataUtils.parseData(s, "|");
@@ -433,6 +452,7 @@ SortUtils.quickSort(target_superconceptList);
           </tr>
     <%
         }
+}        
     %>        
         
         
