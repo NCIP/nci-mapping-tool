@@ -49,6 +49,7 @@ if (identifier != null && identifier.compareTo("null") == 0) {
 }
 
 
+String mapping_version = (String) request.getSession().getAttribute("mapping_version");
 String type = (String) request.getSession().getAttribute("type");
 
 String source_cs = (String) request.getSession().getAttribute("source_cs");
@@ -366,16 +367,6 @@ if (input_option.compareToIgnoreCase("Property") == 0) {
 
                   &nbsp;
 
-<!--
-		     <h:commandButton
-			value="cancel" 
-			action="#{mappingBean.cancelAdvancedSearchAction}" 
-			onclick="javascript:history.back();"
-			image="#{basePath}/images/cancel.gif" 
-			alt="Cancel" >
-		     </h:commandButton>	
-
--->
 
       <a href="#" onclick="javascript:history.back();" >
         <img src="<%= request.getContextPath() %>/images/cancel.gif" style="border: none">
@@ -395,7 +386,11 @@ if (input_option.compareToIgnoreCase("Property") == 0) {
      </table> 
 
      <input type="hidden" name="type" id="type" value="<%=type%>">
+     
      <input type="hidden" name="identifier" id="identifier" value="<%=identifier%>">
+     <input type="hidden" name="mapping_version" id="mapping_version" value="<%=mapping_version%>">
+     
+     
      <input type="hidden" name="source_cs" id="source_cs" value="<%=source_cs%>">
      <input type="hidden" name="target_cs" id="target_cs" value="<%=target_cs%>">
      
@@ -403,6 +398,7 @@ if (input_option.compareToIgnoreCase("Property") == 0) {
      
      <input type="hidden" name="input_option" id="input_option" value="Property">
      <input type="hidden" name="advanced" id="advanced" value="true">
+     
 
 
 </h:form>
