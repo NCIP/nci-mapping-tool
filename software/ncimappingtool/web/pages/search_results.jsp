@@ -296,6 +296,9 @@ System.out.println("data: " + data);
 <%
       List list = null;
       
+      
+      
+      
       if (type.compareTo("valueset") != 0) {
       
           list = new MappingSearchUtils().simpleSearch(type,
@@ -449,11 +452,15 @@ if (show_rank_column) {
       }
 %>               
  
- 
                 <tr>
                 <td>&nbsp;</td><td></td>
                 </tr>
-                
+
+
+<%
+if (list != null && list.size() > 0) {
+%>
+
 <tr><td>
 <h:commandButton id="generate" value="generate" action="#{mappingBean.saveMappingAction}"
 image="#{basePath}/images/save.gif"
@@ -462,9 +469,24 @@ tabindex="2">
 </h:commandButton>
 </td>
 <td></td>
-</tr>	
-                  
-                  
+</tr>
+
+<%                 
+} else {
+%>
+
+<tr><td class="textbody">
+No match found.
+</td>
+<td></td>
+</tr>
+
+<%
+}
+%>
+
+
+
           </table>
           
           
