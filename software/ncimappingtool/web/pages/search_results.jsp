@@ -364,11 +364,8 @@ if (show_rank_column) {
  if (list == null) {
   System.out.println("list == null???");
  } else {
+     request.getSession().setAttribute("search_results", list);
 
- %>
-      request.getSession().setAttribute("search_results", list);
- <%
- 
  
  if (list != null && list.size() == 1) {
  
