@@ -1173,6 +1173,9 @@ System.out.println("Creating MappingObject ... valueset ");
         String identifier = request.getParameter("identifier");
         String mapping_version = request.getParameter("mapping_version");
 
+System.out.println("MappingBean submitBatchAction identifier " + identifier );
+System.out.println("MappingBean submitBatchAction mapping_version " + mapping_version);
+
         String id = MappingObject.computeKey(identifier, mapping_version);
         System.out.println("MappingBean id = " + id);
         request.getSession().setAttribute("id", id);
@@ -1185,7 +1188,7 @@ System.out.println("Creating MappingObject ... valueset ");
 				_mappings.put(id, obj);
 				request.getSession().setAttribute("mappings", _mappings);
 			} else {
-				System.out.println("MappingBean MappingObject with id NOT FOUND ???");
+				System.out.println("MappingBean MappingObject with id " + id + " NOT FOUND ???");
 			}
 		}
 
@@ -1206,8 +1209,6 @@ System.out.println("Creating MappingObject ... valueset ");
 		String prefix = null;
 		String suffix = null;
 		String input_option = null;
-
-		//String source_cs = null;
 
         synchronized (request.getSession()) {
 			type = (String) request.getParameter("type");
@@ -1544,7 +1545,10 @@ System.out.println("matchText: " + matchText);
 
         if (mapping_id == null) {
 			System.out.println("cloneMappingAction mapping_id == null???: ");
-			return "clone";
+			String msg = "Please check one from the list.";
+			request.getSession().setAttribute("message", msg);
+
+			return "message";
 		}
 
         Iterator it = mappings.keySet().iterator();

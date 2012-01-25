@@ -37,6 +37,12 @@
              <from-outcome>clone</from-outcome>
              <to-view-id>/pages/home.jsp</to-view-id>
          </navigation-case>   
+
+          <navigation-case>
+             <from-action>#{mappingBean.cloneMappingAction}</from-action>
+             <from-outcome>message</from-outcome>
+             <to-view-id>/pages/home.jsp</to-view-id>
+         </navigation-case>  
          
           <navigation-case>
              <from-action>#{mappingBean.uploadMappingAction}</from-action>
