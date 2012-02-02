@@ -11,6 +11,7 @@ import org.LexGrid.LexBIG.LexBIGService.*;
 import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
 import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
 import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
+import org.LexGrid.valueSets.ValueSetDefinition;
 
 
 
@@ -294,6 +295,46 @@ import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
                 iterator = new SearchUtils().searchByAssociation(
 					    this._vocabulary, this._version, this._focusConceptCode, this._rel_search_association,
 					    resolveForward, resolveBackward, resolveAssociationDepth, -1);
+
+			} else if (_type.compareTo("ValueSetReference") == 0) {
+                String coding_scheme_name = this._vocabulary;
+                String coding_scheme_version = this._version;
+
+                System.out.println("(*) _selectValueSetReference: " + _selectValueSetReference);
+
+
+                ValueSetDefinition vsd = ValueSetUtils.getValueSetDefinitionByURI(_selectValueSetReference);
+                if (vsd != null) {
+					iterator = ValueSetUtils.resolveValueSetDefinition(vsd, this._vocabulary, this._version);
+				} else {
+					System.out.println("(*) vsd == null???");
+				}
+/*
+				try {
+					LexEVSDistributed distributed =
+						(LexEVSDistributed)
+						ApplicationServiceProvider.getApplicationServiceFromUrl(URL, "EvsServiceInfo");
+
+					LexEVSValueSetDefinitionServices vds = distributed.getLexEVSValueSetDefinitionServices();
+
+
+					AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+					csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#", "10.08e"));
+
+					ResolvedValueSetDefinition rvsd = vds.resolveValueSetDefinition(def, csvList, null, null);
+
+					ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
+
+					while(itr.hasNext()){
+						PrintUtility.print(itr.next());
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+*/
+
+
+
 			} else {
 				CodedNodeSet cns = codes2CodedNodeSet();
 				try {

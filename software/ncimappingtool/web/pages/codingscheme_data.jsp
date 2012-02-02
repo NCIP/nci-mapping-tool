@@ -423,10 +423,8 @@ if (input_option.compareToIgnoreCase("Property") == 0) {
      <input type="hidden" name="input_option" id="input_option" value="<%=input_option%>">
      
      
-     
      <input type="hidden" name="source_scheme" id="source_scheme" value="<%=source_scheme%>">
      <input type="hidden" name="source_version" id="source_version" value="<%=source_version%>">
-
     
      
      <%
