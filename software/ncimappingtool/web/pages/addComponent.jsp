@@ -248,6 +248,8 @@ System.out.println("********************** REFRESH PAGE");
                 action = (String) request.getParameter("action");
 		adv_search_vocabulary = (String) request.getParameter("dictionary");
 		subsetType = (String) request.getParameter("opt");
+		
+		
 		label = (String) request.getParameter("label");
 		description = (String) request.getParameter("description");
 		search_string = (String) request.getParameter("text");
@@ -258,21 +260,7 @@ System.out.println("********************** REFRESH PAGE");
 		selectValueSetReference = (String) request.getParameter("ref_uri");
 
 
-/*
-System.out.println("REFRESH PAGE adv_search_vocabulary " + adv_search_vocabulary);
-System.out.println("REFRESH PAGE subsetType " + subsetType);
-System.out.println("REFRESH PAGE label " + label);
 
-System.out.println("REFRESH PAGE action " + action);
-
-System.out.println("REFRESH PAGE description " + description);
-System.out.println("REFRESH PAGE search_string " + search_string);
-System.out.println("REFRESH PAGE search_algorithm " + search_algorithm);
-System.out.println("REFRESH PAGE adv_search_source " + adv_search_source);
-System.out.println("REFRESH PAGE rel_search_association " + rel_search_association);
-System.out.println("REFRESH PAGE selectProperty " + selectProperty);
-System.out.println("REFRESH PAGE selectValueSetReference " + selectValueSetReference);
-*/
 
 
 	    } 
@@ -331,7 +319,8 @@ System.out.println("------------ addComponent.jsp subsetType: " + subsetType);
     else if (subsetType.compareTo("EntireVocabulary") == 0)
       check_cs = "checked";    
     else if (subsetType.compareTo("ValueSetReference") == 0)
-      check_vs = "checked";           
+      check_vs = "checked"; 
+      
     else check_n2 = "checked";
 
     String editAction = (String) request.getSession().getAttribute("editAction");
@@ -382,6 +371,7 @@ if (adv_search_vocabulary == null) {
                      
  			<input type="radio" id="subsetType" name="subsetType" value="Property" alt="Property" <%=check_p2%> onclick="javascript:refresh()" tabindex="5">Property&nbsp;
  			<input type="radio" id="subsetType" name="subsetType" value="Relationship" alt="Relationship" <%=check_r2%> onclick="javascript:refresh()" tabindex="5">Relationship&nbsp;
+ 			<input type="radio" id="subsetType" name="subsetType" value="ValueSetReference" alt="Value Set" <%=check_vs%> onclick="javascript:refresh()" tabindex="5">Value Set&nbsp;
  			
  <%
  if (action.compareTo("import") != 0) {
@@ -407,7 +397,61 @@ if (adv_search_vocabulary == null) {
 
 System.out.println("subsetType: " + subsetType);
 
-     if (subsetType.equals("Property")) {
+
+     if (subsetType.equals("ValueSetReference")) {
+     
+%>
+
+     <tr>
+ 
+ 	 <td align="left" class="textbody">
+ 	     <b>Value Set: &nbsp;</b>:
+ 	 </td>                   
+ 
+ 	 <td class="inputItem">
+ 	 <select id="vsdURI" name="vsdURI" size="1" tabindex="6">
+ 
+ 	   <%
+	   
+ 	     Vector item_vec = DataUtils.getValueSetDefinitions();
+ 	     String vsdURI = (String) request.getAttribute("vsdURI");
+
+if (item_vec == null) {
+System.out.println("item_vec == null???");
+} else if (item_vec.size() == 0) {
+System.out.println("item_vec.size() == 0???");
+}
+ 	     
+ 	     if (vsdURI == null && item_vec.size() > 0) {
+ 		      SelectItem item = (SelectItem) item_vec.elementAt(0);
+ 		      vsdURI = (String) item.getLabel();
+ 	     }
+	     
+ 	     if (item_vec != null) {
+ 		    for (int i=0; i<item_vec.size(); i++) {
+ 		      SelectItem item = (SelectItem) item_vec.elementAt(i);
+ 		      String key = (String) item.getLabel();
+ 		      String value = (String) item.getValue();
+ 		      if (value != null && value.compareTo(vsdURI) == 0) {
+ 		  %>
+ 			<option value="<%=value%>" selected><%=key%></option>
+ 		  <%  } else { %>
+ 			<option value="<%=value%>"><%=key%></option>
+ 		  <%
+ 		      }
+ 		    }
+ 	     }
+ 	   %>
+ 	   </select>
+ 
+ 	 </td>
+      </tr>    
+      
+      
+ <%    
+
+
+     } else if (subsetType.equals("Property")) {
      
      
     
@@ -696,16 +740,24 @@ if (transitivity_checkbox != null && transitivity_checkbox.compareTo("true") == 
 	id="Save"
 	value="Save"
 	action="#{mappingBean.saveComponentSubsetAction}" 
-	image="#{form_requestContextPath}/images/continue.gif" alt="Save component subset data">
+	image="#{form_requestContextPath}/images/continue.gif" alt="Continue">
 </h:commandButton>
 &nbsp;
 
+<!--
+		      <a href="#" onclick="javascript:history.go(-1)">
+			<img src="<%= request.getContextPath() %>/images/cancel.gif" alt="Cancel" border="0">
+		      </a>   
+-->		      
+		      
 <h:commandButton
 	id="Cancel"
 	value="Cancel"
 	action="#{mappingBean.cancelComponentSubsetAction}" 
-	image="#{form_requestContextPath}/images/cancel.gif" alt="Cancel creating component subset">
+	onclick="javascript:history.go(-1)"
+	image="#{form_requestContextPath}/images/cancel.gif" alt="Cancel">
 </h:commandButton>
+
 
 </td>
 

@@ -368,5 +368,15 @@ System.out.println("(DEBUG) setTargetToSource Boolean.TRUE ");
 		return entry;
 	}
 
-
+      public static ValueSetDefinition getValueSetDefinitionByURI(String valueSetDefinitionURI) {
+		  ValueSetDefinition vsd = null;
+		  try {
+			  LexEVSValueSetDefinitionServices vds = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+			  String valueSetDefinitionRevisionId = null;
+			  vsd = vds.getValueSetDefinition(new URI(valueSetDefinitionURI), valueSetDefinitionRevisionId);
+		  } catch (Exception ex) {
+			  ex.printStackTrace();
+		  }
+		  return vsd;
+	  }
 }

@@ -1614,6 +1614,9 @@ System.out.println("matchText: " + matchText);
 
 		String type = (String) request.getParameter("type");
 
+System.out.println("(*) saveComponentSubsetAction : " + type);
+
+
 		String source_scheme = (String) request.getParameter("source_scheme");
 		String source_version = (String) request.getParameter("source_version");
 
@@ -1684,8 +1687,12 @@ System.out.println("matchText: " + matchText);
 			String codes = (String) request.getParameter("codes");
 			ob.setCodes(codes);
 
-	    }
+		} else if (subsetType.compareTo("ValueSetReference") == 0) {
 
+			String vsdURI = (String) request.getParameter("vsdURI");
+			ob.setValueSetReference(vsdURI);
+
+	    }
         // VSD (import, restriction)
 
         dumpComponentObject(ob);
