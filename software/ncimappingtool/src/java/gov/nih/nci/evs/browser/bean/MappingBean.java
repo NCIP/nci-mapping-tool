@@ -1745,9 +1745,19 @@ System.out.println("(*) saveComponentSubsetAction : " + type);
 			String mapping_version = (String) request.getSession().getAttribute("mapping_version");
 
 			String mapping_key = MappingObject.computeKey(identifier, mapping_version);
-			_restrictions.put(mapping_key, ob);
-			request.getSession().setAttribute("restrictions", _restrictions);
+			//_restrictions.put(mapping_key, ob);
 			String message = "Restriction data saved.";
+
+			//CodedNodeSet cns = ob.toCNS();
+			if (ob != null) {
+				_restrictions.put(mapping_key, ob);
+			//_restrictions.put(mapping_key, ob);
+
+				request.getSession().setAttribute("restrictions", _restrictions);
+
+			} else {
+				message = "ERROR: Unable to save restriction data.";
+			}
 			request.getSession().setAttribute("message", message);
 		}
 

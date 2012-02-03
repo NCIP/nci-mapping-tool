@@ -214,6 +214,7 @@ import org.LexGrid.valueSets.ValueSetDefinition;
 
 				cns = lbSvc.getNodeSet(this._vocabulary, csvt, entityTypes);
 				ResolvedConceptReferencesIterator iterator = toIterator();
+
 				ConceptReferenceList codeList = new ConceptReferenceList();
 				while (iterator.hasNext()) {
 					ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
@@ -221,7 +222,7 @@ import org.LexGrid.valueSets.ValueSetDefinition;
 				}
 				cns.restrictToCodes(codeList);
 			} catch (Exception ex) {
-
+                ex.printStackTrace();
 			}
 			return cns;
 		}
@@ -309,31 +310,6 @@ import org.LexGrid.valueSets.ValueSetDefinition;
 				} else {
 					System.out.println("(*) vsd == null???");
 				}
-/*
-				try {
-					LexEVSDistributed distributed =
-						(LexEVSDistributed)
-						ApplicationServiceProvider.getApplicationServiceFromUrl(URL, "EvsServiceInfo");
-
-					LexEVSValueSetDefinitionServices vds = distributed.getLexEVSValueSetDefinitionServices();
-
-
-					AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
-					csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#", "10.08e"));
-
-					ResolvedValueSetDefinition rvsd = vds.resolveValueSetDefinition(def, csvList, null, null);
-
-					ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
-
-					while(itr.hasNext()){
-						PrintUtility.print(itr.next());
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-*/
-
-
 
 			} else {
 				CodedNodeSet cns = codes2CodedNodeSet();
