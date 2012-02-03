@@ -509,10 +509,13 @@ public class MappingThread implements Runnable
 
 				String mapping_key = MappingObject.computeKey(identifier, mapping_version);
 				if (restrictions != null && mapping_key != null) {
-					restriction = (CodedNodeSet) restrictions.get(mapping_key);
+					ComponentObject obj = (ComponentObject) restrictions.get(mapping_key);
+					if (obj != null) {
+						restriction = obj.toCNS();
+					}
+				} else {
+					System.out.println("(*) MappingThread: No restriction is found for " + identifier + " " + mapping_version);
 				}
-				//session.setAttribute("source_cs", source_cs);
-				//session.setAttribute("target_cs", target_cs);
 			}
 
 			if (input_list == null || input_list.size() == 0) {
