@@ -54,6 +54,11 @@
           subsetType = subsetTypeObj[i].value;
         }
       }
+
+      var type = "";
+      if (document.forms["addComponentForm"].type != null) {
+          type = document.forms["addComponentForm"].type.value;
+      }  
       
       var dictionary = "";
       if (document.forms["addComponentForm"].dictionary != null) {
@@ -112,6 +117,7 @@
       }
        
       window.location.href="/ncimappingtool/pages/addComponent.jsf?refresh=1"
+          + "&type="+ type
           + "&opt="+ subsetType
           + "&action="+ action
           + "&label="+ label
@@ -164,6 +170,9 @@
     if (type == null) {
     	type = (String) request.getSession().getAttribute("type"); 
     }
+    
+    System.out.println("(***) AddComponent.jsp type: " + type);
+    
     
     String adv_search_vocabulary = request.getParameter("dictionary");
     String adv_search_version = request.getParameter("version");
@@ -245,6 +254,7 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
 	    
 System.out.println("********************** REFRESH PAGE");
 
+                type = (String) request.getParameter("type");
                 action = (String) request.getParameter("action");
 		adv_search_vocabulary = (String) request.getParameter("dictionary");
 		subsetType = (String) request.getParameter("opt");
@@ -264,6 +274,10 @@ System.out.println("********************** REFRESH PAGE");
 
 
 	    } 
+
+System.out.println("------------ addComponent.jsp type: " + type);
+
+
 
 	    if (subsetType == null || subsetType.compareTo("null") == 0) {
 		subsetType = "Property";
