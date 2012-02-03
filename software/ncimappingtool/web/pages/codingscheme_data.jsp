@@ -188,7 +188,7 @@ else {
                 <tr>
 		  <td align="left" class="textbody">
 		      <b>To</b>:&nbsp;<%=target_scheme%>&nbsp;(<%=target_version%>) 
-		         <a href="<%=request.getContextPath()%>/pages/addComponent.jsf?dictionary=<%=target_scheme%>&version=<%=target_version%>&action=restrict" >
+		         <a href="<%=request.getContextPath()%>/pages/addComponent.jsf?type=codingscheme&dictionary=<%=target_scheme%>&version=<%=target_version%>&action=restrict" >
 			     Apply Restriction
 			</a> 
 		  </td>

@@ -1734,16 +1734,19 @@ System.out.println("(*) saveComponentSubsetAction : " + type);
 				return type + "_nomatch";
 			}
 	    } else { // restriction
+	        if (_restrictions == null) _restrictions = new HashMap<String, ComponentObject>();
+
 	        HashMap restrictions = (HashMap) request.getSession().getAttribute("restrictions");
 	        if (restrictions == null) {
-				request.getSession().setAttribute("restrictions", _restrictions);
+				restrictions = _restrictions;
 			}
 
 			String identifier = (String) request.getSession().getAttribute("identifier");
 			String mapping_version = (String) request.getSession().getAttribute("mapping_version");
 
 			String mapping_key = MappingObject.computeKey(identifier, mapping_version);
-			restrictions.put(mapping_key, ob);
+			_restrictions.put(mapping_key, ob);
+			request.getSession().setAttribute("restrictions", _restrictions);
 			String message = "Restriction data saved.";
 			request.getSession().setAttribute("message", message);
 		}

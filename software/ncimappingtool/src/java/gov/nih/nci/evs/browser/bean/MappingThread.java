@@ -499,10 +499,6 @@ public class MappingThread implements Runnable
 			CodedNodeSet restriction = null;
 
 			synchronized (session) {
-
-				//source_cs = (String) request.getParameter("source_cs");
-				//target_cs = (String) request.getParameter("target_cs");
-
 				source_cs = (String) session.getAttribute("source_cs");
 				target_cs = (String) session.getAttribute("target_cs");
 
