@@ -124,6 +124,7 @@ String valueSetDefinitionName = null;
 String identifier = null;
 String mapping_version = null;
 
+
 String batch_status = (String) request.getSession().getAttribute("batch_status");
 MappingData mappingData = null;
 String basePath = request.getContextPath(); 
@@ -756,7 +757,9 @@ if (!readonly) {
 
 		
 			<tr> 
-<%			
+<%
+
+
 if (input_option.compareToIgnoreCase("Code") == 0) {
     String concept_name = null;
     if (code2name_hmap != null) {
@@ -766,13 +769,40 @@ if (input_option.compareToIgnoreCase("Code") == 0) {
 	}
     }
     if (concept_name != null) {
+
+        if (type.compareToIgnoreCase("ncimeta") != 0) {	
+%>
+            <td class="textbody"><%=item_label%>. &nbsp;
+		 <a href="#"
+		       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=input_data%>')">
+		       <%=input_data%></a>&nbsp;(<%=concept_name%>)
+		 
+<%				 
+	} else {			 
+    
 %>    
         <td class="textbody"><%=item_label%>. &nbsp;<%=input_data%>&nbsp;(<%=concept_name%>)
 <%
+        }
+ 
     } else {
+
+        if (type.compareToIgnoreCase("ncimeta") != 0) {	
+%>
+            <td class="textbody"><%=item_label%>. &nbsp;
+		 <a href="#"
+		       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=input_data%>')">
+		       <%=input_data%>
+		 </a>
+<%				 
+	} else {			 
+    
+    
 %>    
         <td class="textbody"><%=item_label%>. &nbsp;<%=input_data%>
 <%
+        }
+
     }
 } else {
 %>			
