@@ -220,6 +220,7 @@ public class DataUtils {
     public static Vector _valueset_item_vec = null;
     public static Vector valueSetDefinitionOnServer_uri_vec = null;
 
+    public static String _mode_of_operation = null;
 
 
     // ==================================================================================
@@ -5194,4 +5195,17 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
         }
         return hmap;
 	}
+
+
+	public static String getModeOfOperation() {
+	    if (_mode_of_operation != null) return _mode_of_operation;
+        try {
+            NCImtBrowserProperties properties = NCImtBrowserProperties.getInstance();
+            _mode_of_operation = properties.getProperty(NCImtBrowserProperties.MODE_OF_OPERATION);
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	    }
+    	return _mode_of_operation;
+	}
+
 }

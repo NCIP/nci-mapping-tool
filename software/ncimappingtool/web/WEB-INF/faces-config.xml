@@ -126,6 +126,26 @@
              <from-outcome>message</from-outcome>
              <to-view-id>/pages/ncimeta_mapping.jsp</to-view-id>
          </navigation-case>           
+
+         <navigation-case>
+             <from-action>#{mappingBean.submitMetadataAction}</from-action>
+             <from-outcome>metadata_acknowlegement</from-outcome>
+             <to-view-id>/pages/metadata_acknowlegement.jsp</to-view-id>
+         </navigation-case>   
+         
+         
+         <navigation-case>
+             <from-action>#{mappingBean.returnToHomeAction}</from-action>
+             <from-outcome>home</from-outcome>
+             <to-view-id>/pages/home.jsp</to-view-id>
+         </navigation-case>         
+
+         <navigation-case>
+             <from-action>#{mappingBean.returnToHomeAction}</from-action>
+             <from-outcome>start</from-outcome>
+             <to-view-id>/pages/start.jsp</to-view-id>
+         </navigation-case>   
+         
          
     </navigation-rule>
 
@@ -167,7 +187,7 @@
  
  
  
-      <navigation-rule>
+    <navigation-rule>
           <from-view-id>/pages/codingscheme_mapping.jsp</from-view-id>
         
           <navigation-case>
@@ -181,11 +201,17 @@
               <from-outcome>message</from-outcome>
               <to-view-id>/pages/codingscheme_mapping.jsp</to-view-id>
           </navigation-case>           
-          
+
+         <navigation-case>
+             <from-action>#{mappingBean.submitMetadataAction}</from-action>
+             <from-outcome>metadata_acknowlegement</from-outcome>
+             <to-view-id>/pages/metadata_acknowlegement.jsp</to-view-id>
+         </navigation-case>   
+         
     </navigation-rule>
  
  
-       <navigation-rule>
+    <navigation-rule>
            <from-view-id>/pages/valueset_mapping.jsp</from-view-id>
          
            <navigation-case>
@@ -199,7 +225,13 @@
                <from-outcome>message</from-outcome>
                <to-view-id>/pages/valueset_mapping.jsp</to-view-id>
            </navigation-case>           
-           
+
+         <navigation-case>
+             <from-action>#{mappingBean.submitMetadataAction}</from-action>
+             <from-outcome>metadata_acknowlegement</from-outcome>
+             <to-view-id>/pages/metadata_acknowlegement.jsp</to-view-id>
+         </navigation-case>   
+         
     </navigation-rule>
     
     
@@ -617,9 +649,47 @@
               <to-view-id>/pages/valueset_data.jsp</to-view-id>
           </navigation-case>
           
-          
      </navigation-rule>  
      
+     
+    <navigation-rule>
+          <from-view-id>/pages/metadata_acknowlegement.jsp</from-view-id>
+        
+          <navigation-case>
+              <from-action>#{mappingBean.returnToHomeAction}</from-action>
+              <from-outcome>home</from-outcome>
+              <to-view-id>/pages/home.jsp</to-view-id>
+          </navigation-case>
+          
+          <navigation-case>
+              <from-action>#{mappingBean.returnToHomeAction}</from-action>
+              <from-outcome>start</from-outcome>
+              <to-view-id>/pages/start.jsp</to-view-id>
+          </navigation-case>           
+
+           <navigation-case>
+               <from-action>#{mappingBean.mappingDataAction}</from-action>
+               <from-outcome>ncimeta</from-outcome>
+               <to-view-id>/pages/ncimeta_data.jsp</to-view-id>
+           </navigation-case>
+           
+           <navigation-case>
+               <from-action>#{mappingBean.mappingDataAction}</from-action>
+               <from-outcome>codingscheme</from-outcome>
+               <to-view-id>/pages/codingscheme_data.jsp</to-view-id>
+           </navigation-case>
+           
+           <navigation-case>
+               <from-action>#{mappingBean.mappingDataAction}</from-action>
+               <from-outcome>valueset</from-outcome>
+               <to-view-id>/pages/valueset_data.jsp</to-view-id>
+           </navigation-case>
+           
+
+         
+    </navigation-rule>
+    
+    
 
     <!-- Managed Beans ===================================================== -->
 

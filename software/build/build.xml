@@ -250,6 +250,8 @@
         <copy todir="${exploded.dir}/install" overwrite="true"
              flatten="true" includeEmptyDirs="no" filtering="true">
             <filterset>
+                <filter token="mode.of.operation" value="${mode.of.operation}"/>
+                <filter token="mapping.dir" value="${mapping.dir}"/>
                 <filter token="ncit.url" value="${ncit.url}"/>
                 <filter token="ncim.url" value="${ncim.url}"/>
                 <filter token="lex.evs.api.url" value="${lex.evs.api.url}"/>

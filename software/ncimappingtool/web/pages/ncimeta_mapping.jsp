@@ -272,6 +272,10 @@ if (input_option.compareTo("Name") == 0) {
      <input type="hidden" name="type" id="type" value="ncimeta">
      <input type="hidden" name="ncim_version" id="type" value="<%=ncim_version%>">
      <input type="hidden" name="input_option" id="input_option" value="Code">
+     
+     
+     <input type="hidden" name="ack" id="ack" value="ncimeta">
+     
 
 </h:form>
         
