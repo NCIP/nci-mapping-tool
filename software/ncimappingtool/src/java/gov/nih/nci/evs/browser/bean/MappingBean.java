@@ -117,8 +117,11 @@ public class MappingBean {
 
 	private HashMap<String, ComponentObject> _restrictions = null;
 
-    public void MappingBean() {
+    private static String _mode_of_operation = null;
 
+
+    public void MappingBean() {
+        _mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
 	}
 
     public String getStatus() {
@@ -307,8 +310,26 @@ public class MappingBean {
 	}
 
 
+    private String assignMappingUniqueIdentifier(String identifier, String mapping_version) {
+		String hashcode = "";
+		hashcode = hashcode + (identifier.hashCode() + mapping_version.hashCode());
+		return hashcode;
+	}
 
 
+    public String returnToHomeAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		_mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
+		System.out.println("(*********) _mode_of_operation: " + _mode_of_operation);
+
+		if (_mode_of_operation != null && _mode_of_operation.compareToIgnoreCase(NCImtBrowserProperties.BATCH_MODE_OF_OPERATION) == 0) {
+			return "start";
+		}
+		return "home";
+	}
 
 
     public String submitMetadataAction() {
@@ -333,6 +354,17 @@ public class MappingBean {
 			return "message";
 		}
 
+        String hashcode = "";
+        String type = (String) request.getParameter("type");
+
+
+_mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
+System.out.println("(*********) _mode_of_operation: " + _mode_of_operation);
+
+
+
+
+
 		String key = MappingObject.computeKey(identifier, mapping_version);
 		HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
 		if (mappings == null) {
@@ -349,7 +381,6 @@ public class MappingBean {
 			}
         }
 
-        String type = (String) request.getParameter("type");
 
         if (type == null) {
 			message = "Please specify the type of mapping by clicking on a radio button below.";
@@ -401,6 +432,17 @@ request.getSession().setAttribute("mapping_hmap", mapping_hmap);
 HashSet expanded_hset = new HashSet();
 request.getSession().setAttribute("expanded_hset", expanded_hset);
 
+			if (_mode_of_operation != null && _mode_of_operation.compareToIgnoreCase(NCImtBrowserProperties.BATCH_MODE_OF_OPERATION) == 0) {
+				hashcode = assignMappingUniqueIdentifier(identifier, mapping_version);
+				request.setAttribute("reference_code", hashcode);
+				request.setAttribute("type", type);
+
+				// check mapping identifier (mapping identifier must be unique)
+				// assign a reference code to a new mapping.
+				// save mapping metadata to the persistent directory (mapping_dir).
+
+				return "metadata_acknowlegement";
+			}
 
 		    return "ncimeta";
 		} else if (type.compareTo("codingscheme") == 0) {
@@ -439,6 +481,20 @@ request.getSession().setAttribute("mapping_hmap", mapping_hmap);
 HashSet expanded_hset = new HashSet();
 request.getSession().setAttribute("expanded_hset", expanded_hset);
 
+
+			if (_mode_of_operation != null && _mode_of_operation.compareToIgnoreCase(NCImtBrowserProperties.BATCH_MODE_OF_OPERATION) == 0) {
+				hashcode = assignMappingUniqueIdentifier(identifier, mapping_version);
+				request.setAttribute("reference_code", hashcode);
+				request.setAttribute("type", type);
+
+				// check mapping identifier (mapping identifier must be unique)
+				// assign a reference code to a new mapping.
+				// save mapping metadata to the persistent directory (mapping_dir).
+
+				return "metadata_acknowlegement";
+			}
+
+
 		    return "codingscheme";
 		} else if (type.compareTo("valueset") == 0) {
 
@@ -475,7 +531,18 @@ request.getSession().setAttribute("mapping_hmap", mapping_hmap);
 HashSet expanded_hset = new HashSet();
 request.getSession().setAttribute("expanded_hset", expanded_hset);
 
-            //request.getSession().setAttribute("mappings", _mappings);
+			if (_mode_of_operation != null && _mode_of_operation.compareToIgnoreCase(NCImtBrowserProperties.BATCH_MODE_OF_OPERATION) == 0) {
+				hashcode = assignMappingUniqueIdentifier(identifier, mapping_version);
+				request.setAttribute("reference_code", hashcode);
+				request.setAttribute("type", type);
+
+				// check mapping identifier (mapping identifier must be unique)
+				// assign a reference code to a new mapping.
+				// save mapping metadata to the persistent directory (mapping_dir).
+
+				return "metadata_acknowlegement";
+			}
+
 
 		    return "valueset";
 		}
@@ -1843,6 +1910,7 @@ System.out.println("(*) saveComponentSubsetAction : " + type);
 		return "export";
 	}
 
+
     public String uploadDataAction() {
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
@@ -1881,7 +1949,13 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
 		return "upload";
 	}
 
-
+    public String mappingDataAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+		String type = (String) request.getParameter("type");
+		return type;
+    }
 
     public void updateMapping(HttpServletRequest request) {
 		String type = (String) request.getParameter("type");
@@ -1911,7 +1985,6 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
 	       }
 		}
 	}
-
 
     public String saveAllMappingAction() {
         HttpServletRequest request =

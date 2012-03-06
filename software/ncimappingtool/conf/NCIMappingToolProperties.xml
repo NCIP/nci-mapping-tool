@@ -386,6 +386,18 @@
 
     <ConfigurableItems>
         <ConfigurableItem>
+                 <key>MAPPING_DIR</key>
+                 <value>@mapping.dir@</value>
+        </ConfigurableItem>
+        <ConfigurableItem>
+                 <key>MODE_OF_OPERATION</key>
+                 <!--
+                 <value>@mode.of.operation@</value>
+                 -->
+                 <value>interactive</value>
+        </ConfigurableItem>
+        
+        <ConfigurableItem>
                  <key>DEBUG_ON</key>
                  <value>@debug.on@</value>
         </ConfigurableItem>

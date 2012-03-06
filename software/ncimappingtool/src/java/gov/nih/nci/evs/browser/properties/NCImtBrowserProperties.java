@@ -98,6 +98,12 @@ public class NCImtBrowserProperties {
         "STANDARD_FTP_REPORT_INFO";
     public static int STANDARD_FTP_REPORT_INFO_MAX = 20;
 
+    public static String MAPPING_DIR = "MAPPING_DIR";
+    public static String MODE_OF_OPERATION = "MODE_OF_OPERATION";
+
+    public static final String BATCH_MODE_OF_OPERATION = "batch";
+    public static final String INTERACTIVE_MODE_OF_OPERATION = "interactive";
+
     private static NCImtBrowserProperties _browserProperties = null;
     private static Properties _properties = new Properties();
 
@@ -106,6 +112,8 @@ public class NCImtBrowserProperties {
     private static int _maxTreeLevel = 1000;
     private static String _service_url = null;
     private static String _lg_config_file = null;
+    private static String _mapping_dir = null;
+    private static String _mode_of_operation = null;
 
     private static String _sort_by_score = null;
     private static String _mail_smtp_server = null;
@@ -193,6 +201,18 @@ public class NCImtBrowserProperties {
                             .getProperty(_browserProperties.NCIT_URL);
 
 //System.out.println("_ncit_url: " + _ncit_url);
+
+                    _mapping_dir =
+                        _browserProperties
+                            .getProperty(_browserProperties.MAPPING_DIR);
+
+                    _mode_of_operation =
+                        _browserProperties
+                            .getProperty(_browserProperties.MODE_OF_OPERATION);
+
+
+System.out.println("(*) NCImtBrowserProperties _mapping_dir: " + _mapping_dir);
+System.out.println("(*) NCImtBrowserProperties _mode_of_operation: " + _mode_of_operation);
 
 
                     String pagination_time_out_str =
@@ -302,6 +322,14 @@ System.out.println("propertyFile: " + propertyFile);
 
     public static String getNCIT_URL() {
         return _ncit_url;
+    }
+
+    public static String getMappingDir() {
+        return _mapping_dir;
+    }
+
+    public static String getModeOfOperation() {
+        return _mode_of_operation;
     }
 
     public static int getPaginationTimeOut() {

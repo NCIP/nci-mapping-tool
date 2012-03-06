@@ -62,6 +62,9 @@
           Tag: <%=anthill_build_tag_built%>
    LexEVS URL: <%=evs_service_url%>          
 -->
+
+
+
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
@@ -774,7 +777,7 @@ if (input_option.compareToIgnoreCase("Code") == 0) {
 %>
             <td class="textbody"><%=item_label%>. &nbsp;
 		 <a href="#"
-		       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=input_data%>')">
+		       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=input_data%>'); return false;">
 		       <%=input_data%></a>&nbsp;(<%=concept_name%>)
 		 
 <%				 
@@ -791,7 +794,7 @@ if (input_option.compareToIgnoreCase("Code") == 0) {
 %>
             <td class="textbody"><%=item_label%>. &nbsp;
 		 <a href="#"
-		       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=input_data%>')">
+		       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=input_data%>'); return false;">
 		       <%=input_data%>
 		 </a>
 <%				 
@@ -832,7 +835,7 @@ if (type.compareTo("codingscheme") == 0) {
 %>
 
       <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/manual_mapping.jsf?idx1=<%=idx1_str%>',
-        '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="13">
+        '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no'); return false;" tabindex="13">
         <img src="<%= request.getContextPath() %>/images/user.png" style="border: none">
       </a> 
 
@@ -1017,12 +1020,17 @@ target_codingschemeversion = target_version;
 if (source_code.compareTo("N/A") != 0) {
 
 %>
+
+
                                  <td class="datacoldark">
 				 <a href="#"
-				       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>')">
+				       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>'); return false;">
 				       <%=source_code%>
 				 </a>
 				 </td>
+		 
+				 
+				 
 <%				 
 } else {
 %>
@@ -1084,7 +1092,7 @@ if (source_code.compareTo("N/A") != 0) {
 			 <td class="datacoldark">
 
 				 <a href="#"
-				       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>')">
+				       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>'); return false;">
 				       <%=target_code%>
 				 </a>
 
@@ -1099,7 +1107,7 @@ if (!readonly) {
 %>			
 	
       <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/entry_notes.jsf?idx1=<%=idx1_str%>&idx2=<%=idx2_str%>',
-        '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="13">
+        '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no'); return false;" tabindex="13">
         <img src="<%= request.getContextPath() %>/images/edit.png" style="border: none">
       </a> 
       
@@ -1117,7 +1125,7 @@ if (!readonly) {
 
       
       <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_info.jsf?target_scheme=<%=target_codingscheme%>&target_version=<%=target_codingschemeversion%>&src_cd=<%=input_data%>&target_cd=<%=target_code%>',
-        '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="13">
+        '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no'); return false;" tabindex="13">
         <img src="<%= request.getContextPath() %>/images/Info.gif" style="border: none">
       </a>       
       
