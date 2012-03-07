@@ -211,8 +211,8 @@ public class NCImtBrowserProperties {
                             .getProperty(_browserProperties.MODE_OF_OPERATION);
 
 
-System.out.println("(*) NCImtBrowserProperties _mapping_dir: " + _mapping_dir);
-System.out.println("(*) NCImtBrowserProperties _mode_of_operation: " + _mode_of_operation);
+//System.out.println("(*) NCImtBrowserProperties _mapping_dir: " + _mapping_dir);
+//System.out.println("(*) NCImtBrowserProperties _mode_of_operation: " + _mode_of_operation);
 
 
                     String pagination_time_out_str =
