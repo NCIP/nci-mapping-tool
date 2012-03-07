@@ -998,8 +998,9 @@ if (!readonly) {
 			 target_scheme = mappingData.getTargetCodingScheme();
 			 target_version = mappingData.getTargetCodingSchemeVersion();
 
-			 source_scheme = DataUtils.getFormalName(source_scheme);        
+			 source_scheme = DataUtils.getFormalName(source_scheme);   
 			 target_scheme = DataUtils.getFormalName(target_scheme);  
+			 
 			 
 target_codingscheme = target_scheme;
 target_codingschemeversion = target_version;
@@ -1098,6 +1099,7 @@ if (source_code.compareTo("N/A") != 0) {
 
 
 			 </td>
+			 
 			 <td class="datacoldark"><%=target_name%>
 			 &nbsp;
 

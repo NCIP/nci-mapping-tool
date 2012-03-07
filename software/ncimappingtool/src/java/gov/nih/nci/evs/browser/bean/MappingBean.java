@@ -323,8 +323,6 @@ public class MappingBean {
                 .getExternalContext().getRequest();
 
 		_mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
-		System.out.println("(*********) _mode_of_operation: " + _mode_of_operation);
-
 		if (_mode_of_operation != null && _mode_of_operation.compareToIgnoreCase(NCImtBrowserProperties.BATCH_MODE_OF_OPERATION) == 0) {
 			return "start";
 		}

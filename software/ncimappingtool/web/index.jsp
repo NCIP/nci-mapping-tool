@@ -12,10 +12,6 @@
  
 <%
 String _mode_of_operation = DataUtils.getModeOfOperation();
-
-System.out.println("index.jsp _mode_of_operation: " + _mode_of_operation);
-
-
 if (_mode_of_operation != null && _mode_of_operation.compareTo(NCImtBrowserProperties.INTERACTIVE_MODE_OF_OPERATION) == 0) {
 %>
   <jsp:forward page="/pages/home.jsf" />
