@@ -50,11 +50,24 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
 
-<!--
-<body onload="doLoad()">
--->
+<%
+    String anchor = (String) request.getSession().getAttribute("anchor");
+    if (DataUtils.isNull(anchor)) {
+        anchor = (String) request.getParameter("idx");
+    }
+    if (!DataUtils.isNull(anchor)) {
+%>    
+        <body onload="goToAnchor(<%=anchor%>)">
+<%        
+        request.getSession().removeAttribute("anchor");
+    } else {
+%>       
+        <body>
+<%    
+    }
+%>
 
-<body>
+
 
 <!--
    Build info: <%=ncit_build_info%>
@@ -91,6 +104,12 @@
 		//window.location.reload( false );
 		window.document.forms[0].submit(); 
 	}
+	
+	
+	function goToAnchor(anchor) {
+	    location.href = "#" + anchor;
+	}
+
  
 </script> 
 
@@ -834,11 +853,20 @@ if (!readonly) {
 if (type.compareTo("codingscheme") == 0) {
 %>
 
+
+<!--
       <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/manual_mapping.jsf?idx1=<%=idx1_str%>',
         '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no'); return false;" tabindex="13">
         <img src="<%= request.getContextPath() %>/images/user.png" style="border: none">
       </a> 
+-->
 
+
+      <a name="<%=idx1_str%>" href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/manual_mapping.jsf?idx1=<%=idx1_str%>',
+        '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no'); return false;" tabindex="13">
+        <img src="<%= request.getContextPath() %>/images/user.png" style="border: none">
+      </a> 
+      
 
 <%    
 }

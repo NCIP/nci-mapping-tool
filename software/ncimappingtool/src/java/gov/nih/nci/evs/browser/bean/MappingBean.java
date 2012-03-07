@@ -1395,6 +1395,17 @@ System.out.println("MappingBean submitBatchAction mapping_version " + mapping_ve
 
         String idx1_str = (String) request.getSession().getAttribute("idx1_str");
 
+
+        //KLO 030712
+        int anchor = 0;
+        if (idx1_str != null) {
+			anchor = Integer.parseInt(idx1_str) + 1;
+		}
+		String anchor_str = new Integer(anchor).toString();
+		request.getSession().setAttribute("anchor", anchor_str);
+
+
+
         String associationName = "mapsTo";
         String rel = null;
         int score = 0;
