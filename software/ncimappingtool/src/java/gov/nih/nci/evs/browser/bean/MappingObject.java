@@ -175,7 +175,14 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 			} else {
 				uuid += NULL_STRING_HASH_CODE;
 			}
-			String key = "M" + new Integer(uuid).toString();
+
+			String key = null;
+			if (uuid < 0) {
+				uuid = uuid * (-1);
+				key = "MN" + new Integer(uuid).toString();
+			} else {
+			    key = "M" + new Integer(uuid).toString();
+			}
 			return key;
 
 		}
