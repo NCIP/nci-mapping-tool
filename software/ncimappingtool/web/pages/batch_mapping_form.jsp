@@ -796,7 +796,7 @@ if (input_option.compareToIgnoreCase("Code") == 0) {
 %>
             <td class="textbody"><%=item_label%>. &nbsp;
 		 <a href="#"
-		       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=input_data%>'); return false;">
+		       onclick="javascript:openNewWindow('<%=ncit_url%>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=input_data%>'); return false;">
 		       <%=input_data%></a>&nbsp;(<%=concept_name%>)
 		 
 <%				 
@@ -813,7 +813,7 @@ if (input_option.compareToIgnoreCase("Code") == 0) {
 %>
             <td class="textbody"><%=item_label%>. &nbsp;
 		 <a href="#"
-		       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=input_data%>'); return false;">
+		       onclick="javascript:openNewWindow('<%=ncit_url%>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=input_data%>'); return false;">
 		       <%=input_data%>
 		 </a>
 <%				 
@@ -1053,7 +1053,7 @@ if (source_code.compareTo("N/A") != 0) {
 
                                  <td class="datacoldark">
 				 <a href="#"
-				       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>'); return false;">
+				       onclick="javascript:openNewWindow('<%=ncit_url%>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>'); return false;">
 				       <%=source_code%>
 				 </a>
 				 </td>
@@ -1121,7 +1121,7 @@ if (source_code.compareTo("N/A") != 0) {
 			 <td class="datacoldark">
 
 				 <a href="#"
-				       onclick="javascript:openNewWindow('<%=ncit_url%>ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>'); return false;">
+				       onclick="javascript:openNewWindow('<%=ncit_url%>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>'); return false;">
 				       <%=target_code%>
 				 </a>
 

@@ -357,10 +357,6 @@ public class MappingBean {
 
 
 _mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
-System.out.println("(*********) _mode_of_operation: " + _mode_of_operation);
-
-
-
 
 
 		String key = MappingObject.computeKey(identifier, mapping_version);
@@ -1403,8 +1399,6 @@ System.out.println("MappingBean submitBatchAction mapping_version " + mapping_ve
 		}
 		String anchor_str = new Integer(anchor).toString();
 		request.getSession().setAttribute("anchor", anchor_str);
-
-
 
         String associationName = "mapsTo";
         String rel = null;
