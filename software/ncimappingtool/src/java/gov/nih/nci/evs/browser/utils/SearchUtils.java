@@ -3988,9 +3988,6 @@ public class SearchUtils {
 
             String language = null;
 
-System.out.println("matchAlgorithm: " + matchAlgorithm);
-System.out.println("matchText_vec.size(): " + matchText_vec.size());
-
             for (int i = 0; i < matchText_vec.size(); i++) {
 				String matchText = (String) matchText_vec.elementAt(i);
 int j = i+1;
@@ -4021,8 +4018,6 @@ int j = i+1;
             SortOptionList sortCriteria = null;
             LocalNameList restrictToProperties = new LocalNameList();
             boolean resolveConcepts = false;
-
-System.out.println("QuickUnionIterator " + cns_vec.size());
 
             ResolvedConceptReferencesIterator iterator =
                 new QuickUnionIterator(cns_vec, sortCriteria, null,
@@ -4079,6 +4074,85 @@ System.out.println("QuickUnionIterator " + cns_vec.size());
         String matchAlgorithm) {
 		return searchByProperty(scheme, version, propertyName, matchText_vec, matchAlgorithm, null);
 	}
+
+
+
+    public Vector<CodedNodeSet> getCNSByMatchingProperty(
+        String scheme, String version, String propertyName, Vector matchText_vec,
+        String matchAlgorithm, CodedNodeSet restriction) {
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            Vector<CodedNodeSet> cns_vec = new Vector<CodedNodeSet>();
+			CodingSchemeVersionOrTag versionOrTag =
+				new CodingSchemeVersionOrTag();
+			if (version != null)
+				versionOrTag.setVersion(version);
+            String language = null;
+
+			LocalNameList propertyNames = new LocalNameList();
+			if (propertyName.compareToIgnoreCase("ALL") != 0) {
+				propertyNames.addEntry(propertyName);
+			}
+
+			CodedNodeSet.PropertyType[] propertyTypes = getAllPropertyTypes();
+
+            for (int i = 0; i < matchText_vec.size(); i++) {
+				String matchText = (String) matchText_vec.elementAt(i);
+				int j = i+1;
+				System.out.println("(" + j + ")" + matchText);
+
+				matchText = matchText.trim();
+                CodedNodeSet cns = getNodeSet(lbSvc, scheme, versionOrTag);
+
+                if (restriction != null) {
+					try {
+						cns = cns.intersect(restriction);
+					} catch (Exception ex) {
+						System.out.println("intersect throws exceptions???");
+						return null;
+					}
+				}
+
+                if (cns != null) {
+					try {
+						cns = cns.restrictToMatchingProperties(
+								propertyNames, propertyTypes,
+								matchText, matchAlgorithm, language);
+					} catch (Exception ex) {
+						System.out.println("restrictToMatchingDesignations throws exceptions???");
+						cns = null;
+					}
+                }
+                if (cns != null) {
+                    cns_vec.add(cns);
+				}
+            }
+            return cns_vec;
+        } catch (Exception ex) {
+
+		}
+		return null;
+	}
+
+
+
+    public ResolvedConceptReferencesIterator searchByProperty(Vector<CodedNodeSet> cns_vec) {
+        if (cns_vec == null || cns_vec.size() == 0) return null;
+		SortOptionList sortCriteria = null;
+		LocalNameList restrictToProperties = new LocalNameList();
+		boolean resolveConcepts = false;
+        try {
+			ResolvedConceptReferencesIterator iterator =
+				new QuickUnionIterator(cns_vec, sortCriteria, null,
+					restrictToProperties, null, resolveConcepts);
+
+			return iterator;
+        } catch (Exception ex) {
+
+		}
+		return null;
+    }
+
 
 
     public ResolvedConceptReferencesIterator searchByProperty(
