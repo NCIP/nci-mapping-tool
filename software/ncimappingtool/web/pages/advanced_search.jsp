@@ -224,11 +224,11 @@ if (input_option.compareToIgnoreCase("Property") == 0) {
 %>
                  <tr>
 		  <td align="left" class="textbody">
-		      <b>Source Property</b>:
+		      <b>Source Properties</b>:
 		  </td>
 
                   <td class="textbody">
-                    <select id="src_property" name="src_property" size="1" tabindex="4">
+                    <select id="src_property" name="src_property" size="5" tabindex="4" multiple>
                     <%
                        if (src_properties != null) {
 			    for (int i=0; i<src_properties.size(); i++) {

@@ -138,7 +138,8 @@ public class MappingThread implements Runnable
 
 	    String property = null;
 
-		String src_property = null;
+		//String src_property = null;
+		String[] src_property = null;
 		String target_property = null;
 		String left_trim = null;
 		String right_trim = null;
@@ -164,7 +165,8 @@ public class MappingThread implements Runnable
 			}
 
 	  	    if (advanced) {
-				src_property = (String) session.getAttribute("src_property");
+				//src_property = (String) session.getAttribute("src_property");
+				src_property = (String[]) session.getAttribute("src_property");
 				target_property = (String) session.getAttribute("target_property");
 				left_trim = (String) session.getAttribute("left_trim");
 				right_trim = (String) session.getAttribute("right_trim");
@@ -525,7 +527,8 @@ public class MappingThread implements Runnable
 
 			property = (String) session.getAttribute("property");
 
-			src_property = (String) session.getAttribute("src_property");
+			//src_property = (String) session.getAttribute("src_property");
+			src_property = (String[]) session.getAttribute("src_property");
 			target_property = (String) session.getAttribute("target_property");
 
 			left_trim = (String) session.getAttribute("left_trim");
@@ -632,18 +635,36 @@ public class MappingThread implements Runnable
 						iterator = mapping_utils.searchByName(targetCodingScheme, targetCodingSchemeVersion, matchtext, null, algorithm, false, -1);
 
 					} else if (sourceCodingScheme != null) {
-						Vector src_properties = mapping_utils.getPropertyValues(sourceCodingScheme, sourceCodingSchemeVersion,
-																			   sourceCode, src_property);
-						Vector matchText_vec = new Vector();
-						for (int k=0; k<src_properties.size(); k++) {
-							String value = (String) src_properties.elementAt(k);
-							value = new SearchUtils().convertPropertyValue(value, right_trim, left_trim, prefix, suffix);
-							System.out.println(value);
-							matchText_vec.add(value);
+                        Vector cns_vec = new Vector();
+
+                        for (int lcv=0; lcv<src_property.length; lcv++) {
+
+							Vector src_properties = mapping_utils.getPropertyValues(sourceCodingScheme, sourceCodingSchemeVersion,
+																			        sourceCode, src_property[lcv]);
+							for (int k=0; k<src_properties.size(); k++) {
+								Vector matchText_vec = new Vector();
+								String value = (String) src_properties.elementAt(k);
+								value = new SearchUtils().convertPropertyValue(value, right_trim, left_trim, prefix, suffix);
+								System.out.println(value);
+								matchText_vec.add(value);
+
+								Vector<CodedNodeSet> w = new SearchUtils().getCNSByMatchingProperty(
+									targetCodingScheme, targetCodingSchemeVersion, target_property, matchText_vec, algorithm, restriction);
+								if (w != null) {
+									for (int j=0; j<w.size(); j++) {
+										CodedNodeSet cns_element = (CodedNodeSet) w.elementAt(j);
+										cns_vec.add(cns_element);
+									}
+								}
+
+							}
 						}
 
+                        /*
 						iterator = new SearchUtils().searchByProperty(
 								targetCodingScheme, targetCodingSchemeVersion, target_property, matchText_vec, algorithm, restriction);
+						*/
+						iterator = new SearchUtils().searchByProperty(cns_vec);
 
 					}
 
@@ -656,6 +677,10 @@ public class MappingThread implements Runnable
 						try {
 							 HashSet key_hset = new HashSet();
 							 int numRemaining = iterator.numberRemaining();
+
+System.out.println("******************* numRemaining " + numRemaining);
+
+
 							 while (iterator.hasNext()) {
 								 ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
 								 Entity target_entity = MappingUtils.getConceptByCode(targetCodingScheme, targetCodingSchemeVersion, null, rcr.getConceptCode());

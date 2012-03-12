@@ -119,6 +119,8 @@ public class MappingBean {
 
     private static String _mode_of_operation = null;
 
+    private String[] _selectedProperties = null;
+
 
     public void MappingBean() {
         _mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
@@ -1263,7 +1265,9 @@ System.out.println("MappingBean submitBatchAction mapping_version " + mapping_ve
         String algorithm = null;
         String advanced = null;
 
-		String src_property = null;
+		//String src_property = null;
+		String[] src_property = null;
+
 		String target_property = null;
 		String left_trim = null;
 		String right_trim = null;
@@ -1288,7 +1292,18 @@ System.out.println("MappingBean submitBatchAction mapping_version " + mapping_ve
 
 			advanced = (String) request.getParameter("advanced");
 			if (advanced != null) {
-					src_property = (String) request.getParameter("src_property");
+
+
+					//src_property = (String) request.getParameter("src_property");
+					src_property = (String[]) request.getParameterValues("src_property");
+
+					for (int k=0; k<src_property.length; k++) {
+						String selected_property = src_property[k];
+
+						System.out.println("SELECTED PROPERTY: " + selected_property);
+					}
+
+
 					target_property = (String) request.getParameter("target_property");
 					left_trim = (String) request.getParameter("left_trim");
 					right_trim = (String) request.getParameter("right_trim");
