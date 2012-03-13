@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
-<%@ page import="java.util.Vector"%>
+<%@ page import="java.util.*"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.*" %>
@@ -77,29 +77,6 @@ if (algorithm != null && algorithm.compareTo("null") == 0) {
 }
 
 
-String property = (String) request.getSession().getAttribute("property");
-if (property != null && property.compareTo("null") == 0) {
-    property = "";
-} else if (property == null) {
-    property = "";
-}
-
-String src_property = (String) request.getSession().getAttribute("src_property");
-if (src_property != null && src_property.compareTo("null") == 0) {
-    src_property = "";
-} else if (src_property == null) {
-    src_property = "";
-}
-
-
-String target_property = (String) request.getSession().getAttribute("target_property");
-if (target_property != null && target_property.compareTo("null") == 0) {
-    target_property = "";
-} else if (target_property == null) {
-    target_property = "";
-}
-
-
 String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
 
@@ -112,6 +89,42 @@ Vector properties = OntologyBean.getSupportedPropertyNames(target_scheme, target
 
 Vector src_properties = OntologyBean.getSupportedPropertyNames(source_scheme, source_version);
 Vector target_properties = OntologyBean.getSupportedPropertyNames(target_scheme, target_version);
+
+
+
+String property = (String) request.getSession().getAttribute("property");
+if (property != null && property.compareTo("null") == 0) {
+    property = "";
+} else if (property == null) {
+    property = "";
+}
+
+/*
+String src_property = (String) request.getSession().getAttribute("src_property");
+if (src_property != null && src_property.compareTo("null") == 0) {
+    src_property = "";
+} else if (src_property == null) {
+    src_property = "";
+}
+*/
+
+String[] src_property = (String[]) request.getSession().getAttribute("src_property");
+if (src_property == null) {
+    src_property = new String[1];
+    src_property[0] = (String) src_properties.elementAt(0);
+}
+
+
+
+String target_property = (String) request.getSession().getAttribute("target_property");
+if (target_property != null && target_property.compareTo("null") == 0) {
+    target_property = (String) target_properties.elementAt(0);
+} else if (target_property == null) {
+    target_property = "";
+}
+
+
+
 
 String codes = "";
 
@@ -244,6 +257,7 @@ else {
 
 <%
 if (input_option.compareToIgnoreCase("Property") == 0) { 
+    Set<String> values = new HashSet<String>(Arrays.asList(src_property));
 %>
                  <tr>
 		  <td align="left" class="textbody">
@@ -256,7 +270,8 @@ if (input_option.compareToIgnoreCase("Property") == 0) {
                        if (src_properties != null) {
 			    for (int i=0; i<src_properties.size(); i++) {
 				 String t = (String) src_properties.elementAt(i);
-				 if (t.compareTo(src_property) == 0) {
+				 //if (t.compareTo(src_property) == 0) {
+				 if (values.contains(t)) {
 			    %>
 				   <option value="<%=t%>" selected><%=t%></option>
 			    <%
