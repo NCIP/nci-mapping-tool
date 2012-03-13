@@ -1014,7 +1014,9 @@ System.out.println("submitMetadataAction type: " + type);
 
 			String source_cs = (String) request.getParameter("source_cs");
 			String target_cs = (String) request.getParameter("target_cs");
-			String src_property = (String) request.getParameter("src_property");
+
+			//String[] src_property = (String[]) request.getParameter("src_property");
+
 			String target_property = (String) request.getParameter("target_property");
 
 			String left_trim = (String) request.getParameter("left_trim");
@@ -1068,7 +1070,8 @@ System.out.println("submitMetadataAction type: " + type);
 			request.getSession().setAttribute("input_option", input_option);
 			request.getSession().setAttribute("data", list);
 			request.getSession().setAttribute("property", target_property);
-			request.getSession().setAttribute("src_property", src_property);
+
+			//request.getSession().setAttribute("src_property", src_property);
 
 			request.getSession().setAttribute("target_property", target_property);
 			request.getSession().setAttribute("left_trim", left_trim);
