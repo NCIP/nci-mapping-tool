@@ -1263,6 +1263,8 @@ System.out.println("MappingBean submitBatchAction mapping_version " + mapping_ve
 			request.getSession().setAttribute("source_cs", source_cs);
 		}
 
+System.out.println("MappingBean submitBatchAction #1");
+
         String type = null;
         HashMap mapping_hmap = null;
         String algorithm = null;
@@ -1282,6 +1284,11 @@ System.out.println("MappingBean submitBatchAction mapping_version " + mapping_ve
 			type = (String) request.getParameter("type");
 			input_option = (String) request.getParameter("input_option");
 
+
+System.out.println("MappingBean submitBatchAction type: " + type);
+System.out.println("MappingBean submitBatchAction input_option: " + input_option);
+
+
 			mapping_hmap = (HashMap) request.getSession().getAttribute("mapping_hmap");
 			if (mapping_hmap == null) {
 				mapping_hmap = new HashMap();
@@ -1294,6 +1301,11 @@ System.out.println("MappingBean submitBatchAction mapping_version " + mapping_ve
 			}
 
 			advanced = (String) request.getParameter("advanced");
+
+
+System.out.println("MappingBean submitBatchAction advanced: " + advanced);
+
+
 			if (advanced != null) {
 
 
@@ -1336,6 +1348,9 @@ System.out.println("MappingBean submitBatchAction mapping_version " + mapping_ve
 				String valueSetDefinitionRevisionId = null;
 				AbsoluteCodingSchemeVersionReferenceList csVersionList = (AbsoluteCodingSchemeVersionReferenceList) request.getSession().getAttribute("acsvrl");
 				String csVersionTag = null;
+
+
+System.out.println("MappingBean MappingThread: vsdURI " + vsdURI);
 
 				runnable = new MappingThread(request, mapping_hmap, type, vsdURI, valueSetDefinitionRevisionId, csVersionList, csVersionTag);
 			} else {
