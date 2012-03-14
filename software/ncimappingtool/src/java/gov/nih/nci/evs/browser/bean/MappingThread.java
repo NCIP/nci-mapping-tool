@@ -92,7 +92,7 @@ public class MappingThread implements Runnable
 		  String csVersionTag)
   {
 
-	//System.out.println("THREAD " + vsd_uri);
+System.out.println("MappingThread THREAD " + vsd_uri);
 
     this.request = request;
     this.mapping_hmap = mapping_hmap;
@@ -108,9 +108,23 @@ public class MappingThread implements Runnable
 	LexEVSValueSetDefinitionServices vds = null;
 	try {
 		vds = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+
+if (vds == null) {
+	System.out.println("MappingThread vds == null??? " + vsd_uri);
+}
+
+
 		ResolvedValueSetDefinition rvsd = null;
 		try {
+
+System.out.println("MappingThread calling getCodedNodeSetForValueSetDefinition ..." + vsd_uri);
+
             ResolvedValueSetCodedNodeSet rvscns = vds.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri), valueSetDefinitionRevisionId, csVersionList, csVersionTag);
+
+System.out.println("MappingThread getCodedNodeSetForValueSetDefinition DONE" + vsd_uri);
+
+
+
 			if (rvscns == null) {
 				System.out.println("ERROR: rvscns not found -- " + vsd_uri);
 			} else {
@@ -125,6 +139,8 @@ public class MappingThread implements Runnable
 		ex.printStackTrace();
 	}
 
+
+System.out.println("MappingThread THREAD instantiated " + vsd_uri);
 
   }
 
@@ -187,6 +203,11 @@ public class MappingThread implements Runnable
 				return;
 			}
 
+
+System.out.println("THREAD input_list.size(): " + input_list.size());
+
+
+
 			String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 			String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
 
@@ -205,6 +226,10 @@ public class MappingThread implements Runnable
 			//String targetCodingSchemeVersion = null;
 			//targetCodingSchemeVersion = target_version;
 
+System.out.println("THREAD sourceCodingScheme: " + sourceCodingScheme);
+System.out.println("THREAD sourceCodingSchemeVersion: " + sourceCodingSchemeVersion);
+
+
 			ArrayList list = new ArrayList();
 			HashSet hset = new HashSet();
 			String source = null;
@@ -213,6 +238,11 @@ public class MappingThread implements Runnable
 			int counter = 0;
 			for (int i=0; i<input_list.size(); i++) {
 				String input_value = (String) input_list.get(i);
+
+
+System.out.println("THREAD input_value: " + input_value);
+
+
 				String sourceCode = null;
 				String matchtext = null; //(String) values.elementAt(1);
 
@@ -506,8 +536,18 @@ public class MappingThread implements Runnable
 
 				HashMap restrictions = (HashMap) session.getAttribute("restrictions");
 
-				String identifier = (String) request.getSession().getAttribute("identifier");
-				String mapping_version = (String) request.getSession().getAttribute("mapping_version");
+                String identifier = null;
+                String mapping_version = null;
+
+                try {
+					identifier = (String) request.getSession().getAttribute("identifier");
+					mapping_version = (String) request.getSession().getAttribute("mapping_version");
+
+				} catch (Exception ex) {
+					identifier = (String) session.getAttribute("identifier");
+					mapping_version = (String) session.getAttribute("mapping_version");
+					ex.printStackTrace();
+				}
 
 				String mapping_key = MappingObject.computeKey(identifier, mapping_version);
 				if (restrictions != null && mapping_key != null) {
