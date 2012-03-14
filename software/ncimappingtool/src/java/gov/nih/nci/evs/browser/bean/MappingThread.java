@@ -546,7 +546,7 @@ System.out.println("THREAD input_value: " + input_value);
 				} catch (Exception ex) {
 					identifier = (String) session.getAttribute("identifier");
 					mapping_version = (String) session.getAttribute("mapping_version");
-					ex.printStackTrace();
+					//ex.printStackTrace();
 				}
 
 				String mapping_key = MappingObject.computeKey(identifier, mapping_version);
