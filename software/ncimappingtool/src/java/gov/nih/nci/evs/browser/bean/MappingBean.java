@@ -1896,7 +1896,7 @@ System.out.println("(*) saveComponentSubsetAction : " + type);
 
 
         try {
-        	String xml = null;
+        	//String xml = null;
 			StringBuffer sb = null;
 
 			HttpServletResponse response = (HttpServletResponse) FacesContext
@@ -1906,22 +1906,39 @@ System.out.println("(*) saveComponentSubsetAction : " + type);
 			String mapping_name = (String) request.getParameter("identifier");
 			String mapping_version = (String) request.getParameter("mapping_version");
 
+System.out.println("mapping_name: " + mapping_name);
+System.out.println("mapping_version: " + mapping_version);
+
+
 			String key = MappingObject.computeKey(mapping_name, mapping_version);
+
+System.out.println("key: " + key);
+
+
 			HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
 			if (mappings == null) {
+				System.out.println("exportMappingToXMLAction mappings == null ???");
+
 				mappings = new HashMap();
 				request.getSession().setAttribute("mappings", mappings);
 			}
 
 			HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
 
-
 			MappingObject obj = (MappingObject) mappings.get(key);
+
+if (obj == null) {
+	System.out.println("mapping obj cannot be found for key : " + key);
+} else {
+	System.out.println("obj.toXML() : " + obj.toXML());
+}
+
 			//xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-			xml = "";
+			String xml = "";
 
 			if (obj != null) {
 				obj.setStatusHashMap(status_hmap);
+
 				sb = new StringBuffer(xml);
 				sb = sb.append(obj.toXML());
 			}
@@ -1932,7 +1949,14 @@ System.out.println("(*) saveComponentSubsetAction : " + type);
 			response.setHeader("Content-Disposition", "attachment; filename="
 					+ mapping_name);
 
+System.out.println("mapping file name : " + mapping_name);
+
+System.out.println("mapping sb.length() : " + sb.length());
+
+
+
 			response.setContentLength(sb.length());
+
 			ServletOutputStream ouputStream = response.getOutputStream();
 			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
 			ouputStream.flush();
