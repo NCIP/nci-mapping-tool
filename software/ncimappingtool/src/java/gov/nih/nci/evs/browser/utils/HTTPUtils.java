@@ -166,16 +166,20 @@ public class HTTPUtils {
 
     }
 
-    public static void printRequestSessionAttributes() {
+    /**
+     * @return
+     */
+    public static HttpServletRequest getRequest() {
+        return (HttpServletRequest) FacesContext.getCurrentInstance()
+            .getExternalContext().getRequest();
+    }
+
+    public static void printRequestSessionAttributes(HttpServletRequest request) {
         _logger.debug(" ");
         _logger.debug(Utils.SEPARATOR);
         _logger.debug("Request Session Attribute(s):");
 
         try {
-            HttpServletRequest request =
-                (HttpServletRequest) FacesContext.getCurrentInstance()
-                    .getExternalContext().getRequest();
-
             HttpSession session = request.getSession();
             Enumeration<?> enumeration =
                 SortUtils.sort(session.getAttributeNames());
@@ -191,16 +195,17 @@ public class HTTPUtils {
         }
     }
 
-    public static void printRequestAttributes() {
+    public static void printRequestSessionAttributes() {
+        HttpServletRequest request = getRequest();
+        printRequestSessionAttributes(request);
+    }
+
+    public static void printRequestAttributes(HttpServletRequest request) {
         _logger.debug(" ");
         _logger.debug(Utils.SEPARATOR);
         _logger.debug("Request Attribute(s):");
 
         try {
-            HttpServletRequest request =
-                (HttpServletRequest) FacesContext.getCurrentInstance()
-                    .getExternalContext().getRequest();
-
             Enumeration<?> enumeration =
                 SortUtils.sort(request.getAttributeNames());
             int i = 0;
@@ -215,16 +220,17 @@ public class HTTPUtils {
         }
     }
 
-    public static void printRequestParameters() {
+    public static void printRequestAttributes() {
+        HttpServletRequest request = getRequest();
+        printRequestAttributes(request);
+    }
+    
+    public static void printRequestParameters(HttpServletRequest request) {
         _logger.debug(" ");
         _logger.debug(Utils.SEPARATOR);
         _logger.debug("Request Parameter(s):");
 
         try {
-            HttpServletRequest request =
-                (HttpServletRequest) FacesContext.getCurrentInstance()
-                    .getExternalContext().getRequest();
-
             Enumeration<?> enumeration =
                 SortUtils.sort(request.getParameterNames());
             int i = 0;
@@ -237,6 +243,11 @@ public class HTTPUtils {
         } catch (Exception e) {
             _logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
         }
+    }
+
+    public static void printRequestParameters() {
+        HttpServletRequest request = getRequest();
+        printRequestParameters(request);
     }
 
     public static void printAttributes() {
@@ -307,13 +318,5 @@ public class HTTPUtils {
      */
     public static void clearRefererParm(HttpServletRequest request) {
         request.setAttribute(REFERER, null);
-    }
-
-    /**
-     * @return
-     */
-    public static HttpServletRequest getRequest() {
-        return (HttpServletRequest) FacesContext.getCurrentInstance()
-            .getExternalContext().getRequest();
     }
 }
