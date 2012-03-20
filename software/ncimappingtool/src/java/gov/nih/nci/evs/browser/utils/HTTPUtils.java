@@ -223,6 +223,22 @@ public class HTTPUtils {
         printRequestParameters(request);
     }
 
+    public static HashMap<String, String> retrieveRequestParametersMap(HttpServletRequest request) {
+        HashMap<String, String> map = new HashMap<String, String>();
+        try {
+            Enumeration<?> enumeration =
+                SortUtils.sort(request.getParameterNames());
+            while (enumeration.hasMoreElements()) {
+                String name = (String) enumeration.nextElement();
+                String value = request.getParameter(name);
+                map.put(name, value);
+            }
+        } catch (Exception e) {
+            _logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
+        }
+        return map; 
+    }
+
     public static void printAttributes() {
         printRequestSessionAttributes();
         printRequestAttributes();
