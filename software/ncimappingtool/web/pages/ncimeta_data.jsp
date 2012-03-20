@@ -300,7 +300,7 @@ if (input_option.compareTo("Name") == 0) {
 
      <input type="hidden" name="type" id="type" value="ncimeta">
      
-     <input type="hidden" name="identifier" id="type" value="<%=identifier%>">
+     <input type="hidden" name="identifier" id="identifier" value="<%=identifier%>">
      <input type="hidden" name="mapping_version" id="mapping_version" value="<%=mapping_version%>">
      
      <input type="hidden" name="ncim_version" id="type" value="<%=ncim_version%>">

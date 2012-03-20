@@ -479,7 +479,6 @@ System.out.println("THREAD input_value: " + input_value);
 						  //mapping_hmap.put(input_value, match_list);
 						  updataMappingData(input_value, match_list);
 
-
 						  synchronized (session) {
 							  session.setAttribute("mapping_hmap", mapping_hmap);
 						  }
@@ -507,8 +506,6 @@ System.out.println("THREAD input_value: " + input_value);
 				HashMap mappings = (HashMap) session.getAttribute("mappings");
 				String id = (String) session.getAttribute("id");
 
-
-
 			String mapping_name = (String) request.getParameter("identifier");
 			String mapping_version = (String) request.getParameter("mapping_version");
 
@@ -527,7 +524,14 @@ System.out.println("mapping_version: " + mapping_version);
 					MappingObject obj = (MappingObject) mappings.get(mapping_key);
 
 					if (obj != null) {
-						obj.setMappingHashMap(this.mapping_hmap);
+
+						//session.setAttribute("mapping_hmap", mapping_hmap);
+
+
+						//obj.setMappingHashMap(this.mapping_hmap);
+
+						obj.setMappingHashMap((HashMap) session.getAttribute("mapping_hmap"));
+
 						obj.setData(input_list);
 						//mappings.put(id, obj);
 						mappings.put(mapping_key, obj);
