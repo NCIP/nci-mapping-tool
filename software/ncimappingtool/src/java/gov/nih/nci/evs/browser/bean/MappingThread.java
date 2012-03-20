@@ -507,14 +507,30 @@ System.out.println("THREAD input_value: " + input_value);
 				HashMap mappings = (HashMap) session.getAttribute("mappings");
 				String id = (String) session.getAttribute("id");
 
-				System.out.println("id: " + id);
 
-				if (id != null) {
-					MappingObject obj = (MappingObject) mappings.get(id);
+
+			String mapping_name = (String) request.getParameter("identifier");
+			String mapping_version = (String) request.getParameter("mapping_version");
+
+System.out.println("mapping_name: " + mapping_name);
+System.out.println("mapping_version: " + mapping_version);
+
+				String mapping_key = MappingObject.computeKey(mapping_name, mapping_version);
+
+
+				System.out.println("************* META mapping id: " + id);
+
+				//if (id != null) {
+				//	MappingObject obj = (MappingObject) mappings.get(id);
+
+				if (mapping_key != null) {
+					MappingObject obj = (MappingObject) mappings.get(mapping_key);
+
 					if (obj != null) {
 						obj.setMappingHashMap(this.mapping_hmap);
 						obj.setData(input_list);
-						mappings.put(id, obj);
+						//mappings.put(id, obj);
+						mappings.put(mapping_key, obj);
 						System.out.println("MAPPING DATA UPDATED.");
 
 						session.setAttribute("mappings", mappings);

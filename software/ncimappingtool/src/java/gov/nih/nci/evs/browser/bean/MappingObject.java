@@ -193,6 +193,9 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 
 		public void setKey() {
+			_key = computeKey(_name, _version);
+
+			/*
 			_uuid = 0;
 
 			if(_name != null){
@@ -207,6 +210,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 				_uuid += NULL_STRING_HASH_CODE;
 			}
 			_key = "M" + new Integer(_uuid).toString();
+			*/
 
 		}
 
