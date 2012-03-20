@@ -171,6 +171,8 @@ if (mode != null && mode.compareTo("readonly") == 0) {
 
 String action = (String) request.getParameter("action");
 String id = (String) request.getParameter("id");
+
+
 identifier = (String) request.getSession().getAttribute("identifier");
 mapping_version = (String) request.getSession().getAttribute("mapping_version");
 
