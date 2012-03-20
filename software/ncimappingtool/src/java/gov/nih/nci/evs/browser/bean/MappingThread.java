@@ -43,6 +43,7 @@ import org.LexGrid.commonTypes.Property;
 public class MappingThread implements Runnable
 {
   public HttpServletRequest request = null;
+  HashMap<String, String> requestParameterMap = null;
   HashMap mapping_hmap = null;
   HttpSession session = null;
   String type;
@@ -62,6 +63,7 @@ public class MappingThread implements Runnable
   public MappingThread(HttpServletRequest request, HashMap mapping_hmap)
   {
     this.request = request;
+    this.requestParameterMap = HTTPUtils.retrieveRequestParametersMap(request);
     this.mapping_hmap = mapping_hmap;
     this.session = request.getSession(true);
     this.type = "ncimeta"; //default
@@ -70,6 +72,7 @@ public class MappingThread implements Runnable
   public MappingThread(HttpServletRequest request, HashMap mapping_hmap, String type)
   {
     this.request = request;
+    this.requestParameterMap = HTTPUtils.retrieveRequestParametersMap(request);
     this.mapping_hmap = mapping_hmap;
     this.session = request.getSession(true);
     this.type = type;
@@ -79,6 +82,7 @@ public class MappingThread implements Runnable
   public MappingThread(HttpServletRequest request, HashMap mapping_hmap, String type, boolean advanced)
   {
     this.request = request;
+    this.requestParameterMap = HTTPUtils.retrieveRequestParametersMap(request);
     this.mapping_hmap = mapping_hmap;
     this.session = request.getSession(true);
     this.type = type;
@@ -95,6 +99,7 @@ public class MappingThread implements Runnable
 System.out.println("MappingThread THREAD " + vsd_uri);
 
     this.request = request;
+    this.requestParameterMap = HTTPUtils.retrieveRequestParametersMap(request);
     this.mapping_hmap = mapping_hmap;
     this.session = request.getSession(true);
     this.type = type;
@@ -506,8 +511,8 @@ System.out.println("THREAD input_value: " + input_value);
 				HashMap mappings = (HashMap) session.getAttribute("mappings");
 				String id = (String) session.getAttribute("id");
 
-			String mapping_name = (String) request.getParameter("identifier");
-			String mapping_version = (String) request.getParameter("mapping_version");
+	            String mapping_name = requestParameterMap.get("identifier");
+	            String mapping_version = requestParameterMap.get("mapping_version");
 
 System.out.println("mapping_name: " + mapping_name);
 System.out.println("mapping_version: " + mapping_version);
