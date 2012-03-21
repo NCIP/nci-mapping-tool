@@ -1136,14 +1136,25 @@ if (source_code.compareTo("N/A") != 0) {
 		
 <%	
 if (!readonly) {	
-%>			
+
+
+      if (DataUtils.isNull(mappingData.getComment())) {
+%>
 	
       <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/entry_notes.jsf?idx1=<%=idx1_str%>&idx2=<%=idx2_str%>',
         '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no'); return false;" tabindex="13">
         <img src="<%= request.getContextPath() %>/images/edit.png" style="border: none">
       </a> 
-      
-      
+<%      
+      } else {
+%>      
+       <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/entry_notes.jsf?idx1=<%=idx1_str%>&idx2=<%=idx2_str%>',
+        '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no'); return false;" tabindex="13">
+        <img src="<%= request.getContextPath() %>/images/comment.png" style="border: none">
+      </a> 
+<%      
+      }
+%>      
       &nbsp;
 
 <%	
