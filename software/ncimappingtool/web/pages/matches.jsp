@@ -171,7 +171,7 @@ String target_cs = (String) request.getSession().getAttribute("target_cs");
               <%=targetName%> (
                 <a href="<%= request.getContextPath() %>/pages/manual_mapping.jsf?refresh=true&target_code=<%=targetCode%>">
                  <%=targetCode%>
-               </a>)              
+               </a>              
               )
          </td>
          </tr>
