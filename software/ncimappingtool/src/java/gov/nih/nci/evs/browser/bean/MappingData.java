@@ -63,6 +63,7 @@ public class MappingData
 	private String targetCodeNamespace;
 
 	private String comment;
+	private String status;
 
 // Default constructor
 	public MappingData() {
@@ -155,6 +156,11 @@ public class MappingData
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 // Get methods
 	public String getSourceCode() {
 		return this.sourceCode;
@@ -210,6 +216,10 @@ public class MappingData
 
 	public String getComment() {
 		return this.comment;
+	}
+
+	public String getStatus() {
+		return this.status;
 	}
 
 	public String getKey() {

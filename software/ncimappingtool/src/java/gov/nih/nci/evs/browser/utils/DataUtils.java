@@ -217,6 +217,9 @@ public class DataUtils {
     public static String[] rel_options = new String[] {"SY", "BT", "NT", "RO"};
     public static String[] score_options = new String[] {"0", "1", "2", "3", "4", "5", "6"};
 
+    public static String[] status_options = new String[] {"Pending", "Valid", "Invalid"}; //, "Undecided"};
+    public static String   default_status = "Undecided";
+
     public static Vector _valueset_item_vec = null;
     public static Vector valueSetDefinitionOnServer_uri_vec = null;
 
