@@ -634,13 +634,36 @@ Iterator it = mapping_hmap.keySet().iterator();
 					       }
 					    %>
 					    </select>
+					    
+					    
+
+<%	
+if (!readonly && !show_refresh_button) {	
+%>	
+        &nbsp;
+  	<h:commandButton
+  		id="Submit_Form"
+  		value="Submit_Form"
+  		image="#{basePath}/images/submit.gif"
+  		action="#{mappingBean.submitBatchAction}" 
+  		alt="Submit Batch" >
+  	</h:commandButton>
+  	&nbsp;
+  	
+<%	
+}	
+%>					    
+					    
+					    
+					    
 				    </td>
 				    
 <%
 
 
-if (type.compareTo("codingscheme") == 0) {				    
+if (type.compareTo("codingscheme") == 0& !show_refresh_button) {				    
 %>				    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				    <td align="right" class="textbody10">
 				    
 		<a class="textbody10" href="<%=request.getContextPath()%>/pages/advanced_search.jsf?" >
@@ -672,7 +695,7 @@ if (type.compareTo("codingscheme") == 0) {
 <HR></HR>
 
       <table class="datatable">
-        <tr><td>
+        <tr><td class="textbody">
 <%
 if (show_refresh_button) {
 %>
@@ -701,6 +724,73 @@ if (show_refresh_button) {
 		<a href="<%=request.getContextPath()%>/pages/batch_mapping_form.jsf?action=collapseAll&mode=<%=mode%>">
 		   <img src="<%= request.getContextPath() %>/images/collapseAll.png" width="18" height="18" alt="Collapse All" border="0">
 		</a>
+		
+        &nbsp;
+        
+		<a href="#">
+		   <img src="<%= request.getContextPath() %>/images/checkAll.gif" width="18" height="18" alt="Check All" border="0">
+		</a>
+        
+        &nbsp;
+        
+		<a href="#">
+		   <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Uncheck All" border="0">
+		</a>        
+        
+        &nbsp;&nbsp;&nbsp;
+        
+        <b>Set status of checked entries to<b>:&nbsp; 
+        
+
+			    <select id="entry_status" name="entry_status" size="1" tabindex="4">
+			    <%
+
+				    String[] status_options = DataUtils.status_options;
+				    String default_status = DataUtils.default_status;
+				    for (int i=0; i<status_options.length; i++) {
+					 String t = status_options[i];
+					 if (t.compareTo(default_status) == 0) {
+				    %>
+					   <option value="<%=t%>" selected><%=t%></option>
+				    <%
+					 } else {
+				    %>
+					   <option value="<%=t%>"><%=t%></option>
+				    <%
+					 }
+				    }
+			    %>
+			    </select>
+			    
+
+
+
+        &nbsp;&nbsp;
+
+        
+        <b>Hide<b>&nbsp; 
+
+			    <select id="entry_type" name="entry_type" size="2" multiple tabindex="4">
+			    <%
+
+				    String[] status_types = DataUtils.status_options;
+				    String default_type = DataUtils.default_status;
+				    for (int i=0; i<status_types.length; i++) {
+					 String t = status_types[i];
+					 if (t.compareTo(default_type) == 0) {
+				    %>
+					   <option value="<%=t%>" selected><%=t%></option>
+				    <%
+					 } else {
+				    %>
+					   <option value="<%=t%>"><%=t%></option>
+				    <%
+					 }
+				    }
+			    %>
+			    </select>
+			    
+		
 	<%  
 	} 
 	%>
@@ -708,16 +798,9 @@ if (show_refresh_button) {
 <%	
 if (!readonly) {	
 %>	
-        &nbsp;
 
-  	<h:commandButton
-  		id="Submit_Form"
-  		value="Submit_Form"
-  		image="#{basePath}/images/submit.gif"
-  		action="#{mappingBean.submitBatchAction}" 
-  		alt="Submit Batch" >
-  	</h:commandButton>
-  	&nbsp;
+        
+        &nbsp;&nbsp;
   	
 	<h:commandButton id="save_all" value="save_all" action="#{mappingBean.saveAllMappingAction}"
 	image="#{basePath}/images/save.gif"
@@ -725,16 +808,18 @@ if (!readonly) {
 	tabindex="3">
 	</h:commandButton>  
   
-        &nbsp;
 
-<%
-}
-%>
-
+		
+	<%  
+	} 
+	%>
+	
+	&nbsp;&nbsp;
+	
 	<h:commandButton
 		id="Export_XML"
 		value="Export_XML"
-		image="#{basePath}/images/exportxml.gif"
+		image="#{basePath}/images/export.gif"
 		action="#{mappingBean.exportMappingToXMLAction}" 
 		onclick="javascript:cursor_wait();"
 		alt="Export to XML" >
@@ -749,6 +834,15 @@ if (!readonly) {
 
 	
   </td></tr>
+  </table>
+
+
+<HR></HR>
+
+      <table class="datatable">
+        <tr><td class="textbody">
+        
+        
   
 <%
   String idx1_str = null;
@@ -901,6 +995,8 @@ if (!readonly) {
 <%	
 if (!readonly) {	
 %>
+
+<!--
   	<h:commandButton
   		id="remove_mapping"
   		value="remove_mapping"
@@ -908,7 +1004,8 @@ if (!readonly) {
   		action="#{mappingBean.removeMappingAction}" 
   		alt="Remove" >
   	</h:commandButton>
-  	
+
+-->  	
 <%    
 }
 %>		
@@ -1150,7 +1247,7 @@ if (!readonly) {
 %>      
        <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/entry_notes.jsf?idx1=<%=idx1_str%>&idx2=<%=idx2_str%>',
         '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no'); return false;" tabindex="13">
-        <img src="<%= request.getContextPath() %>/images/comment.png" style="border: none">
+        <img src="<%= request.getContextPath() %>/images/edit_green.png" style="border: none">
       </a> 
 <%      
       }
