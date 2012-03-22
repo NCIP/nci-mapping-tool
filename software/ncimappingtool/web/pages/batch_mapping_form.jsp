@@ -770,7 +770,7 @@ if (show_refresh_button) {
         
         <b>Hide<b>&nbsp; 
 
-			    <select id="entry_type" name="entry_type" size="2" multiple tabindex="4">
+			    <select id="entry_type" name="entry_type" size="1" tabindex="4">
 			    <%
 
 				    String[] status_types = DataUtils.status_options;
@@ -829,11 +829,15 @@ if (!readonly) {
   	
 <%
 }  	
-        
 %>        
 
 	
   </td></tr>
+  
+<%
+if (!show_refresh_button) {
+%>  
+  
   </table>
 
 
@@ -842,7 +846,10 @@ if (!readonly) {
       <table class="datatable">
         <tr><td class="textbody">
         
-        
+
+<%
+}  	
+%>          
   
 <%
   String idx1_str = null;
