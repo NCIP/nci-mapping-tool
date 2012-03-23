@@ -2103,9 +2103,12 @@ System.out.println("mapping_version: " + mapping_version);
 System.out.println("exportMappingAction format: " + format);
 
 
-		if (format.compareTo("draft_xml") == 0) {
+		if (format.compareTo("draft_xml") == 0 || format.compareTo("final_xml") == 0) {
 			return exportMappingToXMLAction();
 		}
+
+		String message = "To be implemented";
+		request.getSession().setAttribute("message", message);
 
 		return format;
     }

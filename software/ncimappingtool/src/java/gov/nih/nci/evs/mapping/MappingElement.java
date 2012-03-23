@@ -76,6 +76,7 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
     public class MappingElement {
 
+        private int index = 0;
 	    private String data = null;
 	    private String status = null;
 
@@ -85,6 +86,7 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
          * Constructor
          */
         public MappingElement() {
+		    this.index = 0;
             this.data = null;
             this.status = null;
             this.entries = null;
@@ -100,6 +102,14 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
             this.data = data;
             this.status = status;
             this.entries = entries;
+		}
+
+		public int getIndex() {
+			return this.index;
+		}
+
+		public void setIndex(int index) {
+			this.index = index;
 		}
 
 		public String getData() {
