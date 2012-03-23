@@ -223,6 +223,9 @@ public class DataUtils {
     public static String[] export_options = new String[] {"ALL", "Valid", "Invalid", "Pending"}; //, "Undecided"};
     public static String   default_export_option = "ALL";
 
+    public static String[] hide_options = new String[] {"NONE", "Valid", "Invalid", "Pending"}; //, "Undecided"};
+    public static String   default_hide_option = "NONE";
+
     public static Vector _valueset_item_vec = null;
     public static Vector valueSetDefinitionOnServer_uri_vec = null;
 

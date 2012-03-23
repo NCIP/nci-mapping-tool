@@ -110,11 +110,9 @@
 	    location.href = "#" + anchor;
 	}
 
+
  
 </script> 
-
-
-
 
 <%
 
@@ -163,6 +161,7 @@ HashMap code2name_hmap = null;
 HashMap mapping_hmap = null;
 
 Map status_map = null;
+String mappingKey = null;
 
 String mode = (String) request.getParameter("mode");
 if (mode != null && mode.compareTo("readonly") == 0) {
@@ -178,6 +177,8 @@ String id = (String) request.getParameter("id");
 identifier = (String) request.getSession().getAttribute("identifier");
 mapping_version = (String) request.getSession().getAttribute("mapping_version");
 
+mappingKey = MappingObject.computeKey(identifier, mapping_version); 
+
 
 MappingObject obj = null;
 if (action != null && (action.compareTo("view") == 0 || action.compareTo("edit") == 0)) {
@@ -185,6 +186,7 @@ if (action != null && (action.compareTo("view") == 0 || action.compareTo("edit")
 	mapping_version = (String) request.getParameter("version");
 	mappings = (HashMap) request.getSession().getAttribute("mappings");
 	obj = (MappingObject) mappings.get(id);
+	mappingKey = id;
 }
 
 
@@ -508,7 +510,7 @@ Iterator it = mapping_hmap.keySet().iterator();
         <a name="evs-content" id="evs-content"></a>
 
 
-<h:form>
+<h:form id="submitForm" styleClass="search-form" >
 
 <p class="texttitle-blue"><%=identifier%>&nbsp;(<%=mapping_version%>)</p>
 
@@ -773,32 +775,6 @@ if (show_refresh_button) {
 			    
 
 
-
-        &nbsp;&nbsp;
-
-        
-        <b>Hide<b>&nbsp; 
-
-			    <select id="entry_type" name="entry_type" size="1" tabindex="4">
-			    <%
-
-				    String[] status_types = DataUtils.status_options;
-				    String default_type = DataUtils.default_status;
-				    for (int i=0; i<status_types.length; i++) {
-					 String t = status_types[i];
-					 if (t.compareTo(default_type) == 0) {
-				    %>
-					   <option value="<%=t%>" selected><%=t%></option>
-				    <%
-					 } else {
-				    %>
-					   <option value="<%=t%>"><%=t%></option>
-				    <%
-					 }
-				    }
-			    %>
-			    </select>
-			    
 		
 	<%  
 	} 
@@ -819,11 +795,43 @@ if (!readonly) {
   
 
 		
-	<%  
-	} 
+<%  
+} 
+%>
+
+
+	<%
+	if (!(collapse_all || expanded_hset.isEmpty())) {
 	%>
 	
-	&nbsp;&nbsp;
+&nbsp;&nbsp;
+<h:commandLink id="hide" value="Hide" action="#{mappingBean.refreshBatchSubmissionPage}" /> 
+	
+
+			    <select id="hide_option" name="hide_option" size="1" tabindex="4">
+			    <%
+				    String[] hide_options = DataUtils.hide_options;
+				    String default_hide_option = DataUtils.default_hide_option;
+				    for (int i=0; i<hide_options.length; i++) {
+					 String t = hide_options[i];
+					 if (t.compareTo(default_hide_option) == 0) {
+				    %>
+					   <option value="<%=t%>" selected><%=t%></option>
+				    <%
+					 } else {
+				    %>
+					   <option value="<%=t%>"><%=t%></option>
+				    <%
+					 }
+				    }
+			    %>
+			    </select>
+			    	
+	<%  
+	} 
+	%>	
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;
 	
 	<h:commandButton
 		id="ExportMapping"
@@ -1491,6 +1499,7 @@ if (type.compareTo("ncimeta") == 0) {
 
      <input type="hidden" name="identifier" id="identifier" value="<%=identifier%>" />
      <input type="hidden" name="mapping_version" id="mapping_version" value="<%=mapping_version%>" />
+     <input type="hidden" name="mappingKey" id="mappingKey" value="<%=mappingKey%>" />
 
 </h:form>
 
