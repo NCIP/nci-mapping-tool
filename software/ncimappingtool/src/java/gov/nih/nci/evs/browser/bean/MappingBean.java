@@ -2113,5 +2113,20 @@ System.out.println("exportMappingAction format: " + format);
 		return format;
     }
 
+
+    public String refreshBatchSubmissionPage() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+        String type = (String) request.getParameter("type");
+        updateMapping(request);
+
+        String hide_option = (String) request.getParameter("hide_option");
+        request.getSession().setAttribute("hide", hide_option);
+
+        return type;
+	}
+
+
 }
 

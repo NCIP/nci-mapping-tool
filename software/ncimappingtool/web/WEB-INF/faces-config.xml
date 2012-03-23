@@ -447,6 +447,25 @@
      <navigation-rule>
          <from-view-id>/pages/batch_mapping_form.jsp</from-view-id>
        
+          <navigation-case>
+             <from-action>#{mappingBean.refreshBatchSubmissionPage}</from-action>
+             <from-outcome>ncimeta</from-outcome>
+             <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+         </navigation-case>
+
+         <navigation-case>
+             <from-action>#{mappingBean.refreshBatchSubmissionPage}</from-action>
+             <from-outcome>codingscheme</from-outcome>
+             <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+         </navigation-case>
+         
+         <navigation-case>
+             <from-action>#{mappingBean.refreshBatchSubmissionPage}</from-action>
+             <from-outcome>valueset</from-outcome>
+             <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+         </navigation-case>          
+       
+       
          <navigation-case>
              <from-action>#{mappingBean.submitBatchAction}</from-action>
              <from-outcome>ncimeta</from-outcome>
