@@ -1894,7 +1894,6 @@ System.out.println("(*) saveComponentSubsetAction : " + type);
         updateMapping(request);
 		String type = (String) request.getParameter("type");
 
-
         try {
         	//String xml = null;
 			StringBuffer sb = null;
@@ -1952,8 +1951,6 @@ if (obj == null) {
 System.out.println("mapping file name : " + mapping_name);
 
 System.out.println("mapping sb.length() : " + sb.length());
-
-
 
 			response.setContentLength(sb.length());
 
@@ -2055,6 +2052,63 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
         return type;
 	}
 
+
+    public String exportAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        // save all data first
+        updateMapping(request);
+		String type = (String) request.getParameter("type");
+
+
+        try {
+        	//String xml = null;
+			StringBuffer sb = null;
+
+			HttpServletResponse response = (HttpServletResponse) FacesContext
+					.getCurrentInstance().getExternalContext().getResponse();
+			response.setContentType("text/xml");
+
+			String mapping_name = (String) request.getParameter("identifier");
+			String mapping_version = (String) request.getParameter("mapping_version");
+
+System.out.println("mapping_name: " + mapping_name);
+System.out.println("mapping_version: " + mapping_version);
+
+			String key = MappingObject.computeKey(mapping_name, mapping_version);
+
+			request.getSession().setAttribute("mappingKey", key);
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+        return "export_specification";
+
+    }
+
+
+    public String exportMappingAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        // save all data first
+        updateMapping(request);
+		String type = (String) request.getParameter("type");
+		String format = (String) request.getParameter("format");
+
+System.out.println("exportMappingAction format: " + format);
+
+
+		if (format.compareTo("draft_xml") == 0) {
+			return exportMappingToXMLAction();
+		}
+
+		return format;
+    }
 
 }
 

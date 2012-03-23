@@ -528,6 +528,13 @@
              <from-outcome>valueset</from-outcome>
              <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
          </navigation-case>            
+
+          <navigation-case>
+             <from-action>#{mappingBean.exportAction}</from-action>
+             <from-outcome>export_specification</from-outcome>
+             <to-view-id>/pages/export_specification.jsp</to-view-id>
+         </navigation-case>  
+         
          
          
     </navigation-rule>    
@@ -684,12 +691,42 @@
                <from-outcome>valueset</from-outcome>
                <to-view-id>/pages/valueset_data.jsp</to-view-id>
            </navigation-case>
-           
-
-         
     </navigation-rule>
     
-    
+ 
+     <navigation-rule>
+           <from-view-id>/pages/export_specification.jsp</from-view-id>
+         
+           <navigation-case>
+               <from-action>#{mappingBean.exportMappingAction}</from-action>
+               <from-outcome>draft_xml</from-outcome>
+               <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+          </navigation-case>
+          
+            <navigation-case>
+               <from-action>#{mappingBean.exportMappingAction}</from-action>
+               <from-outcome>draft_excel</from-outcome>
+               <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+          </navigation-case>
+ 
+ 
+            <navigation-case>
+                <from-action>#{mappingBean.exportMappingAction}</from-action>
+                <from-outcome>final_xml</from-outcome>
+                <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+           </navigation-case>
+ 
+ 
+            <navigation-case>
+                <from-action>#{mappingBean.exportMappingAction}</from-action>
+                <from-outcome>final_xml</from-outcome>
+                <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+           </navigation-case>
+          
+          
+    </navigation-rule>      
+          
+          
 
     <!-- Managed Beans ===================================================== -->
 

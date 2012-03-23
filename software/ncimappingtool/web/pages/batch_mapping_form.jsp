@@ -695,10 +695,11 @@ if (type.compareTo("codingscheme") == 0& !show_refresh_button) {
 <HR></HR>
 
       <table class="datatable">
-        <tr><td class="textbody">
+        
 <%
 if (show_refresh_button) {
 %>
+        <tr><td class="textbody">
   	<h:commandButton
   		id="Refresh_Form"
   		value="Refresh_Form"
@@ -711,7 +712,7 @@ if (show_refresh_button) {
 <%  
 } else {
 %>  
-
+        <tr><td class="textbody" valign="top" >
 	<%
 	if (collapse_all || expanded_hset.isEmpty()) {
 	%>
@@ -817,12 +818,12 @@ if (!readonly) {
 	&nbsp;&nbsp;
 	
 	<h:commandButton
-		id="Export_XML"
-		value="Export_XML"
+		id="ExportMapping"
+		value="ExportMapping"
 		image="#{basePath}/images/export.gif"
-		action="#{mappingBean.exportMappingToXMLAction}" 
+		action="#{mappingBean.exportAction}" 
 		onclick="javascript:cursor_wait();"
-		alt="Export to XML" >
+		alt="Export" >
 	</h:commandButton>  
 	
 
@@ -1393,10 +1394,10 @@ if (!readonly) {
 	<h:commandButton
 		id="Export"
 		value="Export"
-		image="#{basePath}/images/exportxml.gif"
-		action="#{mappingBean.exportMappingToXMLAction}" 
+		image="#{basePath}/images/export.gif"
+		action="#{mappingBean.exportAction}" 
 		onclick="javascript:cursor_wait();"
-		alt="Export to XML" >
+		alt="Export" >
 	</h:commandButton>  	
 
         &nbsp;
