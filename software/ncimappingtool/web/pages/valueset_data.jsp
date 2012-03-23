@@ -336,14 +336,14 @@ String checked = "";
  		            <tr><td>
  			    <h:commandButton id="import" value="import" action="#{mappingBean.importDataAction}"
  			      image="#{basePath}/images/import.gif"
- 			      alt="Import"
+ 			      alt="Import from the Terminology Server"
  			      tabindex="2">
  			    </h:commandButton> 
  			    </td></tr>
  			    <tr><td>
  			    <h:commandButton id="upload" value="upload" action="#{mappingBean.uploadDataAction}"
  			      image="#{basePath}/images/upload.gif"
- 			      alt="upload"
+ 			      alt="Upload from a File"
  			      tabindex="2">
  			    </h:commandButton> 
  			    </td></tr>
