@@ -715,11 +715,16 @@
                 <from-outcome>final_xml</from-outcome>
                 <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
            </navigation-case>
- 
+
+            <navigation-case>
+                <from-action>#{mappingBean.exportMappingAction}</from-action>
+                <from-outcome>final_lexgrid_xml</from-outcome>
+                <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+           </navigation-case>
  
             <navigation-case>
                 <from-action>#{mappingBean.exportMappingAction}</from-action>
-                <from-outcome>final_xml</from-outcome>
+                <from-outcome>final_excel</from-outcome>
                 <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
            </navigation-case>
           

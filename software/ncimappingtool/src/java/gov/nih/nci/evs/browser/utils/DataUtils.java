@@ -217,8 +217,11 @@ public class DataUtils {
     public static String[] rel_options = new String[] {"SY", "BT", "NT", "RO"};
     public static String[] score_options = new String[] {"0", "1", "2", "3", "4", "5", "6"};
 
-    public static String[] status_options = new String[] {"Pending", "Valid", "Invalid"}; //, "Undecided"};
+    public static String[] status_options = new String[] {"Valid", "Invalid", "Pending"}; //, "Undecided"};
     public static String   default_status = "Undecided";
+
+    public static String[] export_options = new String[] {"ALL", "Valid", "Invalid", "Pending"}; //, "Undecided"};
+    public static String   default_export_option = "ALL";
 
     public static Vector _valueset_item_vec = null;
     public static Vector valueSetDefinitionOnServer_uri_vec = null;
