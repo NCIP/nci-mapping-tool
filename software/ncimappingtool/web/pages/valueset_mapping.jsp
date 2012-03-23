@@ -173,10 +173,13 @@ String NOT_SPECIFIED = "NOT SPECIFIED";
 
                   <td class="textbody">
                     <select id="source_cs" name="source_cs" size="1" tabindex="4">
-                    <!--
+                       <%
+                       if (cs_label_vec != null && cs_label_vec.size() > 0) {
+                       %>
                        <option value="<%=NOT_SPECIFIED%>"><%=NOT_SPECIFIED%></option>
-                     -->
-                     
+                       <%
+                       }
+                       %>                     
                     <%
                        String t = null;
 		       for (int i=0; i<cs_label_vec.size(); i++) {
