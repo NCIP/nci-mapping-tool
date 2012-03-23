@@ -35,6 +35,15 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 
 <%
+List ontology_list = DataUtils.getOntologyList();
+String server_not_avail_msg = null;
+if (ontology_list == null || ontology_list.size() == 0) {
+    server_not_avail_msg = "Server is temporarily not available.";
+}
+
+
+
+
 String basePath = request.getContextPath(); 
 String message = (String) request.getSession().getAttribute("message");
 request.getSession().removeAttribute("message");
@@ -101,7 +110,7 @@ if (property != null && property.compareTo("null") == 0) {
 String NOT_SPECIFIED = "NOT SPECIFIED";
 
                 Vector cs_label_vec = new Vector();
-                List ontology_list = DataUtils.getOntologyList();
+                
                 int num_vocabularies = ontology_list.size();
 
                 for (int i = 0; i < ontology_list.size(); i++) {
@@ -144,7 +153,10 @@ if ((DataUtils.isNull(target_cs) || target_cs.compareTo("") == 0) && cs_label_ve
 
 <p class="texttitle-blue">Create Mapping</p>
 
-            <% if (message != null) { request.getSession().removeAttribute("message"); %>
+
+            <% if (server_not_avail_msg != null) { %>
+                <p class="textbodyred">&nbsp;<%=server_not_avail_msg%></p>
+            <% } else if (message != null) { request.getSession().removeAttribute("message"); %>
                 <p class="textbodyred">&nbsp;<%=message%></p>
             <% } %>   
             
@@ -177,9 +189,13 @@ if ((DataUtils.isNull(target_cs) || target_cs.compareTo("") == 0) && cs_label_ve
 
                   <td class="textbody">
                     <select id="source_cs" name="source_cs" size="1" tabindex="4">
-                       
+                       <%
+                       if (cs_label_vec != null && cs_label_vec.size() > 0) {
+                       %>
                        <option value="<%=NOT_SPECIFIED%>"><%=NOT_SPECIFIED%></option>
-                       
+                       <%
+                       }
+                       %>
                        
                     <%
                        String t = null;
