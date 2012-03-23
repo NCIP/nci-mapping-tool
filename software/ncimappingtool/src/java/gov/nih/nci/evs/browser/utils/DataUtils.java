@@ -4826,14 +4826,51 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 
 //  Key coding scheme name$version$code
 //  Value: property value (delimeter: ;)
+
+
+
+    public static Map getPropertyValuesInBatch(String scheme, String version, String propertyName, List<String> codes) {
+        if (codes == null) return null;
+        Map map = null;
+        if (codes.size() == 0) return map;
+
+        PropertyExtension extension = null;
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+
+            if (lbSvc == null) {
+                _logger.warn("lbSvc = null");
+                return null;
+            }
+            extension = (PropertyExtension) lbSvc.getGenericExtension("property-extension");
+            if (extension == null) {
+                _logger.error("Error! PropertyExtension is null!");
+                return null;
+            }
+		} catch (Exception ex) {
+			return null;
+		}
+		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+		if (version != null) {
+			csvt.setVersion(version);
+		}
+
+	    try {
+			map = extension.getProperty(scheme, csvt, propertyName, codes);
+			return map;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+
+
     public static HashMap getPropertyValuesInBatch(List list, String propertyName) {
 
         if (list == null) return null;
         HashMap hmap = new HashMap();
         if (list.size() == 0) return hmap;
-
-
-
 
         PropertyExtension extension = null;
         try {

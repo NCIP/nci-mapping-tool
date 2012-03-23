@@ -162,6 +162,8 @@ List selected_matches = null;
 HashMap code2name_hmap = null;
 HashMap mapping_hmap = null;
 
+Map status_map = null;
+
 String mode = (String) request.getParameter("mode");
 if (mode != null && mode.compareTo("readonly") == 0) {
         readonly = true;
@@ -340,6 +342,12 @@ String input_option = (String) request.getSession().getAttribute("input_option")
 String input_option_label = input_option;
 input_option_label = input_option_label.toLowerCase();
 List list = (ArrayList) request.getSession().getAttribute("data");
+
+
+
+if (type.compareTo("codingscheme") == 0) {
+    status_map = DataUtils.getPropertyValuesInBatch(source_scheme, source_version, "Concept_Status", list);
+}
 
 
 boolean show_rank_column = true;
@@ -863,6 +871,11 @@ if (!show_refresh_button) {
         input_data = (String) list.get(lcv);
         selected_matches = (ArrayList) mapping_hmap.get(input_data);
         
+        String concept_status = null;
+        if (status_map != null) {
+            concept_status = (String) status_map.get(input_data);
+        }
+        
         int k = lcv+1;
         item_label = new Integer(k).toString();
         
@@ -885,7 +898,7 @@ if (!show_refresh_button) {
 			<tr> 
 <%
 
-
+boolean show_status = false;
 if (input_option.compareToIgnoreCase("Code") == 0) {
     String concept_name = null;
     if (code2name_hmap != null) {
@@ -903,7 +916,27 @@ if (input_option.compareToIgnoreCase("Code") == 0) {
 		       onclick="javascript:openNewWindow('<%=ncit_url%>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=input_data%>'); return false;">
 		       <%=input_data%></a>&nbsp;(<%=concept_name%>)
 		 
-<%				 
+<%		
+		    if (concept_status != null) {
+		        concept_status = concept_status.replaceAll("_", " ");
+		        if (concept_status.compareToIgnoreCase("active") == 0 || concept_status.compareToIgnoreCase("reviewed") == 0) {
+		            concept_status = null;
+		        }
+			if (concept_status != null) {
+				if (concept_status.compareToIgnoreCase("Retired Concept")  == 0 || concept_status.compareToIgnoreCase("Obsolete Concept") == 0) {
+				    show_status = true;
+				}
+			}
+			
+			if (!DataUtils.isNull(concept_status) && show_status) {
+%>			
+			&nbsp;<i class="textbodyred"><%=concept_status%></i>&nbsp;
+<%			
+			}
+		        
+		    }                     
+           
+            
 	} else {			 
     
 %>    
