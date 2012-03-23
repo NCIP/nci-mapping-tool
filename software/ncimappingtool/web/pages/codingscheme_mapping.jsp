@@ -100,7 +100,6 @@ if (property != null && property.compareTo("null") == 0) {
 
 String NOT_SPECIFIED = "NOT SPECIFIED";
 
-
                 Vector cs_label_vec = new Vector();
                 List ontology_list = DataUtils.getOntologyList();
                 int num_vocabularies = ontology_list.size();
@@ -117,6 +116,13 @@ String NOT_SPECIFIED = "NOT SPECIFIED";
 		       }
 		}
 		cs_label_vec = SortUtils.quickSort(cs_label_vec);
+
+if ((DataUtils.isNull(source_cs) || source_cs.compareTo("") == 0) && cs_label_vec.size() > 0) {
+    source_cs = (String) cs_label_vec.elementAt(0);
+}
+if ((DataUtils.isNull(target_cs) || target_cs.compareTo("") == 0) && cs_label_vec.size() > 0) {
+    target_cs = (String) cs_label_vec.elementAt(0);
+}
 		
 %>
 <f:view>
@@ -171,9 +177,9 @@ String NOT_SPECIFIED = "NOT SPECIFIED";
 
                   <td class="textbody">
                     <select id="source_cs" name="source_cs" size="1" tabindex="4">
-                       <!--
+                       
                        <option value="<%=NOT_SPECIFIED%>"><%=NOT_SPECIFIED%></option>
-                       -->
+                       
                        
                     <%
                        String t = null;

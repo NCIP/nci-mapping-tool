@@ -271,7 +271,7 @@ if (input_option.compareTo("Name") == 0) {
  			    <tr><td>
  			    <h:commandButton id="upload" value="upload" action="#{mappingBean.uploadDataAction}"
  			      image="#{basePath}/images/upload.gif"
- 			      alt="upload"
+ 			      alt="Upload from a File"
  			      tabindex="2">
  			    </h:commandButton> 
  			    </td></tr>
