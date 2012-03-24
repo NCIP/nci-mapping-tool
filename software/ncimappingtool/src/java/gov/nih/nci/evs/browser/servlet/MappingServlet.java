@@ -39,7 +39,7 @@ public class MappingServlet extends HttpServlet {
 		response.setHeader("Cache-Control", "no-cache");
         PrintWriter out = response.getWriter();
 
-      out.println("<<table>");
+      out.println("<table>");
       out.println("   <th class=\"dataTableHeader\" width=\"60px\" scope=\"col\" align=\"left\">Source</th>");
       out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
       out.println("	  Source Code");
