@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.browser.utils;
 
+import gov.nih.nci.evs.browser.bean.*;
 import java.io.*;
 import java.io.BufferedWriter;
 import java.io.IOException;
