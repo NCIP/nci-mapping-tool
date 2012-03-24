@@ -35,8 +35,16 @@ public class MappingServlet extends HttpServlet {
 
         long ms = System.currentTimeMillis();
 
+        String identifier = (String) request.getParameter("identifier");
+        if (identifier == null) {
+		    identifier = "mapping";
+		}
+		identifier = identifier + ".xls";
+
 		response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Content-Disposition", "attachment; filename="
+                    + identifier);
+
         PrintWriter out = response.getWriter();
 
       out.println("<table>");
