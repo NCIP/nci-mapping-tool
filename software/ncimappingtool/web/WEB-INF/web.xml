@@ -36,7 +36,13 @@
         <load-on-startup>1</load-on-startup>
     </servlet>	
 	
-	
+    <servlet>
+        <servlet-name>mapping</servlet-name>
+        <servlet-class>gov.nih.nci.evs.browser.servlet.MappingServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>	
+    
+    
 	<!-- Faces Servlet -->
 	
 
@@ -56,7 +62,12 @@
 		 <servlet-name>upload</servlet-name>
 		 <url-pattern>/upload</url-pattern>
 	    </servlet-mapping>
-    
+
+	    <servlet-mapping>
+		 <servlet-name>mapping</servlet-name>
+		 <url-pattern>/mapping</url-pattern>
+	    </servlet-mapping>
+	    
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.jsf</url-pattern>
