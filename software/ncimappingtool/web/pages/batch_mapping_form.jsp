@@ -53,23 +53,13 @@
   <script type="text/javascript">
   
 	function checkAll() {
-	
-	alert("checkAll");
-	
 	    var size = document.getElementById("size");
       	    var size_str = size.value;
 	    var m = parseInt(size_str);
-	    
-alert("checkAll " + m);	    
-	    
 	    var i;
 	    var j;
 	    for (i=0; i<m; i++) {
 	        var checkbox_size_name = "checkbox_size_" + i;
-	        
-	        alert(checkbox_size_name);
-	        
-	        
 	        if (document.getElementById(checkbox_size_name) != null) {
 			var checkbox_size_value = document.getElementById(checkbox_size_name).value;
 			var n = parseInt(checkbox_size_value);
@@ -78,9 +68,11 @@ alert("checkAll " + m);
 			   var checkbox = document.getElementById(checkbox_name);
 			   if(checkbox != null) {
 			   	checkbox.checked = 1;
+			   } else {
+			        alert("checkbox == null???");
 			   }
 			}
-	        }
+	        } 
 	    }
 	}
 
@@ -1214,7 +1206,7 @@ if (!readonly) {
                    String checkbox_size_value =  new Integer(selected_matches.size()).toString();
                    
  %>                  
-     <input type="hidden" name="checkbox_size_name" id="checkbox_size_name" value="<%=checkbox_size_value%>" />
+     <input type="hidden" name="<%=checkbox_size_name%>" id="<%=checkbox_size_name%>" value="<%=checkbox_size_value%>" />
  <%                  
                    
                    
