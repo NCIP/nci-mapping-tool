@@ -72,7 +72,7 @@ alert("checkAll " + m);
 	        
 	        if (document.getElementById(checkbox_size_name) != null) {
 			var checkbox_size_value = document.getElementById(checkbox_size_name).value;
-			var n = = parseInt(checkbox_size_value);
+			var n = parseInt(checkbox_size_value);
 			for (j=0; j<n; j++) {
 			   var checkbox_name = "checkbox" + "_" + i + "_" + j;
 			   var checkbox = document.getElementById(checkbox_name);
@@ -99,7 +99,7 @@ alert("uncheckAll " + m);
 	        var checkbox_size_name = "checkbox_size_" + i;
 	        if (document.getElementById(checkbox_size_name) != null) {
 			var checkbox_size_value = document.getElementById(checkbox_size_name).value;
-			var n = = parseInt(checkbox_size_value);
+			var n = parseInt(checkbox_size_value);
 			for (j=0; j<n; j++) {
 			   var checkbox_name = "checkbox" + "_" + i + "_" + j;
 			   var checkbox = document.getElementById(checkbox_name);
