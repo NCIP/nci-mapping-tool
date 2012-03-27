@@ -48,6 +48,71 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
+  
+  
+  <script type="text/javascript">
+  
+	function checkAll() {
+	
+	alert("checkAll");
+	
+	    var size = document.getElementById("size");
+      	    var size_str = size.value;
+	    var m = parseInt(size_str);
+	    
+alert("checkAll " + m);	    
+	    
+	    var i;
+	    var j;
+	    for (i=0; i<m; i++) {
+	        var checkbox_size_name = "checkbox_size_" + i;
+	        
+	        alert(checkbox_size_name);
+	        
+	        
+	        if (document.getElementById(checkbox_size_name) != null) {
+			var checkbox_size_value = document.getElementById(checkbox_size_name).value;
+			var n = = parseInt(checkbox_size_value);
+			for (j=0; j<n; j++) {
+			   var checkbox_name = "checkbox" + "_" + i + "_" + j;
+			   var checkbox = document.getElementById(checkbox_name);
+			   if(checkbox != null) {
+			   	checkbox.checked = 1;
+			   }
+			}
+	        }
+	    }
+	}
+
+	function uncheckAll() {
+	alert("uncheckAll");
+	
+	    var size = document.getElementById("size");
+      	    var size_str = size.value;
+	    var m = parseInt(size_str);
+	    
+alert("uncheckAll " + m);	    	    
+	    
+	    var i;
+	    var j;
+	    for (i=0; i<m; i++) {
+	        var checkbox_size_name = "checkbox_size_" + i;
+	        if (document.getElementById(checkbox_size_name) != null) {
+			var checkbox_size_value = document.getElementById(checkbox_size_name).value;
+			var n = = parseInt(checkbox_size_value);
+			for (j=0; j<n; j++) {
+			   var checkbox_name = "checkbox" + "_" + i + "_" + j;
+			   var checkbox = document.getElementById(checkbox_name);
+			   if(checkbox != null) {
+			       checkbox.checked = 0;
+			   }
+			}
+	        }
+	    }
+	}
+  
+</script>  
+  
 </head>
 
 <%
@@ -109,7 +174,6 @@
 	function goToAnchor(anchor) {
 	    location.href = "#" + anchor;
 	}
-
 
  
 </script> 
@@ -403,6 +467,7 @@ if (DataUtils.isNull(algorithm)) {
 
 String refresh_on = (String) request.getSession().getAttribute("refresh");
 
+String size = new Integer(list.size()).toString();
 
 
 boolean show_refresh_button = true;
@@ -737,16 +802,14 @@ if (show_refresh_button) {
 		</a>
 		
         &nbsp;
-        
-		<a href="#">
-		   <img src="<%= request.getContextPath() %>/images/checkAll.gif" width="18" height="18" alt="Check All" border="0">
-		</a>
-        
+
+                <input type="image" src="<%= request.getContextPath() %>/images/checkAll.gif" width="18" height="18" alt="Check All" border="0"
+                     onclick="javascript:checkAll();" />  
         &nbsp;
-        
-		<a href="#">
-		   <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Uncheck All" border="0">
-		</a>        
+
+                <input type="image" src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Uncheck All" border="0"
+                     onclick="javascript:uncheckAll();" />  
+
         
         &nbsp;&nbsp;&nbsp;
         
@@ -1145,12 +1208,22 @@ if (!readonly) {
 			     <%
 			     
 
-                   String checkbox_name = "checkbox" + idx1_str;
+                   
+                   
+                   String checkbox_size_name = "checkbox_size_" + idx1_str;
+                   String checkbox_size_value =  new Integer(selected_matches.size()).toString();
+                   
+ %>                  
+     <input type="hidden" name="checkbox_size_name" id="checkbox_size_name" value="<%=checkbox_size_value%>" />
+ <%                  
+                   
+                   
 		   for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
 		   
 		         String rel_id = "rel" + "_" + lcv + "_" + lcv2;
 		         String score_id = "score" + "_" + lcv + "_" + lcv2;
 		         
+		         String checkbox_name = "checkbox" + "_" + lcv + "_" + lcv2;
 		   
 		         String idx2_str = new Integer(lcv2).toString();
 
@@ -1187,7 +1260,7 @@ target_codingschemeversion = target_version;
 		    <tr>
 			 
 			 <td>
-			 <input type="checkbox" name="<%=checkbox_name%>" value="<%=idx2_str%>" />
+			 <input type="checkbox" name="<%=checkbox_name%>" id="<%=checkbox_name%>" value="<%=idx2_str%>" />
 			 </td>
 
 			 <td class="datacoldark"><%=source_namespace%></td>
@@ -1500,6 +1573,8 @@ if (type.compareTo("ncimeta") == 0) {
      <input type="hidden" name="identifier" id="identifier" value="<%=identifier%>" />
      <input type="hidden" name="mapping_version" id="mapping_version" value="<%=mapping_version%>" />
      <input type="hidden" name="mappingKey" id="mappingKey" value="<%=mappingKey%>" />
+     <input type="hidden" name="size" id="size" value="<%=size%>" />
+
 
 </h:form>
 
