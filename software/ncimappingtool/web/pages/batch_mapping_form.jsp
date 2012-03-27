@@ -68,23 +68,16 @@
 			   var checkbox = document.getElementById(checkbox_name);
 			   if(checkbox != null) {
 			   	checkbox.checked = 1;
-			   } else {
-			        alert("checkbox == null???");
-			   }
+			   } 
 			}
 	        } 
 	    }
 	}
 
 	function uncheckAll() {
-	alert("uncheckAll");
-	
 	    var size = document.getElementById("size");
       	    var size_str = size.value;
 	    var m = parseInt(size_str);
-	    
-alert("uncheckAll " + m);	    	    
-	    
 	    var i;
 	    var j;
 	    for (i=0; i<m; i++) {
@@ -96,10 +89,10 @@ alert("uncheckAll " + m);
 			   var checkbox_name = "checkbox" + "_" + i + "_" + j;
 			   var checkbox = document.getElementById(checkbox_name);
 			   if(checkbox != null) {
-			       checkbox.checked = 0;
-			   }
+			   	checkbox.checked = 0;
+			   } 
 			}
-	        }
+	        } 
 	    }
 	}
   
