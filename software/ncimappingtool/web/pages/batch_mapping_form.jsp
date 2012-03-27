@@ -788,12 +788,14 @@ if (show_refresh_button) {
 		
         &nbsp;
 
-                <input type="image" src="<%= request.getContextPath() %>/images/checkAll.gif" width="18" height="18" alt="Check All" border="0"
-                     onclick="javascript:checkAll();" />  
-        &nbsp;
 
-                <input type="image" src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Uncheck All" border="0"
-                     onclick="javascript:uncheckAll();" />  
+<a href="javascript:checkAll();">
+    <img src="<%= request.getContextPath() %>/images/checkAll.gif" width="18" height="18" alt="Check All" border="0">
+</a>
+&nbsp;
+<a href="javascript:uncheckAll();">
+    <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Check All" border="0">
+</a>
 
         
         &nbsp;&nbsp;&nbsp;
