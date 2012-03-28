@@ -2024,37 +2024,37 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
 		// update rel and score values for all mapping entries
 
         List list = (ArrayList) request.getSession().getAttribute("data");
-        for (int lcv=0; lcv<list.size(); lcv++) {
-		   String input_data = (String) list.get(lcv);
-		   List selected_matches = (ArrayList) mapping_hmap.get(input_data);
+			if (list != null) {
+			for (int lcv=0; lcv<list.size(); lcv++) {
+			   String input_data = (String) list.get(lcv);
+			   List selected_matches = (ArrayList) mapping_hmap.get(input_data);
 
-		   if (selected_matches != null) {
-			   for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
-				   String rel_id = "rel" + "_" + lcv + "_" + lcv2;
-				   String score_id = "score" + "_" + lcv + "_" + lcv2;
+			   if (selected_matches != null) {
+				   for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
+					   String rel_id = "rel" + "_" + lcv + "_" + lcv2;
+					   String score_id = "score" + "_" + lcv + "_" + lcv2;
 
-				   String checkbox_name = "checkbox" + "_" + lcv + "_" + lcv2;
+					   String checkbox_name = "checkbox" + "_" + lcv + "_" + lcv2;
 
+			String checkbox_status = (String) request.getParameter(checkbox_name);
 
-		String checkbox_status = (String) request.getParameter(checkbox_name);
-		System.out.println("(*) checkbox_status: " + checkbox_status);
+					   MappingData mappingData = (MappingData) selected_matches.get(lcv2);
+					   if (!DataUtils.isNull(checkbox_status)) {
+						   mappingData.setStatus(entry_status);
+					   }
 
-				   MappingData mappingData = (MappingData) selected_matches.get(lcv2);
-				   if (!DataUtils.isNull(checkbox_status)) {
-					   mappingData.setStatus(entry_status);
+					   String rel = (String) request.getParameter(rel_id);
+					   mappingData.setRel(rel);
+					   String score = (String) request.getParameter(score_id);
+					   int score_int = 0;
+					   if (score != null) {
+						   score_int = Integer.parseInt(score);
+					   }
+					   mappingData.setScore(score_int);
 				   }
-
-				   String rel = (String) request.getParameter(rel_id);
-				   mappingData.setRel(rel);
-				   String score = (String) request.getParameter(score_id);
-				   int score_int = 0;
-				   if (score != null) {
-					   score_int = Integer.parseInt(score);
-				   }
-				   mappingData.setScore(score_int);
 			   }
-	       }
-		}
+			}
+	    }
 	}
 
     public String saveAllMappingAction() {
