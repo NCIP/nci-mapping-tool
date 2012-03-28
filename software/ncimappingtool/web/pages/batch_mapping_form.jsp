@@ -95,7 +95,43 @@
 	        } 
 	    }
 	}
-  
+
+	function checkAll(index) {
+	    var j;
+	    var i = parseInt(index);
+	    var checkbox_size_name = "checkbox_size_" + i;
+	    if (document.getElementById(checkbox_size_name) != null) {
+		var checkbox_size_value = document.getElementById(checkbox_size_name).value;
+		var n = parseInt(checkbox_size_value);
+		for (j=0; j<n; j++) {
+		   var checkbox_name = "checkbox" + "_" + i + "_" + j;
+		   var checkbox = document.getElementById(checkbox_name);
+		   if(checkbox != null) {
+			checkbox.checked = 1;
+		   } 
+		}
+	    } 
+	}
+
+	function uncheckAll(index) {
+	    var j;
+	    var i = parseInt(index);
+	    var checkbox_size_name = "checkbox_size_" + i;
+	    if (document.getElementById(checkbox_size_name) != null) {
+		var checkbox_size_value = document.getElementById(checkbox_size_name).value;
+		var n = parseInt(checkbox_size_value);
+		for (j=0; j<n; j++) {
+		   var checkbox_name = "checkbox" + "_" + i + "_" + j;
+		   var checkbox = document.getElementById(checkbox_name);
+		   if(checkbox != null) {
+			checkbox.checked = 0;
+		   } 
+		}
+	    } 
+	}
+
+	
+	
 </script>  
   
 </head>
@@ -1047,14 +1083,6 @@ if (!readonly) {
 <%
 if (type.compareTo("codingscheme") == 0) {
 %>
-
-
-<!--
-      <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/manual_mapping.jsf?idx1=<%=idx1_str%>',
-        '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no'); return false;" tabindex="13">
-        <img src="<%= request.getContextPath() %>/images/user.png" style="border: none">
-      </a> 
--->
 
 
       <a name="<%=idx1_str%>" href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/manual_mapping.jsf?idx1=<%=idx1_str%>',
