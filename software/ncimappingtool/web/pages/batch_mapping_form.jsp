@@ -830,7 +830,7 @@ if (show_refresh_button) {
 </a>
 &nbsp;
 <a href="javascript:uncheckAll();">
-    <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Check All" border="0">
+    <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Uncheck All" border="0">
 </a>
 
         
@@ -1066,6 +1066,29 @@ if (input_option.compareToIgnoreCase("Code") == 0) {
 
 
 
+
+<%
+if (selected_matches != null && selected_matches.size()>0 && expanded_hset.contains(item_label)) {
+%>  
+
+&nbsp;
+
+<a href="javascript:checkAll(<%=idx1_str%>);">
+    <img src="<%= request.getContextPath() %>/images/checkAll_16.gif" width="18" height="18" alt="Check All" border="0">
+</a>
+&nbsp;
+<a href="javascript:uncheckAll(<%=idx1_str%>);">
+    <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Uncheck All" border="0">
+</a>
+
+&nbsp;&nbsp;
+
+<%    
+}
+%>
+
+
+
 <%	
 if (!readonly) {
    if (type.compareTo("valueset") != 0) {
@@ -1102,6 +1125,10 @@ if (type.compareTo("codingscheme") == 0) {
 				<%     
 				if (selected_matches != null && selected_matches.size()>0) {
 				%>
+
+
+
+
 
 
 <%	
@@ -1166,8 +1193,10 @@ if (!readonly) {
 				     
 				}
 }				
-				
 				%>
+				
+				
+				
 				</td>
 				
 			</tr>        
