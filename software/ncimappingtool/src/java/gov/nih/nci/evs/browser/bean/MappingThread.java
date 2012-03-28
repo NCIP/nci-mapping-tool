@@ -297,7 +297,7 @@ System.out.println("THREAD input_value: " + input_value);
 									Vector v = DataUtils.parseData(synonym_str);
 									String synonym = (String) v.elementAt(0);
 									matchtext_vec.add(synonym);
-									System.out.println(sourceCode + " " + synonym);
+									//System.out.println(sourceCode + " " + synonym);
 								}
 								iterator = new SearchUtils().searchByName(vsd_cns, matchtext_vec, algorithm);
 						    }
@@ -691,7 +691,7 @@ System.out.println("mapping_version: " + mapping_version);
 								Vector v = DataUtils.parseData(synonym_str);
 								String synonym = (String) v.elementAt(0);
 								matchtext_vec.add(synonym);
-								System.out.println(sourceCode + " " + synonym);
+								//System.out.println(sourceCode + " " + synonym);
 							}
 							iterator = new SearchUtils().searchByName(targetCodingScheme, targetCodingSchemeVersion, matchtext_vec, algorithm, restriction);
 						}
