@@ -2015,6 +2015,9 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
     }
 
     public void updateMapping(HttpServletRequest request) {
+		String entry_status = (String) request.getParameter("entry_status");
+		System.out.println("(*) entry_status: " + entry_status);
+
 		String type = (String) request.getParameter("type");
         HashMap mapping_hmap = (HashMap) request.getSession().getAttribute("mapping_hmap");
 
@@ -2029,7 +2032,18 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
 			   for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
 				   String rel_id = "rel" + "_" + lcv + "_" + lcv2;
 				   String score_id = "score" + "_" + lcv + "_" + lcv2;
+
+				   String checkbox_name = "checkbox" + "_" + lcv + "_" + lcv2;
+
+
+		String checkbox_status = (String) request.getParameter(checkbox_name);
+		System.out.println("(*) checkbox_status: " + checkbox_status);
+
 				   MappingData mappingData = (MappingData) selected_matches.get(lcv2);
+				   if (!DataUtils.isNull(checkbox_status)) {
+					   mappingData.setStatus(entry_status);
+				   }
+
 				   String rel = (String) request.getParameter(rel_id);
 				   mappingData.setRel(rel);
 				   String score = (String) request.getParameter(score_id);

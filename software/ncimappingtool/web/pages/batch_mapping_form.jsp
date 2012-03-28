@@ -1247,7 +1247,8 @@ target_codingschemeversion = target_version;
 		    <tr>
 			 
 			 <td>
-			 <input type="checkbox" name="<%=checkbox_name%>" id="<%=checkbox_name%>" value="<%=idx2_str%>" />
+			 <input type="checkbox" name="<%=checkbox_name%>" id="<%=checkbox_name%>" value="<%=checkbox_name%>" />
+			 
 			 </td>
 
 			 <td class="datacoldark"><%=source_namespace%></td>
@@ -1378,6 +1379,20 @@ if (!readonly) {
         <img src="<%= request.getContextPath() %>/images/Info.gif" style="border: none">
       </a>       
       
+      
+      
+      &nbsp;
+      <%
+      if (mappingData.getStatus() != null && mappingData.getStatus().compareTo("Valid") == 0) {
+      %>
+      	  <img src="<%= request.getContextPath() %>/images/accept_16.gif" style="border: none">
+      <%
+      } else if (mappingData.getStatus() != null && mappingData.getStatus().compareTo("Invalid") == 0) {
+      %>
+      	  <img src="<%= request.getContextPath() %>/images/reject_16.png" style="border: none">
+      <%
+      }
+      %> 
 				
 			 </td>	     
 		    </tr>
@@ -1461,7 +1476,19 @@ if (show_refresh_button) {
 	<%  
 	} 
 	%>
-	
+
+
+
+<a href="javascript:checkAll();">
+    <img src="<%= request.getContextPath() %>/images/checkAll.gif" width="18" height="18" alt="Check All" border="0">
+</a>
+&nbsp;
+<a href="javascript:uncheckAll();">
+    <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Check All" border="0">
+</a>
+
+
+
 	
 <%	
 if (!readonly) {	

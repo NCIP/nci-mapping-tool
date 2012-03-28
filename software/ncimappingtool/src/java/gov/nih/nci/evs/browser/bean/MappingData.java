@@ -64,6 +64,7 @@ public class MappingData
 
 	private String comment;
 	private String status;
+	private int index;
 
 // Default constructor
 	public MappingData() {
@@ -101,6 +102,10 @@ public class MappingData
 	}
 
 // Set methods
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
 	public void setSourceCode(String sourceCode) {
 		this.sourceCode = sourceCode;
 	}
@@ -220,6 +225,10 @@ public class MappingData
 
 	public String getStatus() {
 		return this.status;
+	}
+
+	public int getIndex() {
+		return this.index;
 	}
 
 	public String getKey() {
