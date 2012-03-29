@@ -34,8 +34,20 @@
   
   session = request.getSession(true);
   boolean readonly = false;
+  
+  Vector show_options = (Vector) request.getSession().getAttribute("show_options");
+  
+  String[] status_options = DataUtils.status_options;
+ 
+  if (show_options == null) {
+      show_options = new Vector();
+      for (int i=0; i<status_options.length; i++) {
+	  String t = status_options[i];
+	  show_options.add(t);
+      }
+  }
+  
 %>
-
 
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
@@ -826,11 +838,11 @@ if (show_refresh_button) {
 
 
 <a href="javascript:checkAll();">
-    <img src="<%= request.getContextPath() %>/images/checkAll.gif" width="18" height="18" alt="Check All" border="0">
+    <img src="<%= request.getContextPath() %>/images/checkAll.gif" width="18" height="18" alt="Check All (Global)" border="0">
 </a>
 &nbsp;
 <a href="javascript:uncheckAll();">
-    <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Uncheck All" border="0">
+    <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Uncheck All (Global)" border="0">
 </a>
 
         
@@ -842,7 +854,7 @@ if (show_refresh_button) {
 			    <select id="entry_status" name="entry_status" size="1" tabindex="4">
 			    <%
 
-				    String[] status_options = DataUtils.status_options;
+				    //String[] status_options = DataUtils.status_options;
 				    String default_status = DataUtils.default_status;
 				    for (int i=0; i<status_options.length; i++) {
 					 String t = status_options[i];
@@ -1272,6 +1284,19 @@ if (!readonly) {
 		         String idx2_str = new Integer(lcv2).toString();
 
 			 mappingData = (MappingData) selected_matches.get(lcv2);
+
+/*
+if (mappingData.getStatus() == null) {
+    mappingData.setStatus("Pending");
+}
+*/
+
+boolean show_entry = false;		 
+if (show_options.contains(mappingData.getStatus())) {
+    show_entry = true;
+}
+if (show_entry) {			 
+			 
 			 source_code = mappingData.getSourceCode();
 			 source_name = mappingData.getSourceName();
 		 
@@ -1461,6 +1486,15 @@ if (!readonly) {
 
 
 
+
+<%    
+}
+%>
+		 
+		 
+		 
+		 
+
 		        <% 
 		        if (expanded_hset.contains(item_label)) {
 		        %>
@@ -1541,7 +1575,7 @@ if (show_refresh_button) {
 </a>
 &nbsp;
 <a href="javascript:uncheckAll();">
-    <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Check All" border="0">
+    <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Uncheck All" border="0">
 </a>
 
 

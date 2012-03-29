@@ -2135,11 +2135,30 @@ System.out.println("exportMappingAction format: " + format);
         String type = (String) request.getParameter("type");
         updateMapping(request);
 
-        String hide_option = (String) request.getParameter("hide_option");
-        request.getSession().setAttribute("hide", hide_option);
+        String[] hide_options = (String[]) request.getParameterValues("hide_option");
+        request.getSession().setAttribute("hide", hide_options);
+
+        for (int i=0; i<hide_options.length; i++) {
+			String option = (String) hide_options[i];
+			System.out.println("(*) Hide " + option);
+		}
+
+		Vector show_options = DataUtils.getShowOptions(hide_options);
+
+		for (int k=0; k<show_options.size(); k++) {
+			String t = (String) show_options.elementAt(k);
+			System.out.println("SHOW " + t);
+		}
+
+		request.getSession().setAttribute("show_options", show_options);
+
+		String mappingKey = (String) request.getParameter("mappingKey");
+        System.out.println("(*) mappingKey " + mappingKey);
+        request.getSession().setAttribute("mappingKey", mappingKey);
 
         return type;
 	}
+
 
 
 }

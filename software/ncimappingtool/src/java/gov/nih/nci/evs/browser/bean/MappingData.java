@@ -99,6 +99,8 @@ public class MappingData
 		this.targetCodingScheme = targetCodingScheme;
 		this.targetCodingSchemeVersion = targetCodingSchemeVersion;
 		this.targetCodeNamespace = targetCodeNamespace;
+
+		this.status = "Pending";
 	}
 
 // Set methods

@@ -215,6 +215,7 @@ public class DataUtils {
 
 
     public static String[] rel_options = new String[] {"SY", "BT", "NT", "RO"};
+
     public static String[] score_options = new String[] {"0", "1", "2", "3", "4", "5", "6"};
 
     public static String[] status_options = new String[] {"Valid", "Invalid", "Pending"}; //, "Undecided"};
@@ -224,6 +225,7 @@ public class DataUtils {
     public static String   default_export_option = "ALL";
 
     public static String[] hide_options = new String[] {"NONE", "Valid", "Invalid", "Pending"}; //, "Undecided"};
+
     public static String   default_hide_option = "NONE";
 
     public static Vector _valueset_item_vec = null;
@@ -5252,6 +5254,30 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 	        ex.printStackTrace();
 	    }
     	return _mode_of_operation;
+	}
+
+
+	//    public static String[] hide_options = new String[] {"NONE", "Valid", "Invalid", "Pending"}; //, "Undecided"};
+	public static Vector getShowOptions(String[] hide_options) {
+
+		Vector v = new Vector();
+		for (int i=0; i<hide_options.length; i++) {
+			String s = hide_options[i];
+			v.add(s);
+        }
+
+        Vector show_options = new Vector();
+        for (int i=0; i<status_options.length; i++) {
+	        String t = status_options[i];
+	        show_options.add(t);
+        }
+
+		if (v.contains("NONE")) return show_options;
+		for (int i=0; i<hide_options.length; i++) {
+			String s = hide_options[i];
+			show_options.remove(s);
+		}
+		return show_options;
 	}
 
 }
