@@ -6,6 +6,8 @@
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils"%>
+<%@ page import="gov.nih.nci.evs.browser.common.*" %>
+
 
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
@@ -66,6 +68,11 @@ if (target_cs != null && target_cs.compareTo("null") == 0) {
     target_cs = "";
 }
 
+
+
+
+
+
 String code_checked = "";
 String name_checked = "";
 String property_checked = "";
@@ -99,7 +106,7 @@ if (property != null && property.compareTo("null") == 0) {
     property = "";
 }
 
-String NOT_SPECIFIED = "NOT SPECIFIED";
+String LOCAL_DATA = Constants.LOCAL_DATA;
 
                 Vector cs_label_vec = new Vector();
                 List ontology_list = DataUtils.getOntologyList();
@@ -117,6 +124,15 @@ String NOT_SPECIFIED = "NOT SPECIFIED";
 		       }
 		}
 		cs_label_vec = SortUtils.quickSort(cs_label_vec);
+
+
+if ((DataUtils.isNull(source_cs) || source_cs.compareTo("") == 0) && cs_label_vec.size() > 0) {
+    source_cs = (String) cs_label_vec.elementAt(0);
+}
+if ((DataUtils.isNull(target_cs) || target_cs.compareTo("") == 0) && cs_label_vec.size() > 0) {
+    target_cs = (String) cs_label_vec.elementAt(0);
+}
+
 
 		
 %>
@@ -176,7 +192,7 @@ String NOT_SPECIFIED = "NOT SPECIFIED";
                        <%
                        if (cs_label_vec != null && cs_label_vec.size() > 0) {
                        %>
-                       <option value="<%=NOT_SPECIFIED%>"><%=NOT_SPECIFIED%></option>
+                       <option value="<%=LOCAL_DATA%>"><%=LOCAL_DATA%></option>
                        <%
                        }
                        %>                     

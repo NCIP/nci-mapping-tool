@@ -5,6 +5,8 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
+<%@ page import="gov.nih.nci.evs.browser.common.*" %>
+
 
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
@@ -107,7 +109,7 @@ if (property != null && property.compareTo("null") == 0) {
     property = "";
 }
 
-String NOT_SPECIFIED = "NOT SPECIFIED";
+String LOCAL_DATA = Constants.LOCAL_DATA;
 
                 Vector cs_label_vec = new Vector();
                 
@@ -192,7 +194,7 @@ if ((DataUtils.isNull(target_cs) || target_cs.compareTo("") == 0) && cs_label_ve
                        <%
                        if (cs_label_vec != null && cs_label_vec.size() > 0) {
                        %>
-                       <option value="<%=NOT_SPECIFIED%>"><%=NOT_SPECIFIED%></option>
+                       <option value="<%=LOCAL_DATA%>"><%=LOCAL_DATA%></option>
                        <%
                        }
                        %>
