@@ -894,7 +894,7 @@ if (!readonly) {
 <h:commandLink id="hide" value="Hide" action="#{mappingBean.refreshBatchSubmissionPage}" /> 
 	
 
-			    <select id="hide_option" name="hide_option" size="1" tabindex="4">
+			    <select id="hide_option" name="hide_option" size="2" multiple tabindex="4">
 			    <%
 				    String[] hide_options = DataUtils.hide_options;
 				    String default_hide_option = DataUtils.default_hide_option;

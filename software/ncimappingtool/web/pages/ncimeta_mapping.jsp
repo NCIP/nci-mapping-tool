@@ -6,6 +6,8 @@
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.*" %>
+<%@ page import="gov.nih.nci.evs.browser.common.*" %>
+
 
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();

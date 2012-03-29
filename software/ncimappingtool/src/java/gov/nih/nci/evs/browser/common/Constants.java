@@ -105,6 +105,8 @@ public class Constants {
     public static String TYPE_INVERSE_ROLE = "type_inverse_role";
     public static String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
 
+    public static String LOCAL_DATA = "LOCAL DATA";
+
 
     /**
      * Constructor
