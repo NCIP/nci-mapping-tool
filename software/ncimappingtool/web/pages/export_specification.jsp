@@ -67,6 +67,10 @@
           + "&stage="+ stage;
     }
     
+    function back() {
+        history.go(-1);
+    }
+    
   </script>
   
   
@@ -447,9 +451,20 @@ if (stage.compareTo("draft") == 0) {
 		action="#{mappingBean.exportMappingAction}" 
 		onclick="javascript:cursor_wait();"
 		alt="Export Mapping" >
-	</h:commandButton>  
+	</h:commandButton> 
+	
+	&nbsp;
+	
+<a href="javascript:back();">
+    <img src="<%= request.getContextPath() %>/images/back.gif" alt="Back" border="0">
+</a>	
+	
                   </td>
-                  <td></td></tr>	
+                  <td></td>
+                  
+                  
+                  
+       </tr>	
 	
      </table> 
 
