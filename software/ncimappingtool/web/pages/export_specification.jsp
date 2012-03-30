@@ -70,6 +70,53 @@
     function back() {
         history.go(-1);
     }
+
+    function ft() {
+        //history.go(-1);
+        alert("test");
+    }
+
+    function exportToFile() {
+    
+        var key = document.getElementById("mappingKey");
+        var key_str = key.value;
+	var stages = document.exportForm.stage;
+	var i;
+	var j;
+	var n;
+	var formats;
+	var export_format;
+	
+	var export_format = "";
+        if (stages[0].checked) {
+        
+           if (document.getElementById('xml').checked == true) {
+               export_format = "xml";
+           } else if (document.getElementById('excel').checked == true) {
+               export_format = "excel";
+           } else {
+               alert("Please specify a format.");
+           }
+
+        } else if (stages[1].checked) {
+        
+           if (document.getElementById('final_xml').checked == true) {
+               export_format = "xml";
+           } else if (document.getElementById('final_excel').checked == true) {
+               export_format = "excel";
+           } else if (document.getElementById('final_lexgrid_xml').checked == true) {
+               export_format = "lexgrid_xml";               
+           } else {
+               alert("Please specify a format.");
+           }
+        } 
+        
+        if (export_format != "") {
+	   var url = "/ncimappingtool/mapping?key=" + key_str + "&format=" + export_format;
+	   window.open(url, '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');
+        }
+    }    
+    
     
   </script>
   
@@ -398,11 +445,11 @@ if (stage.compareTo("draft") == 0) {
 	    <ul style="list-style: none;">
 	    
 	    <li>
-	    <input type="radio" name="format" value="draft_xml" alt="XML" checked>XML
+	    <input type="radio" name="format" id="xml" value="xml" alt="XML" checked>XML
 	    </li>	    
 	    
 	    <li>
-	    <input type="radio" name="format" value="draft_excel" alt="Microsoft Excel" >Microsoft&#174; Excel&nbsp;
+	    <input type="radio" name="format" id="excel" value="excel" alt="Microsoft Excel" >Microsoft&#174; Excel&nbsp;
 	    </li>
 
    
@@ -421,15 +468,15 @@ if (stage.compareTo("draft") == 0) {
 	    <ul style="list-style: none;">
 	  
 	    <li>
-	    <input type="radio" name="format" value="final_xml" alt="XML" >XML
+	    <input type="radio" name="format2" id="final_xml" value="xml" alt="XML" >XML
 	    </li>		  
 	  
 	    <li>
-	    <input type="radio" name="format" value="final_lexgrid_xml" alt="LexGrid XML" checked>LexGrid XML
+	    <input type="radio" name="format2" id="final_lexgrid_xml" value="lexgrid_xml" alt="LexGrid XML" checked>LexGrid XML
 	    </li>	    
 	    
 	    <li>
-	    <input type="radio" name="format" value="final_excel" alt="Microsoft Excel" >Microsoft&#174; Excel&nbsp;
+	    <input type="radio" name="format2" id="final_excel" value="excel" alt="Microsoft Excel" >Microsoft&#174; Excel&nbsp;
 	    </li>
 	    </ul>
 	  </td>
@@ -443,7 +490,8 @@ if (stage.compareTo("draft") == 0) {
 <tr><td>&nbsp;</td><td></td></tr>
 
 
-                  <tr><td>
+                  <tr><td class="textbody">
+                  
 	<h:commandButton
 		id="Export_Mapping"
 		value="Export_Mapping"
@@ -459,6 +507,12 @@ if (stage.compareTo("draft") == 0) {
     <img src="<%= request.getContextPath() %>/images/back.gif" alt="Back" border="0">
 </a>	
 	
+	
+&nbsp;	
+<a href="javascript:exportToFile();">
+    export
+</a>	
+	
                   </td>
                   <td></td>
                   
@@ -472,6 +526,7 @@ if (stage.compareTo("draft") == 0) {
 
      <input type="hidden" name="identifier" id="identifier" value="<%=identifier%>" />
      <input type="hidden" name="mapping_version" id="mapping_version" value="<%=mapping_version%>" />
+     <input type="hidden" name="mappingKey" id="mappingKey" value="<%=mappingKey%>" />
 
 
 

@@ -7,6 +7,12 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import gov.nih.nci.evs.browser.bean.*;
+
+
 public class MappingServlet extends HttpServlet {
 
    public void init(ServletConfig config)
@@ -72,6 +78,96 @@ public class MappingServlet extends HttpServlet {
 
 
    }
+
+
+
+    public void exportMappingToXMLAction(HttpServletRequest request, HttpServletResponse response ) {
+        new MappingBean().updateMapping(request);
+		String type = (String) request.getParameter("type");
+
+        try {
+        	//String xml = null;
+			StringBuffer sb = null;
+
+			response.setContentType("text/xml");
+/*
+			String mapping_name = (String) request.getParameter("identifier");
+			String mapping_version = (String) request.getParameter("mapping_version");
+
+System.out.println("mapping_name: " + mapping_name);
+System.out.println("mapping_version: " + mapping_version);
+
+
+			String key = MappingObject.computeKey(mapping_name, mapping_version);
+*/
+String key = (String) request.getParameter("key");
+System.out.println("key: " + key);
+
+
+String format = (String) request.getParameter("format");
+
+			HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
+			if (mappings == null) {
+				System.out.println("exportMappingToXMLAction mappings == null ???");
+
+				mappings = new HashMap();
+				request.getSession().setAttribute("mappings", mappings);
+			}
+
+			HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
+
+			MappingObject obj = (MappingObject) mappings.get(key);
+
+if (obj == null) {
+	System.out.println("mapping obj cannot be found for key : " + key);
+} else {
+	System.out.println("obj.toXML() : " + obj.toXML());
+}
+
+
+
+			String mapping_name = obj.getName();
+			String mapping_version = obj.getVersion();
+
+
+
+
+			//xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+			String xml = "";
+
+			if (obj != null) {
+				obj.setStatusHashMap(status_hmap);
+
+				sb = new StringBuffer(xml);
+				sb = sb.append(obj.toXML());
+			}
+
+			mapping_name = mapping_name.replaceAll(" ", "_");
+			mapping_name = mapping_name + ".xml";
+
+			response.setHeader("Content-Disposition", "attachment; filename="
+					+ mapping_name);
+
+System.out.println("mapping file name : " + mapping_name);
+
+System.out.println("mapping sb.length() : " + sb.length());
+
+			response.setContentLength(sb.length());
+
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+			ouputStream.flush();
+			ouputStream.close();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+        //FacesContext.getCurrentInstance().responseComplete();
+		//return "export";
+	}
+
+
 
 }
 

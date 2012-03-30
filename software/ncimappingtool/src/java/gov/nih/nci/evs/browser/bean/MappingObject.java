@@ -329,10 +329,13 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
            String m_description = this._name + " (version: " + this._version + ")";
 
            List<MappingElement> mappingElements = new ArrayList();
-
+/*
            Iterator it = _mapping_hmap.keySet().iterator();
            while (it.hasNext()) {
 			   String input_data = (String) it.next();
+*/
+           for (int k=0; k<_data.size(); k++) {
+			   String input_data = (String) _data.get(k);
 
 			   List<MappingEntry> entries = new ArrayList();
 			   List selected_matches = (ArrayList) _mapping_hmap.get(input_data);
@@ -414,4 +417,64 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 
 
-    }
+        public Vector<MappingEntry> getMappingEntries(Vector options) {
+
+            Vector<MappingEntry> w = new Vector();
+            for (int k=0; k<_data.size(); k++) {
+			   String input_data = (String) _data.get(k);
+
+			   List<MappingEntry> entries = new ArrayList();
+			   List selected_matches = (ArrayList) _mapping_hmap.get(input_data);
+
+			   if (selected_matches != null) {
+				    for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
+						 MappingData mappingData = (MappingData) selected_matches.get(lcv2);
+
+						 String status = mappingData.getStatus();
+						 if (options.contains(status)) {
+
+							 String source_code = mappingData.getSourceCode();
+							 String source_name = mappingData.getSourceName();
+							 String source_namespace = mappingData.getSourceCodeNamespace();
+
+							 String associationName = "mapsTo";
+							 String rel = mappingData.getRel();
+							 if (DataUtils.isNull(rel)) rel = "";
+							 int score = mappingData.getScore();
+							 String target_code = mappingData.getTargetCode();
+							 String target_name = mappingData.getTargetName();
+							 String target_namespace = mappingData.getTargetCodeNamespace();
+
+							 String source_scheme = mappingData.getSourceCodingScheme();
+							 String source_version = mappingData.getSourceCodingSchemeVersion();
+							 String target_scheme = mappingData.getTargetCodingScheme();
+							 String target_version = mappingData.getTargetCodingSchemeVersion();
+
+							 source_scheme = DataUtils.getFormalName(source_scheme);
+							 target_scheme = DataUtils.getFormalName(target_scheme);
+
+							 MappingEntry mappingEntry = new MappingEntry(
+								source_code,
+								source_name,
+								source_scheme,
+								source_version,
+								source_namespace,
+								associationName,
+								rel,
+								score,
+								target_code,
+								target_name,
+								target_scheme,
+								target_version,
+								target_namespace);
+
+							 mappingEntry.setComment(mappingData.getComment());
+							 w.add(mappingEntry);
+						 }
+					}
+				}
+			}
+			return w;
+		}
+
+}
