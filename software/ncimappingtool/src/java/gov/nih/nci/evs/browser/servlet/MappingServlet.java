@@ -39,6 +39,18 @@ public class MappingServlet extends HttpServlet {
    public void execute(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
+		String action = (String) request.getParameter("action");
+		String format = (String) request.getParameter("format");
+
+		System.out.println("(*) ACTION: " + action);
+		System.out.println("(*) FORMAT: " + format);
+
+
+		if (action.compareTo("export") == 0 && format.compareTo("xml") == 0) {
+			 exportMappingToXMLAction(request, response);
+			 return;
+		}
+
         long ms = System.currentTimeMillis();
 
         String identifier = (String) request.getParameter("identifier");

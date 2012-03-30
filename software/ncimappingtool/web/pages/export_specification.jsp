@@ -112,7 +112,7 @@
         } 
         
         if (export_format != "") {
-	   var url = "/ncimappingtool/mapping?key=" + key_str + "&format=" + export_format;
+	   var url = "/ncimappingtool/mapping?action=export&key=" + key_str + "&format=" + export_format;
 	   window.open(url, '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');
         }
     }    
@@ -462,6 +462,9 @@ if (stage.compareTo("draft") == 0) {
 } else {
 %>
 
+<!--
+        <input type="hidden" name="entry_status" id="entry_status" value="Valid" />
+-->
 
      	<tr valign="top" align="left">
 	  <td align="left" class="textbody">
@@ -491,7 +494,8 @@ if (stage.compareTo("draft") == 0) {
 
 
                   <tr><td class="textbody">
-                  
+
+<!--                  
 	<h:commandButton
 		id="Export_Mapping"
 		value="Export_Mapping"
@@ -500,19 +504,28 @@ if (stage.compareTo("draft") == 0) {
 		onclick="javascript:cursor_wait();"
 		alt="Export Mapping" >
 	</h:commandButton> 
-	
+-->
+
+<a href="javascript:exportToFile();">
+    <img src="<%= request.getContextPath() %>/images/continue.gif" alt="Continue" border="0">
+</a>
+
+
+<!--
 	&nbsp;
 	
 <a href="javascript:back();">
     <img src="<%= request.getContextPath() %>/images/back.gif" alt="Back" border="0">
 </a>	
-	
+
+<!--	
 	
 &nbsp;	
 <a href="javascript:exportToFile();">
     export
 </a>	
-	
+-->
+
                   </td>
                   <td></td>
                   
