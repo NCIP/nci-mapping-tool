@@ -49,6 +49,9 @@ public class MappingServlet extends HttpServlet {
 		if (action.compareTo("export") == 0 && format.compareTo("xml") == 0) {
 			 exportMappingToXMLAction(request, response);
 			 return;
+		} else if (action.compareTo("export") == 0 && format.compareTo("excel") == 0) {
+			 exportMappingToExcelAction(request, response);
+			 return;
 		}
 
         long ms = System.currentTimeMillis();
@@ -93,28 +96,17 @@ public class MappingServlet extends HttpServlet {
 
 
 
-    public void exportMappingToXMLAction(HttpServletRequest request, HttpServletResponse response ) {
+    public void exportMappingToExcelAction(HttpServletRequest request, HttpServletResponse response ) {
         new MappingBean().updateMapping(request);
 		String type = (String) request.getParameter("type");
 
         try {
         	//String xml = null;
 			StringBuffer sb = null;
-
 			response.setContentType("text/xml");
-/*
-			String mapping_name = (String) request.getParameter("identifier");
-			String mapping_version = (String) request.getParameter("mapping_version");
 
-System.out.println("mapping_name: " + mapping_name);
-System.out.println("mapping_version: " + mapping_version);
-
-
-			String key = MappingObject.computeKey(mapping_name, mapping_version);
-*/
 String key = (String) request.getParameter("key");
 System.out.println("key: " + key);
-
 
 String format = (String) request.getParameter("format");
 
@@ -127,7 +119,6 @@ String format = (String) request.getParameter("format");
 			}
 
 			HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
-
 			MappingObject obj = (MappingObject) mappings.get(key);
 
 if (obj == null) {
@@ -136,15 +127,8 @@ if (obj == null) {
 	System.out.println("obj.toXML() : " + obj.toXML());
 }
 
-
-
 			String mapping_name = obj.getName();
 			String mapping_version = obj.getVersion();
-
-
-
-
-			//xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 			String xml = "";
 
 			if (obj != null) {
@@ -174,16 +158,62 @@ System.out.println("mapping sb.length() : " + sb.length());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
-        //FacesContext.getCurrentInstance().responseComplete();
-		//return "export";
 	}
 
 
 
+    public void exportMappingToXMLAction(HttpServletRequest request, HttpServletResponse response ) {
+        new MappingBean().updateMapping(request);
+		String type = (String) request.getParameter("type");
+
+        try {
+
+			long ms = System.currentTimeMillis();
+
+			String identifier = (String) request.getParameter("identifier");
+			if (identifier == null) {
+				identifier = "mapping";
+			}
+			identifier = identifier + ".xls";
+
+			response.setContentType("application/vnd.ms-excel");
+			response.setHeader("Content-Disposition", "attachment; filename="
+						+ identifier);
+
+			PrintWriter out = response.getWriter();
+
+			  out.println("<table>");
+			  out.println("   <th class=\"dataTableHeader\" width=\"60px\" scope=\"col\" align=\"left\">Source</th>");
+			  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
+			  out.println("	  Source Code");
+			  out.println("   </th>");
+			  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
+			  out.println("	  Source Name");
+			  out.println("   </th>");
+			  out.println("   <th class=\"dataTableHeader\" width=\"30px\" scope=\"col\" align=\"left\">");
+			  out.println("	  REL");
+			  out.println("   </th>");
+			  out.println("   <th class=\"dataTableHeader\" width=\"35px\" scope=\"col\" align=\"left\">");
+			  out.println("	  Map Rank");
+			  out.println("   </th>");
+			  out.println("   <th class=\"dataTableHeader\" width=\"60px\" scope=\"col\" align=\"left\">Target</th>");
+			  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
+			  out.println("	  Target Code");
+			  out.println("   </th>");
+			  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
+			  out.println("	  Target Name");
+			  out.println("   </th>");
+			  out.println("</table>");
+
+            out.flush();
+			out.close();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+    }
+
 }
-
-
 
 
 /*
