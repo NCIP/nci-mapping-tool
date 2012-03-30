@@ -420,7 +420,7 @@ if (stage.compareTo("draft") == 0) {
 					 String t = status_options[i];
 					 if (t.compareTo(default_status) == 0) {
 				    %>
-					   <option value="<%=t%>"><%=t%></option>
+					   <option value="<%=t%>" selected="true"><%=t%></option>
 				    <%
 					 } else {
 				    %>
