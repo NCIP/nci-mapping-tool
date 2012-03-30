@@ -71,11 +71,6 @@
         history.go(-1);
     }
 
-    function ft() {
-        //history.go(-1);
-        alert("test");
-    }
-
     function exportToFile() {
     
         var key = document.getElementById("mappingKey");

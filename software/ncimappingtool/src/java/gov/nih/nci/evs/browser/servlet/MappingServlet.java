@@ -205,8 +205,10 @@ System.out.println("mapping sb.length() : " + sb.length());
 			  out.println("   </th>");
 			  out.println("</table>");
 
-            out.flush();
-			out.close();
+			  // Add mapping entries based on selected entry categories here -- to be implemented.
+
+              out.flush();
+			  out.close();
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
