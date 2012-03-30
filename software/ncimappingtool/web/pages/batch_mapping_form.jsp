@@ -1564,19 +1564,27 @@ if (show_refresh_button) {
 		<a href="<%=request.getContextPath()%>/pages/batch_mapping_form.jsf?action=collapseAll&mode=<%=mode%>">
 		   <img src="<%= request.getContextPath() %>/images/collapseAll.png" width="18" height="18" alt="Collapse All" border="0">
 		</a>
-	<%  
-	} 
-	%>
-
-
-
+		
+		
+&nbsp;		
 <a href="javascript:checkAll();">
     <img src="<%= request.getContextPath() %>/images/checkAll.gif" width="18" height="18" alt="Check All" border="0">
 </a>
 &nbsp;
 <a href="javascript:uncheckAll();">
     <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Uncheck All" border="0">
-</a>
+</a>		
+		
+		
+		
+		
+	<%  
+	} 
+	%>
+
+
+
+
 
 
 
