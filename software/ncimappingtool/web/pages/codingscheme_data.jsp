@@ -6,6 +6,8 @@
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.*" %>
+<%@ page import="gov.nih.nci.evs.browser.common.*" %>
+
 
 <%@ page import="org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
@@ -60,6 +62,13 @@ if (mapping_version != null && mapping_version.compareTo("null") == 0) {
 }
 
 String source_cs = (String) request.getSession().getAttribute("source_cs");
+
+boolean local_source = false;
+if (source_cs.compareTo(Constants.LOCAL_DATA) == 0) {
+    local_source = true;
+}
+
+
 String target_cs = (String) request.getSession().getAttribute("target_cs");
 String input_option = (String) request.getSession().getAttribute("input_option");
 if (input_option == null) {
@@ -77,20 +86,31 @@ if (algorithm != null && algorithm.compareTo("null") == 0) {
 }
 
 
-String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
-String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
-
+String source_scheme = null;
+String source_version = null;
+if (!local_source) {
+    source_scheme = DataUtils.key2CodingSchemeName(source_cs);
+    source_version = DataUtils.key2CodingSchemeVersion(source_cs);
+}
 
 String target_scheme = DataUtils.key2CodingSchemeName(target_cs);
 String target_version = DataUtils.key2CodingSchemeVersion(target_cs);
 
-
 Vector properties = OntologyBean.getSupportedPropertyNames(target_scheme, target_version);
 
-Vector src_properties = OntologyBean.getSupportedPropertyNames(source_scheme, source_version);
+Vector src_properties = null;
+String[] src_property = null;
+
+if (!local_source) {
+    src_properties = OntologyBean.getSupportedPropertyNames(source_scheme, source_version);
+    
+    src_property = (String[]) request.getSession().getAttribute("src_property");
+    if (src_property == null) {
+	    src_property = new String[1];
+	    src_property[0] = (String) src_properties.elementAt(0);
+    }
+}
 Vector target_properties = OntologyBean.getSupportedPropertyNames(target_scheme, target_version);
-
-
 
 String property = (String) request.getSession().getAttribute("property");
 if (property != null && property.compareTo("null") == 0) {
@@ -98,22 +118,6 @@ if (property != null && property.compareTo("null") == 0) {
 } else if (property == null) {
     property = "";
 }
-
-/*
-String src_property = (String) request.getSession().getAttribute("src_property");
-if (src_property != null && src_property.compareTo("null") == 0) {
-    src_property = "";
-} else if (src_property == null) {
-    src_property = "";
-}
-*/
-
-String[] src_property = (String[]) request.getSession().getAttribute("src_property");
-if (src_property == null) {
-    src_property = new String[1];
-    src_property[0] = (String) src_properties.elementAt(0);
-}
-
 
 
 String target_property = (String) request.getSession().getAttribute("target_property");
@@ -123,22 +127,16 @@ if (target_property != null && target_property.compareTo("null") == 0) {
     target_property = "";
 }
 
-
-
-
 String codes = "";
 
 String action = (String) request.getSession().getAttribute("action");
 if (action != null && action.compareTo("upload_data") == 0) {
    codes = (String) request.getSession().getAttribute("codes");
-   
-	if (codes != null && codes.compareTo("null") == 0) {
+   if (codes != null && codes.compareTo("null") == 0) {
 	    codes = "";
-	} else if (codes == null) {
+   } else if (codes == null) {
 	    codes = "";
-	}      
-   
-   
+   }      
 }
 
 else {
@@ -191,7 +189,11 @@ else {
            
                 <tr>
 		  <td align="left" class="textbody">
+		  
+		  
 		      <b>From</b>:&nbsp;<%=source_scheme%>&nbsp;(<%=source_version%>) 
+		      
+		      
 		  </td>
                           <td>
                       &nbsp;
@@ -435,12 +437,28 @@ if (input_option.compareToIgnoreCase("Property") == 0) {
      
      <input type="hidden" name="source_cs" id="source_cs" value="<%=source_cs%>">
      <input type="hidden" name="target_cs" id="target_cs" value="<%=target_cs%>">
-     <input type="hidden" name="input_option" id="input_option" value="<%=input_option%>">
+     
+     
+     
+     
      
      
      <input type="hidden" name="source_scheme" id="source_scheme" value="<%=source_scheme%>">
      <input type="hidden" name="source_version" id="source_version" value="<%=source_version%>">
     
+     <%
+     if (local_source) {
+     %>
+     	 <input type="hidden" name="local_source" id="local_source" value="true">
+     	 <input type="hidden" name="input_option" id="input_option" value="Name">
+     <%
+     } else {
+     %>
+         <input type="hidden" name="local_source" id="local_source" value="false">
+         <input type="hidden" name="input_option" id="input_option" value="Code">
+     <%
+     }
+     %>
      
      <%
      if (input_option.compareTo("Property") == 0) {

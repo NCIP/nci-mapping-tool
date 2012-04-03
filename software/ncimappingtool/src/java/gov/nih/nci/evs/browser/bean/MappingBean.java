@@ -930,8 +930,16 @@ System.out.println("submitMetadataAction type: " + type);
 	}
 
 
-
-
+    public HashMap parseInputData(List codes, int idx) {
+		HashMap hmap = new HashMap();
+		for (int i=0; i<codes.size(); i++) {
+			String code_name = (String) codes.get(i);
+			Vector v = DataUtils.parseData(code_name);
+			String name = (String) v.elementAt(idx);
+			hmap.put(code_name, name);
+		}
+		return hmap;
+	}
 
 
     public String showBatchFormAction() {
@@ -1060,7 +1068,11 @@ System.out.println("submitMetadataAction type: " + type);
 
 				HashMap code2name_hmap = DataUtils.code2Name(source_scheme, source_version, list);
 				request.getSession().setAttribute("code2name_hmap", code2name_hmap);
+			} else {
+				HashMap code2name_hmap = parseInputData(list, 1);
+				request.getSession().setAttribute("code2name_hmap", code2name_hmap);
 			}
+
 
 			request.getSession().setAttribute("identifier", identifier);
 			request.getSession().setAttribute("mapping_version", mapping_version);
@@ -1082,18 +1094,24 @@ System.out.println("submitMetadataAction type: " + type);
 			request.getSession().setAttribute("algorithm", algorithm);
 
 
-
 			if (list == null) {
 				String message = "No mapping data has been entered.";
 				request.getSession().setAttribute("message", message);
 				return "message";
 			}
 
-String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
-String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
+
+String source_scheme = Constants.LOCAL_DATA;
+String source_version = null;
+
+if (source_cs.compareTo(Constants.LOCAL_DATA) != 0) {
+	source_scheme = DataUtils.key2CodingSchemeName(source_cs);
+	source_version = DataUtils.key2CodingSchemeVersion(source_cs);
+}
 
 String target_scheme = DataUtils.key2CodingSchemeName(target_cs);
 String target_version = DataUtils.key2CodingSchemeVersion(target_cs);
+
 
 			request.getSession().setAttribute("source_scheme", source_scheme);
 			request.getSession().setAttribute("source_version", source_version);
