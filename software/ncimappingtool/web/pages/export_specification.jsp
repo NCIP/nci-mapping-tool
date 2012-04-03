@@ -444,7 +444,7 @@ if (stage.compareTo("draft") == 0) {
 	    </li>	    
 	    
 	    <li>
-	    <input type="radio" name="format" id="excel" value="excel" alt="Microsoft Excel" >Microsoft&#174; Excel&nbsp;
+	    <input type="radio" name="format" id="excel" value="excel" alt="Microsoft Excel" >Microsoft<sup>&#174;</sup> Excel&nbsp;
 	    </li>
 
    
@@ -474,7 +474,7 @@ if (stage.compareTo("draft") == 0) {
 	    </li>	    
 	    
 	    <li>
-	    <input type="radio" name="format2" id="final_excel" value="excel" alt="Microsoft Excel" >Microsoft&#174; Excel&nbsp;
+	    <input type="radio" name="format2" id="final_excel" value="excel" alt="Microsoft Excel" >Microsoft<sup>&#174;</sup> Excel&nbsp;
 	    </li>
 	    </ul>
 	  </td>
@@ -506,20 +506,12 @@ if (stage.compareTo("draft") == 0) {
 </a>
 
 
-<!--
 	&nbsp;
 	
 <a href="javascript:back();">
     <img src="<%= request.getContextPath() %>/images/back.gif" alt="Back" border="0">
 </a>	
 
-<!--	
-	
-&nbsp;	
-<a href="javascript:exportToFile();">
-    export
-</a>	
--->
 
                   </td>
                   <td></td>

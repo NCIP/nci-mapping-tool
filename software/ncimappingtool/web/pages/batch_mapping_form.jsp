@@ -64,7 +64,7 @@
   
   <script type="text/javascript">
   
-	function checkAll() {
+	function checkAllBoxes() {
 	    var size = document.getElementById("size");
       	    var size_str = size.value;
 	    var m = parseInt(size_str);
@@ -78,15 +78,17 @@
 			for (j=0; j<n; j++) {
 			   var checkbox_name = "checkbox" + "_" + i + "_" + j;
 			   var checkbox = document.getElementById(checkbox_name);
+			   
 			   if(checkbox != null) {
 			   	checkbox.checked = 1;
 			   } 
+			   
 			}
 	        } 
 	    }
 	}
 
-	function uncheckAll() {
+	function uncheckAllBoxes() {
 	    var size = document.getElementById("size");
       	    var size_str = size.value;
 	    var m = parseInt(size_str);
@@ -837,11 +839,11 @@ if (show_refresh_button) {
         &nbsp;
 
 
-<a href="javascript:checkAll();">
+<a href="javascript:checkAllBoxes();">
     <img src="<%= request.getContextPath() %>/images/checkAll.gif" width="18" height="18" alt="Check All (Global)" border="0">
 </a>
 &nbsp;
-<a href="javascript:uncheckAll();">
+<a href="javascript:uncheckAllBoxes();">
     <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Uncheck All (Global)" border="0">
 </a>
 
@@ -1567,14 +1569,13 @@ if (show_refresh_button) {
 		
 		
 &nbsp;		
-<a href="javascript:checkAll();">
-    <img src="<%= request.getContextPath() %>/images/checkAll.gif" width="18" height="18" alt="Check All" border="0">
+<a href="javascript:checkAllBoxes();">
+    <img src="<%= request.getContextPath() %>/images/checkAll.gif" width="18" height="18" alt="Check All (Global)" border="0">
 </a>
 &nbsp;
-<a href="javascript:uncheckAll();">
-    <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Uncheck All" border="0">
+<a href="javascript:uncheckAllBoxes();">
+    <img src="<%= request.getContextPath() %>/images/uncheckAll.gif" width="18" height="18" alt="Uncheck All (Global)" border="0">
 </a>		
-		
 		
 		
 		
