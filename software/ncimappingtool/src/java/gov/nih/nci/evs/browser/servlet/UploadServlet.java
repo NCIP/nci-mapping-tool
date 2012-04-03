@@ -160,12 +160,10 @@ public final class UploadServlet extends HttpServlet {
         String type = (String) request.getParameter("type");
 
 
- System.out.println("(*) in UploadServlet ...action " + action);
+System.out.println("(*) UploadServlet ...action " + action);
         if (action == null) {
 			action = "upload_data";
 		}
-
-System.out.println("(*) in UploadServlet ...action " + action);
 
 		DiskFileItemFactory  fileItemFactory = new DiskFileItemFactory ();
 		/*
@@ -207,10 +205,6 @@ System.out.println("(*) in UploadServlet ...action " + action);
 
 					request.getSession().setAttribute("action", action);
 
-
-System.out.println("************ #1 action " + action );
-
-
 					if (action.compareTo("upload_data") == 0) {
 						request.getSession().setAttribute("codes", s);
 					} else {
@@ -238,8 +232,6 @@ System.out.println("************ #1 action " + action );
 
         long ms = System.currentTimeMillis();
 
-System.out.println("************ #2 action " + action );
-
         if (action.compareTo("upload_data") == 0) {
 			if (type.compareTo("codingscheme") == 0) {
         		response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/pages/codingscheme_data.jsf"));
@@ -253,14 +245,5 @@ System.out.println("************ #2 action " + action );
 
     }
 
-
-    /*
-    private void redirectToErrorPage(HttpServletRequest _request,
-        HttpServletResponse _response) throws IOException {
-        if (!"".equals(_errorPage)) {
-            _response.sendRedirect(_request.getContextPath() + _errorPage);
-        }
-    }
-    */
 
 }

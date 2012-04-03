@@ -414,7 +414,6 @@ if (id != null) {
 	source_cs = (String) request.getSession().getAttribute("source_cs");
 	target_cs = (String) request.getSession().getAttribute("target_cs");	
 
-
 	source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 	source_version = DataUtils.key2CodingSchemeVersion(source_cs);
 
@@ -444,9 +443,7 @@ String input_option_label = input_option;
 input_option_label = input_option_label.toLowerCase();
 List list = (ArrayList) request.getSession().getAttribute("data");
 
-
-
-if (type.compareTo("codingscheme") == 0) {
+if (type.compareTo("codingscheme") == 0  && input_option.compareTo("Code") == 0) {
     status_map = DataUtils.getPropertyValuesInBatch(source_scheme, source_version, "Concept_Status", list);
 }
 
@@ -471,7 +468,8 @@ if (mapping_hmap == null) {
 
 if (list != null && list.size() > 0) {
     if (input_option.compareToIgnoreCase("Code") == 0) {
-	    if (source_scheme != null && source_scheme.compareTo("") != 0) {
+	    if (source_scheme != null && source_scheme.compareTo("") != 0 && source_scheme.compareTo("Constants.LOCAL_DATA") != 0) {
+	            
 		    code2name_hmap = DataUtils.code2Name(source_scheme, source_version, list);
 		    request.getSession().setAttribute("code2name_hmap", code2name_hmap);
 	    }
@@ -482,8 +480,8 @@ if (list != null && list.size() > 0) {
 if (input_option.compareToIgnoreCase("Code") == 0) {
     code2name_hmap = (HashMap) request.getSession().getAttribute("code2name_hmap");
     if (code2name_hmap == null) {
-	code2name_hmap =DataUtils.code2Name(source_scheme, source_version, list);
-	request.getSession().setAttribute("code2name_hmap", code2name_hmap);
+		code2name_hmap = DataUtils.code2Name(source_scheme, source_version, list);
+		request.getSession().setAttribute("code2name_hmap", code2name_hmap);
     }
 }  
 
@@ -771,7 +769,7 @@ if (!readonly && !show_refresh_button) {
 <%
 
 
-if (type.compareTo("codingscheme") == 0& !show_refresh_button) {				    
+if (type.compareTo("codingscheme") == 0& !show_refresh_button &&  source_scheme.compareTo(Constants.LOCAL_DATA) != 0) {				    
 %>				    
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				    <td align="right" class="textbody10">
