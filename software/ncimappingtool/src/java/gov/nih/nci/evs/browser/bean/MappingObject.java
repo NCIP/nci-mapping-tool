@@ -417,6 +417,34 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 
 
+        public List<MappingData> getMappingData(Vector options) {
+            List list = new ArrayList();
+
+            for (int k=0; k<_data.size(); k++) {
+			    String input_data = (String) _data.get(k);
+
+			    List<MappingEntry> entries = new ArrayList();
+			    List selected_matches = (ArrayList) _mapping_hmap.get(input_data);
+
+			    if (selected_matches != null) {
+				    for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
+						MappingData mappingData = (MappingData) selected_matches.get(lcv2);
+
+						String status = mappingData.getStatus();
+						if (options.contains(status)) {
+						    list.add(mappingData);
+						}
+					}
+			    }
+		    }
+		    return list;
+	   }
+
+
+
+
+
+
         public Vector<MappingEntry> getMappingEntries(Vector options) {
 
             Vector<MappingEntry> w = new Vector();

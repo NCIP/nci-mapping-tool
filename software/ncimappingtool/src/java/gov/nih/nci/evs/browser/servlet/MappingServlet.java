@@ -11,6 +11,8 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import gov.nih.nci.evs.browser.bean.*;
+import gov.nih.nci.evs.browser.utils.*;
+
 
 
 public class MappingServlet extends HttpServlet {
@@ -48,55 +50,114 @@ public class MappingServlet extends HttpServlet {
 
 		if (action.compareTo("export") == 0 && format.compareTo("xml") == 0) {
 			 exportMappingToXMLAction(request, response);
-			 return;
 		} else if (action.compareTo("export") == 0 && format.compareTo("excel") == 0) {
 			 exportMappingToExcelAction(request, response);
-			 return;
+		} else if (action.compareTo("export") == 0 && format.compareTo("lexgrid_xml") == 0) {
+			 exportMappingToLexGridAction(request, response);
 		}
-
-        long ms = System.currentTimeMillis();
-
-        String identifier = (String) request.getParameter("identifier");
-        if (identifier == null) {
-		    identifier = "mapping";
-		}
-		identifier = identifier + ".xls";
-
-		response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-Disposition", "attachment; filename="
-                    + identifier);
-
-        PrintWriter out = response.getWriter();
-
-      out.println("<table>");
-      out.println("   <th class=\"dataTableHeader\" width=\"60px\" scope=\"col\" align=\"left\">Source</th>");
-      out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
-      out.println("	  Source Code");
-      out.println("   </th>");
-      out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
-      out.println("	  Source Name");
-      out.println("   </th>");
-      out.println("   <th class=\"dataTableHeader\" width=\"30px\" scope=\"col\" align=\"left\">");
-      out.println("	  REL");
-      out.println("   </th>");
-      out.println("   <th class=\"dataTableHeader\" width=\"35px\" scope=\"col\" align=\"left\">");
-      out.println("	  Map Rank");
-      out.println("   </th>");
-      out.println("   <th class=\"dataTableHeader\" width=\"60px\" scope=\"col\" align=\"left\">Target</th>");
-      out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
-      out.println("	  Target Code");
-      out.println("   </th>");
-      out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
-      out.println("	  Target Name");
-      out.println("   </th>");
-      out.println("</table>");
-
 
    }
 
 
 
+
+
+
+
+
     public void exportMappingToExcelAction(HttpServletRequest request, HttpServletResponse response ) {
+
+System.out.println("exportMappingToMSExcelAction ...");
+
+        new MappingBean().updateMapping(request);
+		String type = (String) request.getParameter("type");
+
+        try {
+
+			long ms = System.currentTimeMillis();
+
+String key = (String) request.getParameter("key");
+System.out.println("key: " + key);
+
+
+            String[] entry_status = request.getParameterValues("entry_status");
+
+
+			HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
+			if (mappings == null) {
+				System.out.println("exportMappingToMSExcelAction mappings == null ???");
+
+				mappings = new HashMap();
+				request.getSession().setAttribute("mappings", mappings);
+			}
+
+			HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
+			MappingObject obj = (MappingObject) mappings.get(key);
+
+if (obj == null) {
+	System.out.println("mapping obj cannot be found for key : " + key);
+
+}
+
+			String identifier = obj.getName();
+			//String mapping_version = obj.getVersion();
+
+
+			//String identifier = (String) request.getParameter("identifier");
+			if (identifier == null) {
+				identifier = "mapping";
+			}
+			identifier = identifier + ".xls";
+
+			response.setContentType("application/vnd.ms-excel");
+
+			response.setHeader("Content-Disposition", "attachment; filename="
+						+ identifier);
+
+              PrintWriter out = response.getWriter();
+
+			  out.println("<table>");
+			  out.println("   <th class=\"dataTableHeader\" width=\"60px\" scope=\"col\" align=\"left\">Source</th>");
+			  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
+			  out.println("	  Source Code");
+			  out.println("   </th>");
+			  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
+			  out.println("	  Source Name");
+			  out.println("   </th>");
+			  out.println("   <th class=\"dataTableHeader\" width=\"30px\" scope=\"col\" align=\"left\">");
+			  out.println("	  REL");
+			  out.println("   </th>");
+			  out.println("   <th class=\"dataTableHeader\" width=\"35px\" scope=\"col\" align=\"left\">");
+			  out.println("	  Map Rank");
+			  out.println("   </th>");
+			  out.println("   <th class=\"dataTableHeader\" width=\"60px\" scope=\"col\" align=\"left\">Target</th>");
+			  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
+			  out.println("	  Target Code");
+			  out.println("   </th>");
+			  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
+			  out.println("	  Target Name");
+			  out.println("   </th>");
+			  out.println("</table>");
+
+			  // Add mapping entries based on selected entry categories here -- to be implemented.
+
+
+			  out.flush();
+			  out.close();
+
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+  }
+
+
+
+
+
+
+    public void exportMappingToXMLAction(HttpServletRequest request, HttpServletResponse response ) {
         new MappingBean().updateMapping(request);
 		String type = (String) request.getParameter("type");
 
@@ -110,6 +171,8 @@ System.out.println("key: " + key);
 
 String format = (String) request.getParameter("format");
 
+            String[] entry_status = request.getParameterValues("entry_status");
+
 			HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
 			if (mappings == null) {
 				System.out.println("exportMappingToXMLAction mappings == null ???");
@@ -121,11 +184,9 @@ String format = (String) request.getParameter("format");
 			HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
 			MappingObject obj = (MappingObject) mappings.get(key);
 
-if (obj == null) {
-	System.out.println("mapping obj cannot be found for key : " + key);
-} else {
-	System.out.println("obj.toXML() : " + obj.toXML());
-}
+			if (obj == null) {
+				System.out.println("mapping obj cannot be found for key : " + key);
+			}
 
 			String mapping_name = obj.getName();
 			String mapping_version = obj.getVersion();
@@ -162,121 +223,69 @@ System.out.println("mapping sb.length() : " + sb.length());
 
 
 
-    public void exportMappingToXMLAction(HttpServletRequest request, HttpServletResponse response ) {
+
+    public void exportMappingToLexGridAction(HttpServletRequest request, HttpServletResponse response ) {
         new MappingBean().updateMapping(request);
 		String type = (String) request.getParameter("type");
 
         try {
+        	//String xml = null;
+			StringBuffer sb = null;
+			response.setContentType("text/xml");
 
-			long ms = System.currentTimeMillis();
+String key = (String) request.getParameter("key");
+System.out.println("key: " + key);
 
-			String identifier = (String) request.getParameter("identifier");
-			if (identifier == null) {
-				identifier = "mapping";
+String format = (String) request.getParameter("format");
+
+			HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
+			if (mappings == null) {
+				System.out.println("exportMappingToXMLAction mappings == null ???");
+
+				mappings = new HashMap();
+				request.getSession().setAttribute("mappings", mappings);
 			}
-			identifier = identifier + ".xls";
 
-			response.setContentType("application/vnd.ms-excel");
+			HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
+			MappingObject obj = (MappingObject) mappings.get(key);
+
+			String mapping_name = obj.getName();
+			String mapping_version = obj.getVersion();
+
+			mapping_name = mapping_name.replaceAll(" ", "_");
+			mapping_name = mapping_name + ".xml";
+
 			response.setHeader("Content-Disposition", "attachment; filename="
-						+ identifier);
+					+ mapping_name);
 
-			PrintWriter out = response.getWriter();
+            PrintWriter out = response.getWriter();
 
-			  out.println("<table>");
-			  out.println("   <th class=\"dataTableHeader\" width=\"60px\" scope=\"col\" align=\"left\">Source</th>");
-			  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
-			  out.println("	  Source Code");
-			  out.println("   </th>");
-			  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
-			  out.println("	  Source Name");
-			  out.println("   </th>");
-			  out.println("   <th class=\"dataTableHeader\" width=\"30px\" scope=\"col\" align=\"left\">");
-			  out.println("	  REL");
-			  out.println("   </th>");
-			  out.println("   <th class=\"dataTableHeader\" width=\"35px\" scope=\"col\" align=\"left\">");
-			  out.println("	  Map Rank");
-			  out.println("   </th>");
-			  out.println("   <th class=\"dataTableHeader\" width=\"60px\" scope=\"col\" align=\"left\">Target</th>");
-			  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
-			  out.println("	  Target Code");
-			  out.println("   </th>");
-			  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
-			  out.println("	  Target Name");
-			  out.println("   </th>");
-			  out.println("</table>");
+            String source_cs_uri = DataUtils.codingSchemeName2URI(obj.getFromCS());//"source_cs_uri_to_be_determined";
+            String target_cs_uri = DataUtils.codingSchemeName2URI(obj.getToCS());//"target_cs_uri_to_be_determined";
 
-			  // Add mapping entries based on selected entry categories here -- to be implemented.
+  			LexGridXMLGenerator.writeHeader(out, obj.getName(), obj.getVersion(),
+                                       		obj.getFromCS(), source_cs_uri,
+                                       		obj.getToCS(), target_cs_uri);
 
-              out.flush();
-			  out.close();
+            Vector options = new Vector();
+
+            //String[] entry_status = request.getParameterValues("entry_status");
+
+            options.add("Valid");
+            //options.add("Invalid");
+            List<MappingData> list = obj.getMappingData(options);
+
+            LexGridXMLGenerator.writeContent(out, obj.getName(),
+                                             obj.getFromCS(), obj.getToCS(), list);
+
+			out.flush();
+			out.close();
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-    }
+	}
 
 }
 
-
-/*
-<<table>
-   <th class="dataTableHeader" width="60px" scope="col" align="left">Source</th>
-   <th class="dataTableHeader" scope="col" align="left">
-	  Source Code
-   </th>
-   <th class="dataTableHeader" scope="col" align="left">
-	  Source Name
-   </th>
-   <th class="dataTableHeader" width="30px" scope="col" align="left">
-	  REL
-   </th>
-   <th class="dataTableHeader" width="35px" scope="col" align="left">
-	  Map Rank
-   </th>
-   <th class="dataTableHeader" width="60px" scope="col" align="left">Target</th>
-   <th class="dataTableHeader" scope="col" align="left">
-	  Target Code
-   </th>
-   <th class="dataTableHeader" scope="col" align="left">
-	  Target Name
-   </th>
-</table>
-
-
-		   for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
-		         String rel_id = "rel" + "_" + lcv + "_" + lcv2;
-		         String score_id = "score" + "_" + lcv + "_" + lcv2;
-		         String idx2_str = new Integer(lcv2).toString();
-				 mappingData = (MappingData) selected_matches.get(lcv2);
-				 source_code = mappingData.getSourceCode();
-				 source_name = mappingData.getSourceName();
-				 source_namespace = mappingData.getSourceCodeNamespace();
-				 rel = mappingData.getRel();
-				 if (DataUtils.isNull(rel)) rel = "";
-				 score = new Integer(mappingData.getScore()).toString();
-				 target_code = mappingData.getTargetCode();
-				 target_name = mappingData.getTargetName();
-				 target_namespace = mappingData.getTargetCodeNamespace();
-				 source_scheme = mappingData.getSourceCodingScheme();
-				 source_version = mappingData.getSourceCodingSchemeVersion();
-				 target_scheme = mappingData.getTargetCodingScheme();
-				 target_version = mappingData.getTargetCodingSchemeVersion();
-				 source_scheme = DataUtils.getFormalName(source_scheme);
-				 target_scheme = DataUtils.getFormalName(target_scheme);
-				 target_codingscheme = target_scheme;
-				 target_codingschemeversion = target_version;
-
-			 <tr>
-			 	<td class="datacoldark"><%=source_namespace%></td>
-			 	<td class="datacoldark"><%=source_namespace%></td>
-			 	<td class="datacoldark"><%=source_namespace%></td>
-			 	<td class="datacoldark"><%=source_namespace%></td>
-			 	<td class="datacoldark"><%=source_namespace%></td>
-			 	<td class="datacoldark"><%=source_namespace%></td>
-			 </tr>
-		   }
-
-
-</table>
-*/
 
