@@ -1070,8 +1070,16 @@ if (input_option.compareToIgnoreCase("Code") == 0) {
 
     }
 } else {
+     String input_data_label = input_data;
+     if (input_data.indexOf("|") != -1) {
+           Vector v = DataUtils.parseData(input_data);
+           String s1 = (String) v.elementAt(0);
+           String s2 = (String) v.elementAt(1);
+           input_data_label = s1 + " (" + s2 + ")";
+     }
+
 %>			
-    <td class="textbody"><%=item_label%>. &nbsp;<%=input_data%>
+    <td class="textbody"><%=item_label%>. &nbsp;<%=input_data_label%>
 <%    
 }
 %>
