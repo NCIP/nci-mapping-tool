@@ -697,9 +697,34 @@ System.out.println("Output file " + outputfile + " generated.");
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 	public static Entity getLocalConceptByCode(String codingSchemeName, String vers, String ltag, String code)
+	{
+		 Entity entity = new Entity();
+		 if (code.indexOf("|") != -1) {
+			   Vector v = DataUtils.parseData(code);
+			   String s1 = (String) v.elementAt(0);
+			   String s2 = (String) v.elementAt(1);
+
+               entity.setEntityCode(s1);
+               entity.setEntityCodeNamespace(codingSchemeName);
+
+               EntityDescription entityDescription = new EntityDescription();
+               entityDescription.setContent(s2);
+               entity.setEntityDescription(entityDescription);
+
+               return entity;
+
+		 }
+		 return null;
+	}
+
 
  	public static Entity getConceptByCode(String codingSchemeName, String vers, String ltag, String code)
 	{
+		if (code.indexOf("|") != -1) {
+			return getLocalConceptByCode(codingSchemeName, vers, ltag, code);
+		}
+
         try {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			if (lbSvc == null)
