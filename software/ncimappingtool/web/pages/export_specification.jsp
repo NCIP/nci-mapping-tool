@@ -475,9 +475,15 @@ if (stage.compareTo("draft") == 0) {
 	    <input type="radio" name="format2" id="final_xml" value="xml" alt="XML" >XML
 	    </li>		  
 	  
+<%	  
+if (!DataUtils.isNull(source_scheme) && source_scheme.compareTo("LOCAL DATA") != 0) {	  
+%>	  
 	    <li>
 	    <input type="radio" name="format2" id="final_lexgrid_xml" value="lexgrid_xml" alt="LexGrid XML" checked>LexGrid XML
 	    </li>	    
+<%	    
+}
+%>
 	    
 	    <li>
 	    <input type="radio" name="format2" id="final_excel" value="excel" alt="Microsoft Excel" >Microsoft<sup>&#174;</sup> Excel&nbsp;
