@@ -215,6 +215,9 @@
 
 <%
 
+String input_data_label = null;
+boolean is_local_data = false;
+
 String source_scheme = null;
 String source_version = null;
 String source_namespace = null;
@@ -975,6 +978,18 @@ if (!show_refresh_button) {
         idx1_str = new Integer(lcv).toString();
  
         input_data = (String) list.get(lcv);
+        
+        
+input_data_label = input_data;
+if (input_data.indexOf("|") != -1) {
+   Vector v = DataUtils.parseData(input_data);
+   String s1 = (String) v.elementAt(0);
+   String s2 = (String) v.elementAt(1);
+   input_data_label = s1 + " (" + s2 + ")";
+   is_local_data = true;
+}        
+        
+        
         selected_matches = (ArrayList) mapping_hmap.get(input_data);
         
         String concept_status = null;
@@ -1070,13 +1085,6 @@ if (input_option.compareToIgnoreCase("Code") == 0) {
 
     }
 } else {
-     String input_data_label = input_data;
-     if (input_data.indexOf("|") != -1) {
-           Vector v = DataUtils.parseData(input_data);
-           String s1 = (String) v.elementAt(0);
-           String s2 = (String) v.elementAt(1);
-           input_data_label = s1 + " (" + s2 + ")";
-     }
 
 %>			
     <td class="textbody"><%=item_label%>. &nbsp;<%=input_data_label%>
@@ -1293,11 +1301,7 @@ if (!readonly) {
 
 			 mappingData = (MappingData) selected_matches.get(lcv2);
 
-/*
-if (mappingData.getStatus() == null) {
-    mappingData.setStatus("Pending");
-}
-*/
+
 
 boolean show_entry = false;		 
 if (show_options.contains(mappingData.getStatus())) {
@@ -1345,7 +1349,7 @@ target_codingschemeversion = target_version;
 			 
 			 
 <%
-if (source_code.compareTo("N/A") != 0) {
+if (source_code.compareTo("N/A") != 0 && !is_local_data) {
 
 %>
 
