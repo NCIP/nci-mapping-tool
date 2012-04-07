@@ -213,8 +213,14 @@ MappingObject obj = (MappingObject) mappings.get(mappingKey);
 		    	request.getSession().setAttribute("target_verson", target_version);
 		    }	
 
-		    source_cs = source_scheme + " (version: " + source_version + ")";
-		    request.getSession().setAttribute("source_cs", source_cs);
+
+source_cs = source_scheme + " (version: " + source_version + ")";
+request.getSession().setAttribute("source_cs", source_cs);
+
+if (DataUtils.isNull(source_version)) {
+		    source_cs = source_scheme + " (version: unspecified" + ")";
+} 
+	    
 
 		    target_cs = target_scheme + " (version: " + target_version + ")";
 		    request.getSession().setAttribute("target_cs", target_cs);
