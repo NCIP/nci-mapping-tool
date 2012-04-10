@@ -137,11 +137,48 @@ if (obj == null) {
 			  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
 			  out.println("	  Target Name");
 			  out.println("   </th>");
-			  out.println("</table>");
 
+
+              Vector options = new Vector();
+              //String[] entry_status = request.getParameterValues("entry_status");
+              options.add("Valid");
 			  // Add mapping entries based on selected entry categories here -- to be implemented.
+              List<MappingData> list = obj.getMappingData(options);
+
+              for (int i=0; i<list.size(); i++) {
+
+				  MappingData md = (MappingData) list.get(i);
+				  String sourceCode = md.getSourceCode();
+				  String sourceName = md.getSourceName();
+				  //String sourceCodingScheme,
+				  //String sourceCodingSchemeVersion,
+				  String sourceCodeNamespace = md.getSourceCodeNamespace();
+				  //String associationName,
+				  String rel = md.getRel();
+				  int score = md.getScore();
+				  String score_obj = new Integer(score).toString();
+				  String targetCode = md.getTargetCode();
+				  String targetName = md.getTargetName();
+				  //String targetCodingScheme,
+				  //String targetCodingSchemeVersion,
+				  String targetCodeNamespace = md.getTargetCodeNamespace();
 
 
+      out.println("			      <tr>");
+      out.println("			          <td>" + sourceCodeNamespace + "</td>");
+      out.println("			          <td>" + sourceCode + "</td>");
+      out.println("			          <td>" + sourceName + "</td>");
+      out.println("			          <td>" + rel + "</td>");
+      out.println("			          <td>" + score_obj + "</td>");
+      out.println("			          <td>" + targetCodeNamespace + "</td>");
+      out.println("			          <td>" + targetCode + "</td>");
+      out.println("			          <td>" + targetName + "</td>");
+      out.println("			      </tr>");
+
+
+
+			  }
+			  out.println("</table>");
 			  out.flush();
 			  out.close();
 
