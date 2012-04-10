@@ -67,9 +67,9 @@ public class MappingServlet extends HttpServlet {
 
     public void exportMappingToExcelAction(HttpServletRequest request, HttpServletResponse response ) {
 
-System.out.println("exportMappingToMSExcelAction ...");
+System.out.println("exportMappingToExcelAction ...");
 
-        new MappingBean().updateMapping(request);
+        //new MappingBean().updateMapping(request);
 		String type = (String) request.getParameter("type");
 
         try {
@@ -155,6 +155,10 @@ if (obj == null) {
 				  String sourceCodeNamespace = md.getSourceCodeNamespace();
 				  //String associationName,
 				  String rel = md.getRel();
+
+System.out.println("MappingServlet rel: " + rel);
+
+
 				  int score = md.getScore();
 				  String score_obj = new Integer(score).toString();
 				  String targetCode = md.getTargetCode();
@@ -195,7 +199,7 @@ if (obj == null) {
 
 
     public void exportMappingToXMLAction(HttpServletRequest request, HttpServletResponse response ) {
-        new MappingBean().updateMapping(request);
+        //new MappingBean().updateMapping(request);
 		String type = (String) request.getParameter("type");
 
         try {
@@ -262,7 +266,7 @@ System.out.println("mapping sb.length() : " + sb.length());
 
 
     public void exportMappingToLexGridAction(HttpServletRequest request, HttpServletResponse response ) {
-        new MappingBean().updateMapping(request);
+        //new MappingBean().updateMapping(request);
 		String type = (String) request.getParameter("type");
 
         try {
