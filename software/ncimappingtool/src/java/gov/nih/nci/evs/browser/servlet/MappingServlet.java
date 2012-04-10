@@ -213,6 +213,9 @@ System.out.println("key: " + key);
 String format = (String) request.getParameter("format");
 
             String[] entry_status = request.getParameterValues("entry_status");
+            Vector options = toVector(entry_status);
+
+
 
 			HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
 			if (mappings == null) {
@@ -235,9 +238,8 @@ String format = (String) request.getParameter("format");
 
 			if (obj != null) {
 				obj.setStatusHashMap(status_hmap);
-
 				sb = new StringBuffer(xml);
-				sb = sb.append(obj.toXML());
+				sb = sb.append(obj.toXML(options));
 			}
 
 			mapping_name = mapping_name.replaceAll(" ", "_");
@@ -262,6 +264,18 @@ System.out.println("mapping sb.length() : " + sb.length());
 		}
 	}
 
+
+
+    private Vector toVector(String[] entry_status) {
+		Vector options = new Vector();
+		if (entry_status != null) {
+			for (int i = 0; i < entry_status.length; ++i) {
+				String t = (String) entry_status[i];
+				options.add(t);
+			}
+		}
+		return options;
+	}
 
 
 
@@ -308,11 +322,10 @@ String format = (String) request.getParameter("format");
                                        		obj.getFromCS(), source_cs_uri,
                                        		obj.getToCS(), target_cs_uri);
 
-            Vector options = new Vector();
+            String[] entry_status = request.getParameterValues("entry_status");
+            Vector options = toVector(entry_status);
 
-            //String[] entry_status = request.getParameterValues("entry_status");
-
-            options.add("Valid");
+            //options.add("Valid");
             //options.add("Invalid");
             List<MappingData> list = obj.getMappingData(options);
 

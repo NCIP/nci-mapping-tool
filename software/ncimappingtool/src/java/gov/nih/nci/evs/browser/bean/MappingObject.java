@@ -329,11 +329,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
            String m_description = this._name + " (version: " + this._version + ")";
 
            List<MappingElement> mappingElements = new ArrayList();
-/*
-           Iterator it = _mapping_hmap.keySet().iterator();
-           while (it.hasNext()) {
-			   String input_data = (String) it.next();
-*/
+
            for (int k=0; k<_data.size(); k++) {
 			   String input_data = (String) _data.get(k);
 
@@ -414,6 +410,103 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 			String xml = xstream_xml.toXML(mapping);
 			return xml;
 		}
+
+
+
+        public String toXML(Vector entry_status_vec) {
+		   if (entry_status_vec == null || entry_status_vec.size() == 0) {
+			   return toXML();
+		   }
+
+
+           String m_description = this._name + " (version: " + this._version + ")";
+
+           List<MappingElement> mappingElements = new ArrayList();
+
+           for (int k=0; k<_data.size(); k++) {
+			   String input_data = (String) _data.get(k);
+
+			   List<MappingEntry> entries = new ArrayList();
+			   List selected_matches = (ArrayList) _mapping_hmap.get(input_data);
+
+			   if (selected_matches != null) {
+				   for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
+						 MappingData mappingData = (MappingData) selected_matches.get(lcv2);
+
+						 if (entry_status_vec.contains(mappingData.getStatus())) {
+
+							 String source_code = mappingData.getSourceCode();
+							 String source_name = mappingData.getSourceName();
+							 String source_namespace = mappingData.getSourceCodeNamespace();
+
+							 String associationName = "mapsTo";
+							 String rel = mappingData.getRel();
+							 if (DataUtils.isNull(rel)) rel = "";
+							 int score = mappingData.getScore();
+							 String target_code = mappingData.getTargetCode();
+							 String target_name = mappingData.getTargetName();
+							 String target_namespace = mappingData.getTargetCodeNamespace();
+
+							 String source_scheme = mappingData.getSourceCodingScheme();
+							 String source_version = mappingData.getSourceCodingSchemeVersion();
+							 String target_scheme = mappingData.getTargetCodingScheme();
+							 String target_version = mappingData.getTargetCodingSchemeVersion();
+
+							 source_scheme = DataUtils.getFormalName(source_scheme);
+							 target_scheme = DataUtils.getFormalName(target_scheme);
+
+							 MappingEntry mappingEntry = new MappingEntry(
+								source_code,
+								source_name,
+								source_scheme,
+								source_version,
+								source_namespace,
+								associationName,
+								rel,
+								score,
+								target_code,
+								target_name,
+								target_scheme,
+								target_version,
+								target_namespace);
+
+							 mappingEntry.setComment(mappingData.getComment());
+							 entries.add(mappingEntry);
+					     }
+					 }
+				 }
+
+                 String status = null;
+                 if (_status_hmap.containsKey(input_data)) {
+	                 status = (String) _status_hmap.get(input_data);
+				 }
+				 MappingElement element = new MappingElement(input_data, status, entries);
+				 mappingElements.add(element);
+			}
+
+
+		    Mapping mapping = new Mapping(
+				this._type,
+				this._name,
+				this._version,
+				m_description,
+				this._from_cs,
+				this._from_version,
+				this._to_cs,
+				this._to_version,
+				this._ncim_version,
+				this._vsdURI,
+				this._valueSetDefinitionName,
+				this._creation_date,
+				this._uuid,
+				this._status,
+				mappingElements);
+
+			XStream xstream_xml = new XStream(new DomDriver());
+			String xml = xstream_xml.toXML(mapping);
+			return xml;
+		}
+
 
 
 
