@@ -1293,6 +1293,9 @@ if (!readonly) {
 		   for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
 		   
 		         String rel_id = "rel" + "_" + lcv + "_" + lcv2;
+		         
+System.out.println("rel_id: " + rel_id);
+		         
 		         String score_id = "score" + "_" + lcv + "_" + lcv2;
 		         
 		         String checkbox_name = "checkbox" + "_" + lcv + "_" + lcv2;
@@ -1317,7 +1320,9 @@ if (show_entry) {
 			 rel = mappingData.getRel();
 			 
 			 
-			 if (DataUtils.isNull(rel)) rel = "";
+			 if (DataUtils.isNull(rel)) {
+			     rel = "SY";
+			 }
 			 score = new Integer(mappingData.getScore()).toString();
 			 target_code = mappingData.getTargetCode();
 			 target_name = mappingData.getTargetName();
@@ -1381,7 +1386,7 @@ if (source_code.compareTo("N/A") != 0 && !is_local_data) {
 				    String[] rel_options = DataUtils.rel_options;
 				    for (int i=0; i<rel_options.length; i++) {
 					 String t = rel_options[i];
-					 if (t.compareTo(rel) == 0) {
+					 if (t.compareToIgnoreCase(rel) == 0) {
 				    %>
 					   <option value="<%=t%>" selected><%=t%></option>
 				    <%

@@ -659,8 +659,6 @@ System.out.println("mapping_version: " + mapping_version);
 				int score = 0;
 				String associationName = "mapsTo";
 
-
-
 				try {
 
 					Entity source_entity = null;

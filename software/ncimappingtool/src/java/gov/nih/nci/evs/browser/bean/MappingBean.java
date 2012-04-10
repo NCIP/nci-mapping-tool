@@ -2043,6 +2043,11 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
 
         List list = (ArrayList) request.getSession().getAttribute("data");
 			if (list != null) {
+
+
+System.out.println("MappingBean list.size(): " + list.size());
+
+
 			for (int lcv=0; lcv<list.size(); lcv++) {
 			   String input_data = (String) list.get(lcv);
 			   List selected_matches = (ArrayList) mapping_hmap.get(input_data);
@@ -2050,6 +2055,10 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
 			   if (selected_matches != null) {
 				   for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
 					   String rel_id = "rel" + "_" + lcv + "_" + lcv2;
+
+System.out.println("MappingBean rel_id: " + rel_id);
+
+
 					   String score_id = "score" + "_" + lcv + "_" + lcv2;
 
 					   String checkbox_name = "checkbox" + "_" + lcv + "_" + lcv2;
@@ -2062,13 +2071,22 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
 					   }
 
 					   String rel = (String) request.getParameter(rel_id);
+
+System.out.println("MappingBean setting rel to: " + rel);
+
+
 					   mappingData.setRel(rel);
+
+
 					   String score = (String) request.getParameter(score_id);
 					   int score_int = 0;
 					   if (score != null) {
 						   score_int = Integer.parseInt(score);
 					   }
 					   mappingData.setScore(score_int);
+
+					   selected_matches.set(lcv2, mappingData);
+
 				   }
 			   }
 			}
@@ -2091,7 +2109,7 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
                 .getExternalContext().getRequest();
 
         // save all data first
-        updateMapping(request);
+        // updateMapping(request);
 		String type = (String) request.getParameter("type");
 
 
