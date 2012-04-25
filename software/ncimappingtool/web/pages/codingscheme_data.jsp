@@ -45,6 +45,9 @@
 String basePath = request.getContextPath(); 
 String message = (String) request.getSession().getAttribute("message");
 
+String LOCAL_DATA = Constants.LOCAL_DATA;
+
+ 
 request.getSession().removeAttribute("message");
 
 String identifier = (String) request.getSession().getAttribute("identifier");
@@ -189,9 +192,17 @@ else {
            
                 <tr>
 		  <td align="left" class="textbody">
-		  
-		  
+		      <%
+		      if (DataUtils.isNull(source_scheme) && DataUtils.isNull(source_version)) {
+		      %>
+		          <b>From</b>:&nbsp;<%=LOCAL_DATA%>
+		      <%    
+		      } else {
+		      %>
 		      <b>From</b>:&nbsp;<%=source_scheme%>&nbsp;(<%=source_version%>) 
+		      <%
+		      }
+		      %>
 		      
 		      
 		  </td>
