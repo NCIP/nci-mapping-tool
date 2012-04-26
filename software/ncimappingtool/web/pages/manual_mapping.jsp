@@ -182,18 +182,6 @@ if (type.compareTo("ncimeta") == 0) {
 
 String message = (String) request.getSession().getAttribute("message");
 
-
-System.out.println("source_scheme: " + source_scheme);
-System.out.println("source_version: " + source_version);
-System.out.println("target_scheme: " + target_scheme);
-System.out.println("target_version: " + target_version);
-
-
-Entity src_concept = MappingUtils.getConceptByCode(source_scheme, source_version, null, source_code);
-String source_concept_name = src_concept.getEntityDescription().getContent();
-String sourceCodeNamespace = src_concept.getEntityCodeNamespace();
-
-
 Entity target_concept = null;
 String target_concept_name = null;
 Presentation[] target_presentations = null;
@@ -204,26 +192,59 @@ ArrayList src_superconceptList = new ArrayList();
 ArrayList src_subconceptList = new ArrayList();
 ArrayList target_subconceptList = new ArrayList();
 
-HashMap hmap_super = TreeUtils.getSuperconcepts(source_scheme, source_version, source_code);
-if (hmap_super != null) {
-	TreeItem ti = (TreeItem) hmap_super.get(source_code);
-	if (ti != null) {
-		for (String association : ti._assocToChildMap.keySet()) {
-			List<TreeItem> children =
-				ti._assocToChildMap.get(association);
-			for (TreeItem childItem : children) {
-				src_superconceptList.add(childItem._text + "|"
-					+ childItem._code);
+
+System.out.println("source_scheme: " + source_scheme);
+System.out.println("source_version: " + source_version);
+System.out.println("target_scheme: " + target_scheme);
+System.out.println("target_version: " + target_version);
+
+
+Entity src_concept = null;
+String source_concept_name = null;
+String sourceCodeNamespace = null;
+
+
+Presentation[] src_presentations = null;
+Definition[] src_definitions = null;
+Property[] src_properties = null;
+
+HashMap hmap_super = null;				
+
+if (!DataUtils.isNull(source_scheme) && source_scheme.compareTo("LOCAL DATA") != 0) {
+
+   src_concept = MappingUtils.getConceptByCode(source_scheme, source_version, null, source_code);
+   source_concept_name = src_concept.getEntityDescription().getContent();
+   sourceCodeNamespace = src_concept.getEntityCodeNamespace();
+
+	hmap_super = TreeUtils.getSuperconcepts(source_scheme, source_version, source_code);
+	if (hmap_super != null) {
+		TreeItem ti = (TreeItem) hmap_super.get(source_code);
+		if (ti != null) {
+			for (String association : ti._assocToChildMap.keySet()) {
+				List<TreeItem> children =
+					ti._assocToChildMap.get(association);
+				for (TreeItem childItem : children) {
+					src_superconceptList.add(childItem._text + "|"
+						+ childItem._code);
+				}
 			}
 		}
 	}
+	SortUtils.quickSort(src_superconceptList);
+
+	src_presentations = src_concept.getPresentation();
+	src_definitions = src_concept.getDefinition();
+	src_properties = src_concept.getProperty();
+
+	src_subconceptList =
+	   TreeUtils.getSubconceptNamesAndCodes(source_scheme, source_version, source_code);
+	SortUtils.quickSort(src_subconceptList);
+
 }
-SortUtils.quickSort(src_superconceptList);
 
 
 
 String targetCodeNamespace = null;
-//target_code = (String) request.getParameter("target_code");
 
 if (DataUtils.isNull(target_code)) {
     target_code = "";
@@ -258,16 +279,11 @@ if (DataUtils.isNull(target_code)) {
 }
 
 
-Presentation[] src_presentations = null;
-src_presentations = src_concept.getPresentation();
+if (data_value.indexOf("|") != -1) {
+    Vector w = DataUtils.parseData(data_value);
+    source_concept_name = (String) w.elementAt(1);
+}
 
-Definition[] src_definitions = null;
-src_definitions = src_concept.getDefinition();
-Property[] src_properties = src_concept.getProperty();
-				
-src_subconceptList =
-   TreeUtils.getSubconceptNamesAndCodes(source_scheme, source_version, source_code);
-SortUtils.quickSort(src_subconceptList);
 
 %>
 
@@ -300,6 +316,8 @@ tabindex="2">
 
 
 
+
+
             
                   <tr valign="top" align="left">
                           <td align="left" class="textbody" >
@@ -310,11 +328,21 @@ tabindex="2">
                   
                   <tr valign="top" align="left">
                           <td align="left" class="textbody" >
-                              <b>From</b>:&nbsp;<%=source_scheme%>&nbsp;(version: <%=source_version%>)  
+                          <%
+                          if (DataUtils.isNull(source_version)) {
+                          %>
+                             <b>From</b>:&nbsp;<%=source_scheme%>
+                          <%
+                          } else {
+                          %>
+                             <b>From</b>:&nbsp;<%=source_scheme%>&nbsp;(version: <%=source_version%>)  
+                          
+                          <%
+                          }
+                          %>
                           </td>
                   </tr>
-                 
-                 
+              
                  
                   <tr valign="top" align="left">
                           <td align="left" class="textbody" >
@@ -358,13 +386,18 @@ if (target_code.compareTo("") != 0) {
 <%
 }
 %>
-
-
               
               
          </table>       
 
 <hr></hr>
+
+
+<%
+if (!DataUtils.isNull(source_scheme) && source_scheme.compareTo("LOCAL DATA") != 0) {
+%>
+
+
 
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
                   
@@ -618,6 +651,14 @@ if (target_code.compareTo("") != 0) {
               
           
           </table>
+          
+          
+<%
+}
+%>       
+    
+    
+          
  
  <%
  if (target_code.compareTo("") != 0) {

@@ -71,6 +71,9 @@ if (!DataUtils.isNull(idx1_str)) {
 int idx1 = Integer.parseInt(idx1_str);
 String data_value = (String) list.get(idx1);
 
+
+
+
 String source_code = null;
 String source_name = null;
 
@@ -142,8 +145,22 @@ if (type.compareTo("ncimeta") == 0) {
 
 } 
 
-Entity src_concept = MappingUtils.getConceptByCode(source_scheme, source_version, null, source_code);
-String source_concept_name = src_concept.getEntityDescription().getContent();
+Entity src_concept = null;
+String source_concept_name = null;
+
+
+if (!DataUtils.isNull(source_scheme) && source_scheme.compareTo("LOCAL DATA") != 0) {
+	src_concept = MappingUtils.getConceptByCode(source_scheme, source_version, null, source_code);
+	source_concept_name = src_concept.getEntityDescription().getContent();
+}
+
+
+if (data_value.indexOf("|") != -1) {
+    Vector w = DataUtils.parseData(data_value);
+    source_concept_name = (String) w.elementAt(1);
+}
+
+
 
 Vector target_properties = OntologyBean.getSupportedPropertyNames(target_scheme, target_version);
 
