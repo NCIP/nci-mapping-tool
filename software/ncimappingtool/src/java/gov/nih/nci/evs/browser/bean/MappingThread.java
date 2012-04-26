@@ -38,6 +38,7 @@ import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
 import org.LexGrid.concepts.Definition;
 import org.LexGrid.commonTypes.PropertyQualifier;
 import org.LexGrid.commonTypes.Property;
+import gov.nih.nci.evs.browser.common.*;
 
 
 public class MappingThread implements Runnable
@@ -264,7 +265,7 @@ System.out.println("THREAD input_value: " + input_value);
 				ResolvedConceptReferencesIterator iterator = null;
 				String sourceName = "";
 				String sourceCodeNamespace = "";
-				String rel = "";
+				String rel = Constants.DEFAULT_REL;
 				int score = 0;
 				String associationName = "mapsTo";
 
@@ -446,7 +447,7 @@ System.out.println("THREAD input_value: " + input_value);
 
 			String source_code = null;
 			String source_name = null;
-			String rel = null;
+			String rel = Constants.DEFAULT_REL;
 			String score = null;
 			String target_code = null;
 			String target_name = null;
@@ -655,7 +656,7 @@ System.out.println("mapping_version: " + mapping_version);
 				ResolvedConceptReferencesIterator iterator = null;
 				String sourceName = "";
 				String sourceCodeNamespace = "";
-				String rel = "";
+				String rel = Constants.DEFAULT_REL;
 				int score = 0;
 				String associationName = "mapsTo";
 
