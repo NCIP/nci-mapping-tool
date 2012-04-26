@@ -1138,7 +1138,7 @@ if (type.compareTo("codingscheme") == 0) {
 
       <a name="<%=idx1_str%>" href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/manual_mapping.jsf?idx1=<%=idx1_str%>',
         '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no'); return false;" tabindex="13">
-        <img src="<%= request.getContextPath() %>/images/user.png" style="border: none">
+        <img src="<%= request.getContextPath() %>/images/user.png" style="border: none" alt="Manual Mapping" >
       </a> 
       
 
