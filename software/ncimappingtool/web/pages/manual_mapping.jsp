@@ -390,14 +390,12 @@ if (target_code.compareTo("") != 0) {
               
          </table>       
 
-<hr></hr>
-
 
 <%
 if (!DataUtils.isNull(source_scheme) && source_scheme.compareTo("LOCAL DATA") != 0) {
 %>
 
-
+<hr></hr>
 
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
                   
