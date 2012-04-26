@@ -2056,9 +2056,6 @@ System.out.println("MappingBean list.size(): " + list.size());
 				   for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
 					   String rel_id = "rel" + "_" + lcv + "_" + lcv2;
 
-System.out.println("MappingBean rel_id: " + rel_id);
-
-
 					   String score_id = "score" + "_" + lcv + "_" + lcv2;
 
 					   String checkbox_name = "checkbox" + "_" + lcv + "_" + lcv2;
@@ -2071,8 +2068,6 @@ System.out.println("MappingBean rel_id: " + rel_id);
 					   }
 
 					   String rel = (String) request.getParameter(rel_id);
-
-System.out.println("MappingBean setting rel to: " + rel);
 
 
 					   mappingData.setRel(rel);
