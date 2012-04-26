@@ -325,9 +325,23 @@ String format = (String) request.getParameter("format");
             String[] entry_status = request.getParameterValues("entry_status");
             Vector options = toVector(entry_status);
 
+System.out.println("options size: " + options.size());
+if (options.size() == 0) {
+	options.add("Valid");
+}
+
+
             //options.add("Valid");
             //options.add("Invalid");
             List<MappingData> list = obj.getMappingData(options);
+
+
+      if (list != null) {
+		  System.out.println("Number of records to export: " + list.size());
+  	  } else {
+		  System.out.println("obj.getMappingData(options) returns NULL???");
+	  }
+
 
             LexGridXMLGenerator.writeContent(out, obj.getName(),
                                              obj.getFromCS(), obj.getToCS(), list);
