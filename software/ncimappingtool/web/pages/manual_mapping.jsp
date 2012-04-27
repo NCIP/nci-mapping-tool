@@ -50,6 +50,11 @@
 
   <script language="JavaScript">
 
+	function refreshParent(url) {
+	   window.opener.location.href = url;
+	   window.close();
+	}
+
 
   </script>
 </head>
@@ -373,14 +378,34 @@ tabindex="2">
 
 <%
 if (target_code.compareTo("") != 0) {
+
 %>
 <tr><td>&nbsp;</td></tr>
 <tr><td>
+
+
 		    <h:commandButton id="save" value="save" action="#{mappingBean.saveManualMappingAction}"
 		      image="#{basePath}/images/save.gif"
-		      alt="Refresh"
+		      alt="Save"
 		      tabindex="2">
 		    </h:commandButton>
+
+&nbsp;
+
+
+<!--
+		      <a href="" onclick="javascript:refreshParent(<%=request.getContextPath()%>/pages/batch_mapping_form.jsf?idx=<%=idx1_str%>)">
+			<img src="<%= request.getContextPath() %>/images/close.gif" alt="Close" border="0">
+		      </a>   
+
+-->
+
+		      <a href="javascript:window.close();">
+			<img src="<%= request.getContextPath() %>/images/close.gif" alt="Close" border="0">
+		      </a>   
+
+
+
 </td></tr>
 
 <%

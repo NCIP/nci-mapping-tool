@@ -1423,6 +1423,21 @@ System.out.println("MappingBean MappingThread: vsdURI " + vsdURI);
 		return type;
 	}
 
+
+
+
+    public String closeManualMappingAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		String type = (String) request.getParameter("type");
+		return type;
+	}
+
+
+
+
     public String saveManualMappingAction() {
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
@@ -1492,7 +1507,7 @@ System.out.println("MappingBean MappingThread: vsdURI " + vsdURI);
 				selected_matches.add(mappingData);
 			    mapping_hmap.put(input_data, selected_matches);
 			    request.getSession().setAttribute("mapping_hmap", mapping_hmap);
-				message = "Mapping entry saved successfully.";
+				message = "Mapping entry saved successfully. ";
 				request.getSession().setAttribute("message", message);
 
 			} else {
@@ -1500,6 +1515,7 @@ System.out.println("MappingBean MappingThread: vsdURI " + vsdURI);
 				request.getSession().setAttribute("message", message);
 			}
 	    }
+
 		return type;
 	}
 
