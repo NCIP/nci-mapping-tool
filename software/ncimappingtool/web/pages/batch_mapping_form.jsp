@@ -618,7 +618,9 @@ Iterator it = mapping_hmap.keySet().iterator();
 
 <p class="texttitle-blue"><%=identifier%>&nbsp;(<%=mapping_version%>)</p>
 
-            <% if (message != null) { request.getSession().removeAttribute("message"); %>
+            <% if (message != null) { 
+                request.getSession().removeAttribute("message"); 
+            %>
                 <p class="textbodyred">&nbsp;<%=message%></p>
             <% } %>    
  

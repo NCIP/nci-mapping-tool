@@ -581,7 +581,7 @@
               <to-view-id>/pages/manual_mapping.jsp</to-view-id>
           </navigation-case>
           
-          
+         
            <navigation-case>
               <from-action>#{mappingBean.saveManualMappingAction}</from-action>
               <from-outcome>ncimeta</from-outcome>
@@ -599,8 +599,25 @@
               <from-outcome>valueset</from-outcome>
               <to-view-id>/pages/manual_mapping.jsp</to-view-id>
           </navigation-case>          
+
+           <navigation-case>
+              <from-action>#{mappingBean.closeManualMappingAction}</from-action>
+              <from-outcome>ncimeta</from-outcome>
+              <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+          </navigation-case>
+         
+           <navigation-case>
+              <from-action>#{mappingBean.closeManualMappingAction}</from-action>
+              <from-outcome>codingscheme</from-outcome>
+              <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+          </navigation-case>
           
-          
+           <navigation-case>
+              <from-action>#{mappingBean.closeManualMappingAction}</from-action>
+              <from-outcome>valueset</from-outcome>
+              <to-view-id>/pages/batch_mapping_form.jsp</to-view-id>
+          </navigation-case>  
+        
     </navigation-rule>     
     
 
