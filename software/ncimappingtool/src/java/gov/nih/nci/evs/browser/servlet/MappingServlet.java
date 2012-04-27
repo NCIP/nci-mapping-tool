@@ -156,9 +156,6 @@ if (obj == null) {
 				  //String associationName,
 				  String rel = md.getRel();
 
-System.out.println("MappingServlet rel: " + rel);
-
-
 				  int score = md.getScore();
 				  String score_obj = new Integer(score).toString();
 				  String targetCode = md.getTargetCode();
@@ -329,7 +326,6 @@ System.out.println("options size: " + options.size());
 if (options.size() == 0) {
 	options.add("Valid");
 }
-
 
             //options.add("Valid");
             //options.add("Invalid");

@@ -250,6 +250,20 @@ a.hideLink
  font-family: arial, verdana, trebuchet ms, tahoma, sans-serif;
 }
 
+.datacoldark
+{
+ font-size: 12px;
+ background-color: #E5E5E5;
+ font-family: arial, verdana, trebuchet ms, tahoma, sans-serif;
+}
+
+.datacollight
+{
+ font-size: 12px;
+ background-color: #FFFFFF;
+ font-family: arial, verdana, trebuchet ms, tahoma, sans-serif;
+}
+
 .datatable
 {
  font-size: 11px;

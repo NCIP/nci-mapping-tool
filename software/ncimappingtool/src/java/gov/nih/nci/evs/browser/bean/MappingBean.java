@@ -333,6 +333,9 @@ public class MappingBean {
 
 
     public String submitMetadataAction() {
+
+System.out.println("submitMetadataAction ...");
+
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
