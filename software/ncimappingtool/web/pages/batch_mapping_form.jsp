@@ -46,7 +46,6 @@
 	  show_options.add(t);
       }
   }
-  
 %>
 
 
@@ -213,7 +212,11 @@
  
 </script> 
 
+
+
 <%
+
+
 
 String input_data_label = null;
 boolean is_local_data = false;
@@ -1294,7 +1297,7 @@ if (!readonly) {
 		   
 		         String rel_id = "rel" + "_" + lcv + "_" + lcv2;
 		         
-System.out.println("rel_id: " + rel_id);
+//System.out.println("rel_id: " + rel_id);
 		         
 		         String score_id = "score" + "_" + lcv + "_" + lcv2;
 		         
@@ -1345,7 +1348,7 @@ target_codingschemeversion = target_version;
 
 		    <tr>
 			 
-			 <td>
+			 <td class="datacollight" scope="row">
 			 <input type="checkbox" name="<%=checkbox_name%>" id="<%=checkbox_name%>" value="<%=checkbox_name%>" />
 			 
 			 </td>
