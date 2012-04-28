@@ -50,8 +50,8 @@
 
   <script language="JavaScript">
 
-	function refreshParent(url) {
-	   window.opener.location.href = url;
+	function refreshParent() {
+	   window.opener.history.go(0); 
 	   window.close();
 	}
 
@@ -398,14 +398,16 @@ if (target_code.compareTo("") != 0) {
 			<img src="<%= request.getContextPath() %>/images/close.gif" alt="Close" border="0">
 		      </a>   
 
--->
+
 
 		      <a href="javascript:window.close();">
 			<img src="<%= request.getContextPath() %>/images/close.gif" alt="Close" border="0">
 		      </a>   
 
-
-
+-->
+		      <a href="javascript:refreshParent();">
+			<img src="<%= request.getContextPath() %>/images/close.gif" alt="Close" border="0">
+		      </a>   
 </td></tr>
 
 <%
