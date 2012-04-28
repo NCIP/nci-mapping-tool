@@ -393,18 +393,7 @@ if (target_code.compareTo("") != 0) {
 &nbsp;
 
 
-<!--
-		      <a href="" onclick="javascript:refreshParent(<%=request.getContextPath()%>/pages/batch_mapping_form.jsf?idx=<%=idx1_str%>)">
-			<img src="<%= request.getContextPath() %>/images/close.gif" alt="Close" border="0">
-		      </a>   
 
-
-
-		      <a href="javascript:window.close();">
-			<img src="<%= request.getContextPath() %>/images/close.gif" alt="Close" border="0">
-		      </a>   
-
--->
 		      <a href="javascript:refreshParent();">
 			<img src="<%= request.getContextPath() %>/images/close.gif" alt="Close" border="0">
 		      </a>   
