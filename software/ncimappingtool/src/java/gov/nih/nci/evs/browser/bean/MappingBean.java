@@ -2076,16 +2076,9 @@ System.out.println("MappingBean list.size(): " + list.size());
 			   if (selected_matches != null) {
 				   for (int lcv2=0; lcv2<selected_matches.size(); lcv2++) {
 					   String rel_id = "rel" + "_" + lcv + "_" + lcv2;
-
 					   String score_id = "score" + "_" + lcv + "_" + lcv2;
-
 					   String checkbox_name = "checkbox" + "_" + lcv + "_" + lcv2;
-
-			String checkbox_status = (String) request.getParameter(checkbox_name);
-
-System.out.println(checkbox_name + " " + checkbox_status);
-
-
+			           String checkbox_status = (String) request.getParameter(checkbox_name);
 					   MappingData mappingData = (MappingData) selected_matches.get(lcv2);
 					   if (!DataUtils.isNull(checkbox_status)) {
 						   mappingData.setStatus(entry_status);
@@ -2093,10 +2086,7 @@ System.out.println(checkbox_name + " " + checkbox_status);
 					   }
 
 					   String rel = (String) request.getParameter(rel_id);
-
-
 					   mappingData.setRel(rel);
-
 
 					   String score = (String) request.getParameter(score_id);
 					   int score_int = 0;
@@ -2104,12 +2094,10 @@ System.out.println(checkbox_name + " " + checkbox_status);
 						   score_int = Integer.parseInt(score);
 					   }
 					   mappingData.setScore(score_int);
-
                        // business rule:
 					   if (mappingData.getStatus().compareToIgnoreCase("invalid") == 0) {
 						   mappingData.setScore(0);
 					   }
-
 					   selected_matches.set(lcv2, mappingData);
 
 				   }
