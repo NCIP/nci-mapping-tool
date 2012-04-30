@@ -1964,11 +1964,11 @@ System.out.println("key: " + key);
 
 			MappingObject obj = (MappingObject) mappings.get(key);
 
-if (obj == null) {
-	System.out.println("mapping obj cannot be found for key : " + key);
-} else {
-	System.out.println("obj.toXML() : " + obj.toXML());
-}
+			if (obj == null) {
+				System.out.println("mapping obj cannot be found for key : " + key);
+			} else {
+				System.out.println("obj.toXML() : " + obj.toXML());
+			}
 
 			//xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 			String xml = "";
@@ -1986,9 +1986,9 @@ if (obj == null) {
 			response.setHeader("Content-Disposition", "attachment; filename="
 					+ mapping_name);
 
-System.out.println("mapping file name : " + mapping_name);
+//System.out.println("mapping file name : " + mapping_name);
 
-System.out.println("mapping sb.length() : " + sb.length());
+//System.out.println("mapping sb.length() : " + sb.length());
 
 			response.setContentLength(sb.length());
 
@@ -2053,6 +2053,7 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
     }
 
     public void updateMapping(HttpServletRequest request) {
+		String checkedEntryIds = "";
 		String entry_status = (String) request.getParameter("entry_status");
 		System.out.println("(*) entry_status: " + entry_status);
 
@@ -2082,9 +2083,13 @@ System.out.println("MappingBean list.size(): " + list.size());
 
 			String checkbox_status = (String) request.getParameter(checkbox_name);
 
+System.out.println(checkbox_name + " " + checkbox_status);
+
+
 					   MappingData mappingData = (MappingData) selected_matches.get(lcv2);
 					   if (!DataUtils.isNull(checkbox_status)) {
 						   mappingData.setStatus(entry_status);
+						   checkedEntryIds = checkedEntryIds + checkbox_name + "|";
 					   }
 
 					   String rel = (String) request.getParameter(rel_id);
@@ -2111,6 +2116,7 @@ System.out.println("MappingBean list.size(): " + list.size());
 			   }
 			}
 	    }
+	    request.getSession().setAttribute("checkedEntryIds", checkedEntryIds);
 	}
 
     public String saveAllMappingAction() {
@@ -2133,7 +2139,7 @@ System.out.println("MappingBean list.size(): " + list.size());
                 .getExternalContext().getRequest();
 
         // save all data first
-        // updateMapping(request);
+        updateMapping(request);
 		String type = (String) request.getParameter("type");
 
 
