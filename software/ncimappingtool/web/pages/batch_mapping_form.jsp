@@ -150,11 +150,16 @@
 </head>
 
 <%
+    boolean hasAnchor = false;
     String anchor = (String) request.getSession().getAttribute("anchor");
     if (DataUtils.isNull(anchor)) {
         anchor = (String) request.getParameter("idx");
+    } else {
+        request.getSession().removeAttribute("anchor");
     }
+    
     if (!DataUtils.isNull(anchor)) {
+        hasAnchor = true;
 %>    
         <body onload="goToAnchor(<%=anchor%>)">
 <%        
@@ -525,6 +530,9 @@ if (show_refresh_button) {
 	expanded_hset.add(item_label);
     }
 }
+
+
+
 
 
 boolean collapse_all = false;
@@ -979,9 +987,24 @@ if (!show_refresh_button) {
   String item_label = null;
   String input_data = null;
   int lcv=0;
+  
+
+
+
+  
+if (hasAnchor) {
+    int anchor_index = Integer.parseInt(anchor);
+    String anchor_label = new Integer(anchor_index).toString();
+    if (!expanded_hset.contains(anchor_label)) {
+        expanded_hset.add(anchor_label);
+    }
+}
+  
+  
+  
   for (lcv=0; lcv<list.size(); lcv++) {
         idx1_str = new Integer(lcv).toString();
- 
+        String anchor_str = new Integer(lcv+1).toString();
         input_data = (String) list.get(lcv);
         
         
@@ -1141,7 +1164,7 @@ if (type.compareTo("codingscheme") == 0) {
 %>
 
 
-      <a name="<%=idx1_str%>" href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/manual_mapping.jsf?idx1=<%=idx1_str%>',
+      <a name="<%=anchor_str%>" href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/manual_mapping.jsf?idx1=<%=idx1_str%>',
         '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no'); return false;" tabindex="13">
         <img src="<%= request.getContextPath() %>/images/user.png" style="border: none" alt="Manual Mapping" >
       </a> 
