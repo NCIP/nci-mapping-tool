@@ -2100,6 +2100,11 @@ System.out.println("MappingBean list.size(): " + list.size());
 					   }
 					   mappingData.setScore(score_int);
 
+                       // business rule:
+					   if (mappingData.getStatus().compareToIgnoreCase("invalid") == 0) {
+						   mappingData.setScore(0);
+					   }
+
 					   selected_matches.set(lcv2, mappingData);
 
 				   }
@@ -2114,6 +2119,10 @@ System.out.println("MappingBean list.size(): " + list.size());
                 .getExternalContext().getRequest();
         String type = (String) request.getParameter("type");
         updateMapping(request);
+
+		String message = "Data saved successfully.";
+		request.getSession().setAttribute("message", message);
+
         return type;
 	}
 
