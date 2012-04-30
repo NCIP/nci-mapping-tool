@@ -46,6 +46,9 @@
 	  show_options.add(t);
       }
   }
+  
+  String checkedEntryIds = (String) request.getSession().getAttribute("checkedEntryIds");
+
 %>
 
 
@@ -1327,7 +1330,14 @@ if (!readonly) {
 		         String score_id = "score" + "_" + lcv + "_" + lcv2;
 		         
 		         String checkbox_name = "checkbox" + "_" + lcv + "_" + lcv2;
-		   
+
+String box_checked = "";
+if (!DataUtils.isNull(checkedEntryIds)) {
+	if (checkedEntryIds.indexOf(checkbox_name + "|") != -1) {
+              box_checked = "checked";
+	}
+}
+
 		         String idx2_str = new Integer(lcv2).toString();
 
 			 mappingData = (MappingData) selected_matches.get(lcv2);
@@ -1374,7 +1384,7 @@ target_codingschemeversion = target_version;
 		    <tr>
 			 
 			 <td class="datacollight" scope="row">
-			 <input type="checkbox" name="<%=checkbox_name%>" id="<%=checkbox_name%>" value="<%=checkbox_name%>" />
+			 <input type="checkbox" name="<%=checkbox_name%>" id="<%=checkbox_name%>" value="<%=checkbox_name%>" <%=box_checked%> />
 			 
 			 </td>
 
