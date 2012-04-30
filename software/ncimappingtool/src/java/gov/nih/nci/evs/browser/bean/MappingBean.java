@@ -1509,6 +1509,7 @@ System.out.println("MappingBean MappingThread: vsdURI " + vsdURI);
 			    request.getSession().setAttribute("mapping_hmap", mapping_hmap);
 				message = "Mapping entry saved successfully. ";
 				request.getSession().setAttribute("message", message);
+				request.getSession().setAttribute("anchor", new Integer(anchor).toString());
 
 			} else {
 				message = "Mapping entry already exists -- data not saved.";
