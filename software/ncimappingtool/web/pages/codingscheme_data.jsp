@@ -40,7 +40,12 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
-
+  <script type="text/javascript">
+    function back() {
+        history.go(-1);
+    }
+  </script>  
+    
 <%
 String basePath = request.getContextPath(); 
 String message = (String) request.getSession().getAttribute("message");
@@ -428,16 +433,36 @@ if (input_option.compareToIgnoreCase("Property") == 0) {
      
      
 <tr><td>&nbsp;</td></tr>
-	
+
                   <tr><td>
+<% 
+if (message == null) {
+%>
+
+                  
                     <h:commandButton id="continue" value="continue" action="#{mappingBean.showBatchFormAction}"
                       image="#{basePath}/images/continue.gif"
                       alt="Continue"
                       tabindex="2">
                     </h:commandButton>
+
+<%
+} else {
+%>
+
+<a href="javascript:back();">
+    <img src="<%= request.getContextPath() %>/images/back.gif" alt="Back" border="0">
+</a>
+
+
+<%
+}
+%>	
+
+
                   </td>
                   <td></td>
-                  </tr>	
+                  </tr>		
 	
      </table> 
 
