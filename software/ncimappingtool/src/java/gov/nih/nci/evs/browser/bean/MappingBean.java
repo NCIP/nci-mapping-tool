@@ -2194,19 +2194,7 @@ System.out.println("exportMappingAction format: " + format);
 
         String[] selected_hide_options = (String[]) request.getParameterValues("hide_option");
         request.getSession().setAttribute("selected_hide_options", selected_hide_options);
-/*
-        for (int i=0; i<selected_hide_options.length; i++) {
-			String option = (String) selected_hide_options[i];
-			System.out.println("(*) Hide " + option);
-		}
-*/
 		Vector show_options = DataUtils.getShowOptions(selected_hide_options);
-/*
-		for (int k=0; k<show_options.size(); k++) {
-			String t = (String) show_options.elementAt(k);
-			System.out.println("SHOW " + t);
-		}
-*/
 		request.getSession().setAttribute("show_options", show_options);
 
 		String mappingKey = (String) request.getParameter("mappingKey");
