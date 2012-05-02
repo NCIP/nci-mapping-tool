@@ -2069,8 +2069,7 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
         List list = (ArrayList) request.getSession().getAttribute("data");
 			if (list != null) {
 
-
-System.out.println("MappingBean list.size(): " + list.size());
+//System.out.println("MappingBean list.size(): " + list.size());
 
 
 			for (int lcv=0; lcv<list.size(); lcv++) {
@@ -2179,8 +2178,8 @@ System.out.println("exportMappingAction format: " + format);
 			return exportMappingToXMLAction();
 		}
 
-		String message = "To be implemented";
-		request.getSession().setAttribute("message", message);
+		//String message = "To be implemented";
+		//request.getSession().setAttribute("message", message);
 
 		return format;
     }
@@ -2193,21 +2192,21 @@ System.out.println("exportMappingAction format: " + format);
         String type = (String) request.getParameter("type");
         updateMapping(request);
 
-        String[] hide_options = (String[]) request.getParameterValues("hide_option");
-        request.getSession().setAttribute("hide", hide_options);
-
-        for (int i=0; i<hide_options.length; i++) {
-			String option = (String) hide_options[i];
+        String[] selected_hide_options = (String[]) request.getParameterValues("hide_option");
+        request.getSession().setAttribute("selected_hide_options", selected_hide_options);
+/*
+        for (int i=0; i<selected_hide_options.length; i++) {
+			String option = (String) selected_hide_options[i];
 			System.out.println("(*) Hide " + option);
 		}
-
-		Vector show_options = DataUtils.getShowOptions(hide_options);
-
+*/
+		Vector show_options = DataUtils.getShowOptions(selected_hide_options);
+/*
 		for (int k=0; k<show_options.size(); k++) {
 			String t = (String) show_options.elementAt(k);
 			System.out.println("SHOW " + t);
 		}
-
+*/
 		request.getSession().setAttribute("show_options", show_options);
 
 		String mappingKey = (String) request.getParameter("mappingKey");
