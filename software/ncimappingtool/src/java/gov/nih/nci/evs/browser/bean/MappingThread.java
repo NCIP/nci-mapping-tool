@@ -409,7 +409,6 @@ if (vds == null) {
 					obj.setData(input_list);
 					mappings.put(id, obj);
 
-
 					System.out.println("MAPPING DATA UPDATED.");
 					session.setAttribute("mappings", mappings);
 				}
@@ -456,7 +455,7 @@ if (vds == null) {
 			MappingData mappingData = null;
 
 
-			System.out.println("MappingThread source_abbrev: " + source_abbrev);
+			//System.out.println("MappingThread source_abbrev: " + source_abbrev);
 
 
 			if (source_abbrev != null && source_abbrev.compareTo("") != 0) {
@@ -515,13 +514,13 @@ if (vds == null) {
 	            String mapping_name = requestParameterMap.get("identifier");
 	            String mapping_version = requestParameterMap.get("mapping_version");
 
-System.out.println("mapping_name: " + mapping_name);
-System.out.println("mapping_version: " + mapping_version);
+//System.out.println("mapping_name: " + mapping_name);
+//System.out.println("mapping_version: " + mapping_version);
 
 				String mapping_key = MappingObject.computeKey(mapping_name, mapping_version);
 
 
-				System.out.println("************* META mapping id: " + id);
+				//System.out.println("************* META mapping id: " + id);
 
 				//if (id != null) {
 				//	MappingObject obj = (MappingObject) mappings.get(id);
@@ -709,7 +708,7 @@ System.out.println("mapping_version: " + mapping_version);
 								Vector matchText_vec = new Vector();
 								String value = (String) src_properties.elementAt(k);
 								value = new SearchUtils().convertPropertyValue(value, right_trim, left_trim, prefix, suffix);
-								System.out.println(value);
+								//System.out.println(value);
 								matchText_vec.add(value);
 
 								Vector<CodedNodeSet> w = new SearchUtils().getCNSByMatchingProperty(
@@ -734,7 +733,7 @@ System.out.println("mapping_version: " + mapping_version);
 
 
 					if (iterator == null) {
-						System.out.println("******************* search returns null???");
+						//System.out.println("******************* search returns null???");
 					} else {
 
 
@@ -742,7 +741,7 @@ System.out.println("mapping_version: " + mapping_version);
 							 HashSet key_hset = new HashSet();
 							 int numRemaining = iterator.numberRemaining();
 
-System.out.println("******************* numRemaining " + numRemaining);
+//System.out.println("******************* numRemaining " + numRemaining);
 
 
 							 while (iterator.hasNext()) {
@@ -818,7 +817,7 @@ System.out.println("******************* numRemaining " + numRemaining);
 				HashMap mappings = (HashMap) session.getAttribute("mappings");
 				String id = (String) session.getAttribute("id");
 
-				System.out.println("id: " + id);
+				//System.out.println("id: " + id);
 
 				if (id != null) {
 					MappingObject obj = (MappingObject) mappings.get(id);

@@ -872,9 +872,11 @@ if (show_refresh_button) {
 
 			    <select id="entry_status" name="entry_status" size="1" tabindex="4">
 			    <%
-
 				    //String[] status_options = DataUtils.status_options;
-				    String default_status = DataUtils.default_status;
+				    String default_status = (String) request.getSession().getAttribute("entry_status");
+				    if (DataUtils.isNull(default_status)) {
+				        default_status = DataUtils.default_status;
+				    }
 				    for (int i=0; i<status_options.length; i++) {
 					 String t = status_options[i];
 					 if (t.compareTo(default_status) == 0) {

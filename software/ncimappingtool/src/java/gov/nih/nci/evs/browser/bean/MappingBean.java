@@ -2057,6 +2057,8 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
     public void updateMapping(HttpServletRequest request) {
 		String checkedEntryIds = "";
 		String entry_status = (String) request.getParameter("entry_status");
+		request.getSession().setAttribute("entry_status", entry_status);
+
 		System.out.println("(*) entry_status: " + entry_status);
 
 		String type = (String) request.getParameter("type");
