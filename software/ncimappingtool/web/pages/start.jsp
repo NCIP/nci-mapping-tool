@@ -37,6 +37,7 @@
 
 <%
 String hm_basePath = request.getContextPath(); 
+request.getSession().removeAttribute("checkedEntryIds");
 
 String reference_code = (String) request.getAttribute("reference_code");
 

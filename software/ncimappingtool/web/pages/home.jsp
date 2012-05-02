@@ -37,6 +37,8 @@
 
 <%
 String hm_basePath = request.getContextPath(); 
+request.getSession().removeAttribute("checkedEntryIds");
+
 %>
 <f:view>
   <!-- Begin Skip Top Navigation -->

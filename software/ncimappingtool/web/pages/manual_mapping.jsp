@@ -363,13 +363,13 @@ tabindex="2">
                   
                   <tr valign="top" align="left">
                           <td align="left" class="textbody" >
-                              <b>Target concept code</b>:&nbsp;<input name="target_code" id="target_code" value="<%=target_code%>" />
+                              <b>Target concept code</b>:&nbsp;<input name="target_code" id="target_code" value="<%=target_code%>" readonly="readonly" />
 
 
                        &nbsp; 
 				 
 		      <a href="<%=request.getContextPath()%>/pages/search.jsf?idx1=<%=idx1_str%>">
-			<img src="<%= request.getContextPath() %>/images/search.png" width="15" height="15" alt="Search" border="0">
+			  <img src="<%= request.getContextPath() %>/images/search.gif" alt="Search" border="0">
 		      </a>   
 				      
                               

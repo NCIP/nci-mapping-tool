@@ -213,6 +213,8 @@ public class MappingBean {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        request.getSession().removeAttribute("checkedEntryIds");
+
         String type = (String) request.getParameter("type");
         if (type == null) {
 			String value = (String) request.getParameter("new");
