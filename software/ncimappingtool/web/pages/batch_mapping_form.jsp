@@ -930,10 +930,28 @@ if (!readonly) {
 			    <select id="hide_option" name="hide_option" size="2" multiple tabindex="4">
 			    <%
 				    String[] hide_options = DataUtils.hide_options;
-				    String default_hide_option = DataUtils.default_hide_option;
+
+        String[] selected_hide_options = (String[]) request.getSession().getAttribute("selected_hide_options");
+        
+        
+        
+        if (selected_hide_options == null || selected_hide_options.length == 0) {
+            System.out.println("(*) selected_hide_options == null || selected_hide_options.length == 0");
+            selected_hide_options = new String[1];
+            selected_hide_options[0] = DataUtils.default_hide_option;
+        } 
+        
+        //for (int k=0; k<selected_hide_options.length; k++) {
+        //    System.out.println("\tselected_hide_option: " + selected_hide_options[k]);
+        //}
+        
+        
+        List selected_hide_option_list = Arrays.asList(selected_hide_options);
+				    
 				    for (int i=0; i<hide_options.length; i++) {
 					 String t = hide_options[i];
-					 if (t.compareTo(default_hide_option) == 0) {
+					 if (selected_hide_option_list.contains(t)) {
+					 
 				    %>
 					   <option value="<%=t%>" selected><%=t%></option>
 				    <%
