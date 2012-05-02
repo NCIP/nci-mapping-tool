@@ -97,7 +97,7 @@ public class MappingThread implements Runnable
 		  String csVersionTag)
   {
 
-System.out.println("MappingThread THREAD " + vsd_uri);
+//System.out.println("MappingThread THREAD " + vsd_uri);
 
     this.request = request;
     this.requestParameterMap = HTTPUtils.retrieveRequestParametersMap(request);
@@ -123,11 +123,11 @@ if (vds == null) {
 		ResolvedValueSetDefinition rvsd = null;
 		try {
 
-System.out.println("MappingThread calling getCodedNodeSetForValueSetDefinition ..." + vsd_uri);
+//System.out.println("MappingThread calling getCodedNodeSetForValueSetDefinition ..." + vsd_uri);
 
             ResolvedValueSetCodedNodeSet rvscns = vds.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri), valueSetDefinitionRevisionId, csVersionList, csVersionTag);
 
-System.out.println("MappingThread getCodedNodeSetForValueSetDefinition DONE" + vsd_uri);
+//System.out.println("MappingThread getCodedNodeSetForValueSetDefinition DONE" + vsd_uri);
 
 
 
@@ -146,7 +146,7 @@ System.out.println("MappingThread getCodedNodeSetForValueSetDefinition DONE" + v
 	}
 
 
-System.out.println("MappingThread THREAD instantiated " + vsd_uri);
+//System.out.println("MappingThread THREAD instantiated " + vsd_uri);
 
   }
 
@@ -210,7 +210,7 @@ System.out.println("MappingThread THREAD instantiated " + vsd_uri);
 			}
 
 
-System.out.println("THREAD input_list.size(): " + input_list.size());
+//System.out.println("THREAD input_list.size(): " + input_list.size());
 
 
 
@@ -232,8 +232,8 @@ System.out.println("THREAD input_list.size(): " + input_list.size());
 			//String targetCodingSchemeVersion = null;
 			//targetCodingSchemeVersion = target_version;
 
-System.out.println("THREAD sourceCodingScheme: " + sourceCodingScheme);
-System.out.println("THREAD sourceCodingSchemeVersion: " + sourceCodingSchemeVersion);
+//System.out.println("THREAD sourceCodingScheme: " + sourceCodingScheme);
+//System.out.println("THREAD sourceCodingSchemeVersion: " + sourceCodingSchemeVersion);
 
 
 			ArrayList list = new ArrayList();
@@ -246,7 +246,7 @@ System.out.println("THREAD sourceCodingSchemeVersion: " + sourceCodingSchemeVers
 				String input_value = (String) input_list.get(i);
 
 
-System.out.println("THREAD input_value: " + input_value);
+//System.out.println("THREAD input_value: " + input_value);
 
 
 				String sourceCode = null;
@@ -288,7 +288,7 @@ System.out.println("THREAD input_value: " + input_value);
 						}
 
 						if(input_option.compareToIgnoreCase("Code") == 0) {
-							System.out.println("calling getSynonyms: sourceCode " + sourceCode);
+							//System.out.println("calling getSynonyms: sourceCode " + sourceCode);
 
 							Vector matchtext_vec = new Vector();
 							Vector synonyms = DataUtils.getSynonyms(sourceCodingScheme, sourceCodingSchemeVersion, null, sourceCode);
@@ -313,14 +313,14 @@ System.out.println("THREAD input_value: " + input_value);
 
 					}
 					if (iterator == null) {
-						System.out.println("******************* search returns null???");
+						//System.out.println("******************* search returns null???");
 					} else {
 
 						try {
 							 HashSet key_hset = new HashSet();
 							 int numRemaining = iterator.numberRemaining();
 
-							 System.out.println("(*) valueset Number of matches: " + numRemaining);
+							 //System.out.println("(*) valueset Number of matches: " + numRemaining);
 
 							 while (iterator.hasNext()) {
 								 ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
@@ -328,8 +328,8 @@ System.out.println("THREAD input_value: " + input_value);
 								 String targetCodingScheme = rcr.getCodingSchemeName();
 								 String targetCodingSchemeVersion = rcr.getCodingSchemeVersion();
 
-								 System.out.println("targetCodingScheme: " + targetCodingScheme);
-								 System.out.println("targetCodingSchemeVersion: " + targetCodingSchemeVersion);
+								 //System.out.println("targetCodingScheme: " + targetCodingScheme);
+								 //System.out.println("targetCodingSchemeVersion: " + targetCodingSchemeVersion);
 
 
 								 Entity target_entity = MappingUtils.getConceptByCode(targetCodingScheme, targetCodingSchemeVersion, null, rcr.getConceptCode());
@@ -401,7 +401,7 @@ System.out.println("THREAD input_value: " + input_value);
 				HashMap mappings = (HashMap) session.getAttribute("mappings");
 				String id = (String) session.getAttribute("id");
 
-				System.out.println("id: " + id);
+				//System.out.println("id: " + id);
 
 				if (id != null) {
 					MappingObject obj = (MappingObject) mappings.get(id);
