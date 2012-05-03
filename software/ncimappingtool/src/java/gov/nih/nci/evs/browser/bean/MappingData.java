@@ -3,6 +3,8 @@ package gov.nih.nci.evs.browser.bean;
 import java.io.*;
 import java.util.*;
 
+import gov.nih.nci.evs.browser.utils.*;
+
 /**
   * <!-- LICENSE_TEXT_START -->
 * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -101,7 +103,48 @@ public class MappingData
 		this.targetCodeNamespace = targetCodeNamespace;
 
 		this.status = "Pending";
+		this.comment = "";
 	}
+
+
+	public MappingData(
+		String sourceCode,
+		String sourceName,
+		String sourceCodingScheme,
+		String sourceCodingSchemeVersion,
+		String sourceCodeNamespace,
+		String associationName,
+		String rel,
+		int score,
+		String targetCode,
+		String targetName,
+		String targetCodingScheme,
+		String targetCodingSchemeVersion,
+		String targetCodeNamespace,
+		String status,
+		String comment) {
+
+		this.sourceCode = sourceCode;
+		this.sourceName = sourceName;
+		this.sourceCodingScheme = sourceCodingScheme;
+		this.sourceCodingSchemeVersion = sourceCodingSchemeVersion;
+		this.sourceCodeNamespace = sourceCodeNamespace;
+		this.associationName = associationName;
+		this.rel = rel;
+		this.score = score;
+		this.targetCode = targetCode;
+		this.targetName = targetName;
+		this.targetCodingScheme = targetCodingScheme;
+		this.targetCodingSchemeVersion = targetCodingSchemeVersion;
+		this.targetCodeNamespace = targetCodeNamespace;
+		this.status = status;
+
+		if (DataUtils.isNull(comment)) {
+			comment = "";
+		}
+		this.comment = comment;
+	}
+
 
 // Set methods
 	public void setIndex(int index) {

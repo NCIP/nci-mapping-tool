@@ -278,7 +278,10 @@ public class MappingEntry
 			this.targetName,
 			this.targetCodingScheme,
 			this.targetCodingSchemeVersion,
-			this.targetCodeNamespace);
+			this.targetCodeNamespace,
+			this.status,
+			this.comment
+			);
 
 		obj.setComment(this.comment);
 		return obj;
