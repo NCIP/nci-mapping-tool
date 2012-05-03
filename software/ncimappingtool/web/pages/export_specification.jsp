@@ -71,7 +71,18 @@
         history.go(-1);
     }
 
+
     function exportToFile() {
+          var entries = "";
+	  var selObj = document.getElementById('entry_status');
+	  var i;
+	  var count = 0;
+	  for (i=0; i<selObj.options.length; i++) {
+	    if (selObj.options[i].selected) {
+	      entries = entries + selObj.options[i].value + "_";
+	    }
+	  }
+  
     
         var key = document.getElementById("mappingKey");
         var key_str = key.value;
@@ -85,10 +96,10 @@
 	var export_format = "";
         if (stages[0].checked) {
         
-           if (document.getElementById('xml').checked == true) {
-               export_format = "xml";
-           } else if (document.getElementById('excel').checked == true) {
-               export_format = "excel";
+           if (document.getElementById('draft_xml').checked == true) {
+               export_format = "draft_xml";
+           } else if (document.getElementById('draft_excel').checked == true) {
+               export_format = "draft_xlsx";
            } else {
                alert("Please specify a format.");
            }
@@ -96,18 +107,18 @@
         } else if (stages[1].checked) {
         
            if (document.getElementById('final_xml').checked == true) {
-               export_format = "xml";
+               export_format = "final_xml";
            } else if (document.getElementById('final_excel').checked == true) {
-               export_format = "excel";
+               export_format = "final_xlsx";
            } else if (document.getElementById('final_lexgrid_xml').checked == true) {
-               export_format = "lexgrid_xml";               
+               export_format = "final_lexgrid_xml";               
            } else {
                alert("Please specify a format.");
            }
         } 
         
         if (export_format != "") {
-	   var url = "/ncimappingtool/mapping?action=export&key=" + key_str + "&format=" + export_format;
+	   var url = "/ncimappingtool/mapping?action=export&key=" + key_str + "&format=" + export_format + "&entries=" + entries;
 	   window.open(url, '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');
         }
     }    
@@ -446,11 +457,11 @@ if (stage.compareTo("draft") == 0) {
 	    <ul style="list-style: none;">
 	    
 	    <li>
-	    <input type="radio" name="format" id="xml" value="xml" alt="XML" checked>XML
+	    <input type="radio" name="format" id="draft_xml" value="draft_xml" alt="XML" checked>XML
 	    </li>	    
 	    
 	    <li>
-	    <input type="radio" name="format" id="excel" value="excel" alt="Microsoft Excel" >Microsoft<sup>&#174;</sup> Excel&nbsp;
+	    <input type="radio" name="format" id="draft_excel" value="draft_excel" alt="Microsoft Excel" >Microsoft<sup>&#174;</sup> Excel&nbsp;
 	    </li>
 
    
@@ -463,30 +474,26 @@ if (stage.compareTo("draft") == 0) {
 } else {
 %>
 
-<!--
-        <input type="hidden" name="entry_status" id="entry_status" value="Valid" />
--->
-
      	<tr valign="top" align="left">
 	  <td align="left" class="textbody">
 	    <ul style="list-style: none;">
 	  
 	    <li>
-	    <input type="radio" name="format2" id="final_xml" value="xml" alt="XML" >XML
+	    <input type="radio" name="format2" id="final_xml" value="final_xml" alt="XML" >XML
 	    </li>		  
 	  
 <%	  
 if (!DataUtils.isNull(source_scheme) && source_scheme.compareTo("LOCAL DATA") != 0) {	  
 %>	  
 	    <li>
-	    <input type="radio" name="format2" id="final_lexgrid_xml" value="lexgrid_xml" alt="LexGrid XML" checked>LexGrid XML
+	    <input type="radio" name="format2" id="final_lexgrid_xml" value="final_lexgrid_xml" alt="LexGrid XML" checked>LexGrid XML
 	    </li>	    
 <%	    
 }
 %>
 	    
 	    <li>
-	    <input type="radio" name="format2" id="final_excel" value="excel" alt="Microsoft Excel" >Microsoft<sup>&#174;</sup> Excel&nbsp;
+	    <input type="radio" name="format2" id="final_excel" value="final_excel" alt="Microsoft Excel" >Microsoft<sup>&#174;</sup> Excel&nbsp;
 	    </li>
 	    </ul>
 	  </td>

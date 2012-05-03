@@ -1925,8 +1925,8 @@ System.out.println("(*) saveComponentSubsetAction : " + type);
         System.out.println("Codes: " + ob.getCodes());
 	}
 
-
-    public String exportMappingToXMLAction() {
+/*
+    public String exportMappingToXMLAction(String format) {
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -1983,14 +1983,16 @@ System.out.println("key: " + key);
 			}
 
 			mapping_name = mapping_name.replaceAll(" ", "_");
-			mapping_name = mapping_name + ".xml";
+
+			String ext = format.replace("_", ".");
+
+			//mapping_name = mapping_name + ".xml";
+			mapping_name = mapping_name + "_" + ext;
 
 			response.setHeader("Content-Disposition", "attachment; filename="
 					+ mapping_name);
 
-//System.out.println("mapping file name : " + mapping_name);
-
-//System.out.println("mapping sb.length() : " + sb.length());
+System.out.println("mapping file name : " + mapping_name);
 
 			response.setContentLength(sb.length());
 
@@ -2006,7 +2008,7 @@ System.out.println("key: " + key);
         FacesContext.getCurrentInstance().responseComplete();
 		return "export";
 	}
-
+*/
 
     public String uploadDataAction() {
         HttpServletRequest request =
@@ -2098,7 +2100,7 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
 					   }
 					   mappingData.setScore(score_int);
                        // business rule:
-					   if (mappingData.getStatus().compareToIgnoreCase("invalid") == 0) {
+					   if (mappingData.getStatus().compareToIgnoreCase("Invalid") == 0) {
 						   mappingData.setScore(0);
 					   }
 					   selected_matches.set(lcv2, mappingData);
@@ -2160,7 +2162,7 @@ System.out.println("mapping_version: " + mapping_version);
 
     }
 
-
+/*
     public String exportMappingAction() {
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
@@ -2175,14 +2177,12 @@ System.out.println("exportMappingAction format: " + format);
 
 
 		if (format.compareTo("draft_xml") == 0 || format.compareTo("final_xml") == 0) {
-			return exportMappingToXMLAction();
+			return exportMappingToXMLAction(format);
 		}
-
-		//String message = "To be implemented";
-		//request.getSession().setAttribute("message", message);
 
 		return format;
     }
+*/
 
 
     public String refreshBatchSubmissionPage() {
