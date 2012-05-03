@@ -47,12 +47,11 @@ public class MappingServlet extends HttpServlet {
 		System.out.println("(*) ACTION: " + action);
 		System.out.println("(*) FORMAT: " + format);
 
-
-		if (action.compareTo("export") == 0 && format.compareTo("xml") == 0) {
+		if (action.compareTo("export") == 0 && (format.compareTo("draft_xml") == 0 || format.compareTo("final_xml") == 0)) {
 			 exportMappingToXMLAction(request, response);
-		} else if (action.compareTo("export") == 0 && format.compareTo("excel") == 0) {
+		} else if (action.compareTo("export") == 0 && (format.compareTo("draft_xlsx") == 0 || format.compareTo("final_xlsx") == 0)) {
 			 exportMappingToExcelAction(request, response);
-		} else if (action.compareTo("export") == 0 && format.compareTo("lexgrid_xml") == 0) {
+		} else if (action.compareTo("export") == 0 && format.compareTo("final_lexgrid_xml") == 0) {
 			 exportMappingToLexGridAction(request, response);
 		}
 
@@ -71,6 +70,14 @@ System.out.println("exportMappingToExcelAction ...");
 
         //new MappingBean().updateMapping(request);
 		String type = (String) request.getParameter("type");
+
+		String entries = (String) request.getParameter("entries");
+		if (entries.startsWith("ALL")) {
+			entries = "Valid_Invalid_Pending";
+		}
+
+System.out.println("(*) Options: " + entries);
+
 
         try {
 
@@ -102,12 +109,26 @@ if (obj == null) {
 			String identifier = obj.getName();
 			//String mapping_version = obj.getVersion();
 
-
 			//String identifier = (String) request.getParameter("identifier");
 			if (identifier == null) {
 				identifier = "mapping";
 			}
-			identifier = identifier + ".xls";
+
+String format = (String) request.getParameter("format");
+boolean isDraft = true;
+if (!format.startsWith("draft")) {
+	isDraft = false;
+}
+
+//String ext = format.replace("_xlsx", ".xlsx");
+
+String ext = format.replace("_xlsx", ".xls");
+
+			identifier = identifier + "_" + ext;
+
+			//identifier = identifier + ".xls";//.xlsx
+
+System.out.println("mapping file name: " + identifier);
 
 			response.setContentType("application/vnd.ms-excel");
 
@@ -138,6 +159,16 @@ if (obj == null) {
 			  out.println("	  Target Name");
 			  out.println("   </th>");
 
+			  if (isDraft) {
+				  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
+				  out.println("	  Status");
+				  out.println("   </th>");
+
+				  out.println("   <th class=\"dataTableHeader\" scope=\"col\" align=\"left\">");
+				  out.println("	  Comment");
+				  out.println("   </th>");
+			  }
+
 
               Vector options = new Vector();
               //String[] entry_status = request.getParameterValues("entry_status");
@@ -163,6 +194,11 @@ if (obj == null) {
 				  //String targetCodingScheme,
 				  //String targetCodingSchemeVersion,
 				  String targetCodeNamespace = md.getTargetCodeNamespace();
+				  String status = md.getStatus();
+				  String comment = md.getComment();
+				  if (DataUtils.isNull(comment)) {
+					  comment = "";
+				  }
 
 
       out.println("			      <tr>");
@@ -174,6 +210,14 @@ if (obj == null) {
       out.println("			          <td>" + targetCodeNamespace + "</td>");
       out.println("			          <td>" + targetCode + "</td>");
       out.println("			          <td>" + targetName + "</td>");
+
+
+      if (isDraft && entries.indexOf(status) != -1) {
+		  out.println("			          <td>" + status + "</td>");
+		  out.println("			          <td>" + comment + "</td>");
+	  }
+
+
       out.println("			      </tr>");
 
 
@@ -199,6 +243,13 @@ if (obj == null) {
         //new MappingBean().updateMapping(request);
 		String type = (String) request.getParameter("type");
 
+		String entries = (String) request.getParameter("entries");
+		if (entries.startsWith("ALL")) {
+			entries = "Valid_Invalid_Pending";
+		}
+
+System.out.println("(*) Options: " + entries);
+
         try {
         	//String xml = null;
 			StringBuffer sb = null;
@@ -210,9 +261,11 @@ System.out.println("key: " + key);
 String format = (String) request.getParameter("format");
 
             String[] entry_status = request.getParameterValues("entry_status");
-            Vector options = toVector(entry_status);
 
 
+            //Vector options = toVector(entry_status);
+
+            Vector options = DataUtils.parseData(entries, "_");
 
 			HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
 			if (mappings == null) {
@@ -240,7 +293,9 @@ String format = (String) request.getParameter("format");
 			}
 
 			mapping_name = mapping_name.replaceAll(" ", "_");
-			mapping_name = mapping_name + ".xml";
+
+			String ext = format.replace("_xml", ".xml");
+			mapping_name = mapping_name + "_" + ext;
 
 			response.setHeader("Content-Disposition", "attachment; filename="
 					+ mapping_name);
@@ -305,7 +360,12 @@ String format = (String) request.getParameter("format");
 			String mapping_version = obj.getVersion();
 
 			mapping_name = mapping_name.replaceAll(" ", "_");
-			mapping_name = mapping_name + ".xml";
+			//mapping_name = mapping_name + ".xml";
+			String ext = format.replace("_xml", ".xml");
+			mapping_name = mapping_name + "_" + ext;
+
+System.out.println("mapping file name : " + mapping_name);
+
 
 			response.setHeader("Content-Disposition", "attachment; filename="
 					+ mapping_name);

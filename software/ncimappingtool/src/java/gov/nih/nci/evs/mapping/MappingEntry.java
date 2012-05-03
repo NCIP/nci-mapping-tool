@@ -65,12 +65,47 @@ public class MappingEntry
 	private String targetCodeNamespace;
 
 	private String comment;
+	private String status;
 
 // Default constructor
 	public MappingEntry() {
 	}
 
 // Constructor
+	public MappingEntry(
+		String sourceCode,
+		String sourceName,
+		String sourceCodingScheme,
+		String sourceCodingSchemeVersion,
+		String sourceCodeNamespace,
+		String associationName,
+		String rel,
+		int score,
+		String targetCode,
+		String targetName,
+		String targetCodingScheme,
+		String targetCodingSchemeVersion,
+		String targetCodeNamespace,
+		String status,
+		String comment) {
+
+		this.sourceCode = sourceCode;
+		this.sourceName = sourceName;
+		this.sourceCodingScheme = sourceCodingScheme;
+		this.sourceCodingSchemeVersion = sourceCodingSchemeVersion;
+		this.sourceCodeNamespace = sourceCodeNamespace;
+		this.associationName = associationName;
+		this.rel = rel;
+		this.score = score;
+		this.targetCode = targetCode;
+		this.targetName = targetName;
+		this.targetCodingScheme = targetCodingScheme;
+		this.targetCodingSchemeVersion = targetCodingSchemeVersion;
+		this.targetCodeNamespace = targetCodeNamespace;
+		this.status = status;
+		this.comment = comment;
+	}
+
 	public MappingEntry(
 		String sourceCode,
 		String sourceName,
@@ -99,6 +134,8 @@ public class MappingEntry
 		this.targetCodingScheme = targetCodingScheme;
 		this.targetCodingSchemeVersion = targetCodingSchemeVersion;
 		this.targetCodeNamespace = targetCodeNamespace;
+		this.status = "Pending";
+		this.comment = "";
 	}
 
 // Set methods
@@ -156,6 +193,10 @@ public class MappingEntry
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 // Get methods
@@ -217,6 +258,10 @@ public class MappingEntry
 
 	public String getComment() {
 		return this.comment;
+	}
+
+	public String getStatus() {
+		return this.status;
 	}
 
 	public MappingData toMappingData() {

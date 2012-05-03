@@ -452,6 +452,12 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 							 String target_scheme = mappingData.getTargetCodingScheme();
 							 String target_version = mappingData.getTargetCodingSchemeVersion();
 
+							 String status = mappingData.getStatus();
+							 String comment = mappingData.getComment();
+							 if (DataUtils.isNull(comment)) {
+								 comment = "";
+							 }
+
 							 source_scheme = DataUtils.getFormalName(source_scheme);
 							 target_scheme = DataUtils.getFormalName(target_scheme);
 
@@ -468,7 +474,9 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 								target_name,
 								target_scheme,
 								target_version,
-								target_namespace);
+								target_namespace,
+								status,
+								comment);
 
 							 mappingEntry.setComment(mappingData.getComment());
 							 entries.add(mappingEntry);
@@ -571,6 +579,10 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 							 String target_scheme = mappingData.getTargetCodingScheme();
 							 String target_version = mappingData.getTargetCodingSchemeVersion();
 
+							 String comment = mappingData.getComment();
+							 String entry_status = mappingData.getStatus();
+
+
 							 source_scheme = DataUtils.getFormalName(source_scheme);
 							 target_scheme = DataUtils.getFormalName(target_scheme);
 
@@ -587,9 +599,11 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 								target_name,
 								target_scheme,
 								target_version,
-								target_namespace);
+								target_namespace,
+								entry_status,
+								comment);
 
-							 mappingEntry.setComment(mappingData.getComment());
+							 //mappingEntry.setComment(mappingData.getComment());
 							 w.add(mappingEntry);
 						 }
 					}
