@@ -262,8 +262,8 @@ String batch_status = (String) request.getSession().getAttribute("batch_status")
 MappingData mappingData = null;
 String basePath = request.getContextPath(); 
 String message = (String) request.getSession().getAttribute("message");
-
 request.getSession().removeAttribute("message");
+
 String type = (String) request.getSession().getAttribute("type");
 
 String ncim_version = null;
@@ -1501,8 +1501,10 @@ if (source_code.compareTo("N/A") != 0 && !is_local_data) {
 <%	
 if (!readonly) {	
 
+System.out.println("mappingData.getComment(): " + mappingData.getComment());
 
-      if (DataUtils.isNull(mappingData.getComment())) {
+
+      if (DataUtils.isNull(mappingData.getComment()) || mappingData.getComment().compareTo("") == 0) {
 %>
 	
       <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/entry_notes.jsf?idx1=<%=idx1_str%>&idx2=<%=idx2_str%>',
