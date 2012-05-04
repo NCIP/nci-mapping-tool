@@ -36,8 +36,13 @@
 
   <script language="JavaScript">
 
+	function refreshParent() {
+	   window.opener.history.go(0); 
+	   window.close();
+	}
 
   </script>
+
 </head>
 <body>
   <f:view>
@@ -116,7 +121,7 @@ source_scheme = DataUtils.getFormalName(source_scheme);
 target_scheme = DataUtils.getFormalName(target_scheme);        
 
 String message = (String) request.getSession().getAttribute("message"); 
-
+request.getSession().removeAttribute("message"); 
 
 System.out.println("idx1_str: " + idx1_str);
 System.out.println("idx2_str: " + idx2_str);
@@ -214,6 +219,15 @@ System.out.println("target_version: " + target_version);
 			      alt="Save"
 			      tabindex="2">
 			    </h:commandButton>
+			    
+&nbsp;
+		    
+
+		      <a href="javascript:refreshParent();">
+			<img src="<%= request.getContextPath() %>/images/close.gif" alt="Close" border="0">
+		      </a>  			    
+			    
+			    
 			   </td>
 			   &nbsp;
 			  <td>
