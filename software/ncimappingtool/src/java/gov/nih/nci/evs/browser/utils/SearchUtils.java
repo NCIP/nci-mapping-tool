@@ -3932,7 +3932,7 @@ public class SearchUtils {
             for (int i = 0; i < matchText_vec.size(); i++) {
 				String matchText = (String) matchText_vec.elementAt(i);
 				int j = i+1;
-				System.out.println("(" + j + ")" + matchText);
+				//System.out.println("(" + j + ")" + matchText);
 
 				matchText = matchText.trim();
                 CodedNodeSet cns = getNodeSet(lbSvc, scheme, versionOrTag);
@@ -3991,7 +3991,7 @@ public class SearchUtils {
             for (int i = 0; i < matchText_vec.size(); i++) {
 				String matchText = (String) matchText_vec.elementAt(i);
 int j = i+1;
-				System.out.println("(" + j + ") " + matchText);
+				//System.out.println("(" + j + ") " + matchText);
 
 				matchText = matchText.trim();
                 CodedNodeSet cns = vsd_cns; //getNodeSet(lbSvc, scheme, versionOrTag);
@@ -4099,7 +4099,7 @@ int j = i+1;
             for (int i = 0; i < matchText_vec.size(); i++) {
 				String matchText = (String) matchText_vec.elementAt(i);
 				int j = i+1;
-				System.out.println("(" + j + ")" + matchText);
+				//System.out.println("(" + j + ")" + matchText);
 
 				matchText = matchText.trim();
                 CodedNodeSet cns = getNodeSet(lbSvc, scheme, versionOrTag);
@@ -4178,7 +4178,7 @@ int j = i+1;
             for (int i = 0; i < matchText_vec.size(); i++) {
 				String matchText = (String) matchText_vec.elementAt(i);
 				int j = i+1;
-				System.out.println("(" + j + ")" + matchText);
+				//System.out.println("(" + j + ")" + matchText);
 
 				matchText = matchText.trim();
                 CodedNodeSet cns = getNodeSet(lbSvc, scheme, versionOrTag);

@@ -233,6 +233,8 @@ public class DataUtils {
 
     public static String _mode_of_operation = null;
 
+    public static HashMap _mapping_namespace_hmap = null;
+
 
     // ==================================================================================
 
@@ -272,14 +274,25 @@ public class DataUtils {
 
      private static void setMappingDisplayNameHashMap() {
  		_mappingDisplayNameHashMap = new HashMap();
+ 		_mapping_namespace_hmap = new HashMap();
  		Iterator it = _csnv2codingSchemeNameMap.keySet().iterator();
  		while (it.hasNext()) {
  			String value = (String) it.next();
  			String cs = (String) _csnv2codingSchemeNameMap.get(value);
  			String version = (String) _csnv2VersionMap.get(value);
+
+//System.out.println("=== setMappingDisplayNameHashMap: cs " + cs + " version: " + version);
+
  			HashMap hmap = MetadataUtils.getMappingDisplayHashMap(cs, version);
  			if (hmap != null) {
  				_mappingDisplayNameHashMap.put(cs, hmap);
+
+ 				Iterator it2 = hmap.keySet().iterator();
+ 				while (it2.hasNext()) {
+					String key = (String) it2.next();
+					String value2 = (String) hmap.get(key);
+                    _mapping_namespace_hmap.put(key, value2);
+				}
  			}
  		}
 	}
@@ -319,6 +332,8 @@ public class DataUtils {
 
         Vector nv_vec = new Vector();
         boolean includeInactive = false;
+
+        _mapping_namespace_hmap = new HashMap();
 
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
@@ -4819,6 +4834,9 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
     public static String getMappingDisplayName(String scheme, String name) {
 		HashMap hmap = (HashMap) _mappingDisplayNameHashMap.get(scheme);
 		if (hmap == null) {
+
+			System.out.println("_mappingDisplayNameHashMap.get " + scheme + " returns NULL???");
+
 			return name;
 		}
 		Object obj = hmap.get(name);
@@ -5279,5 +5297,61 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 		}
 		return show_options;
 	}
+
+     public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag)
+        throws Exception {
+		CodedNodeSet cns = null;
+		try {
+			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+			CodedNodeSet.AnonymousOption restrictToAnonymous = CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY;
+			cns = cns.restrictToAnonymous(restrictToAnonymous);
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+ 	    return cns;
+    }
+
+    public static ResolvedConceptReferencesIterator getEntitiesInCodingScheme(String codingSchemeName, String vers) {
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            if (lbSvc == null) {
+                System.out.println("lbSvc == null???");
+                return null;
+            }
+            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            if (vers != null) versionOrTag.setVersion(vers);
+
+            CodedNodeSet cns = null;
+            try {
+				try {
+					cns = getNodeSet(lbSvc, codingSchemeName, versionOrTag);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+                if (cns == null) {
+					System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
+					return null;
+				}
+				try {
+					ResolvedConceptReferencesIterator iterator = cns.resolve(null, null, null, null, false);
+					int numberRemaining = iterator.numberRemaining();
+
+					System.out.println("numberRemaining: " + numberRemaining);
+
+					return iterator;
+				} catch (Exception e) {
+					System.out.println("cns.resolveToList failed???");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
