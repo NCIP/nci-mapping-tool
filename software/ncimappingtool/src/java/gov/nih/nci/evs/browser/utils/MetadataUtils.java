@@ -531,6 +531,9 @@ public class MetadataUtils {
 					hmap.put(cs_name, prop.getValue());
 
 					System.out.println(codingSchemeName + "   " + cs_name + " --> " + prop.getValue());
+
+					//DataUtils._mapping_namespace_hmap.put(cs_name, prop.getValue());
+
                 }
             }
             return hmap;

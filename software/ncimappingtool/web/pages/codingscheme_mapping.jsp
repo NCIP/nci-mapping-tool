@@ -218,7 +218,21 @@ if ((DataUtils.isNull(target_cs) || target_cs.compareTo("") == 0) && cs_label_ve
                   </td>
                 </tr>
  
- 
+
+                 <tr>
+                  <td></td>
+ 		  <td align="left" class="textbody">
+ 		      <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Entire source terminology: </b>:
+ 		      
+ <input type="radio" name="entire_terminology" value="yes" /> Yes
+ &nbsp;
+ <input type="radio" name="entire_terminology" value="no" checked /> No
+  		      
+		  </td>
+		 </tr> 
+
+		  
+		  
                 <tr>
 		  <td align="left" class="textbody">
 		      <b>To</b>:

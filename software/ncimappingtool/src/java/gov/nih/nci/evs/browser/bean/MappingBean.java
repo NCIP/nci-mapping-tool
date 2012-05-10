@@ -32,7 +32,9 @@ import org.LexGrid.valueSets.ValueSetDefinition;
 import org.LexGrid.commonTypes.Source;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.lexgrid.valuesets.dto.ResolvedValueSetDefinition;
+
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+
 import javax.servlet.ServletOutputStream;
 import org.LexGrid.concepts.*;
 import org.lexgrid.valuesets.dto.ResolvedValueSetCodedNodeSet;
@@ -47,6 +49,8 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+
+import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
 
 
 /**
@@ -351,6 +355,8 @@ System.out.println("submitMetadataAction ...");
 			return "message";
 		}
 
+
+
 		String mapping_version = (String) request.getParameter("mapping_version");
 		mapping_version = mapping_version.trim();
 		if (mapping_version.compareTo("") == 0) {
@@ -477,11 +483,47 @@ request.getSession().setAttribute("expanded_hset", expanded_hset);
 			request.getSession().setAttribute("target_cs", target_cs);
 			request.getSession().setAttribute("input_option", input_option);
 
-HashMap mapping_hmap = new HashMap();
-request.getSession().setAttribute("mapping_hmap", mapping_hmap);
-HashSet expanded_hset = new HashSet();
-request.getSession().setAttribute("expanded_hset", expanded_hset);
+			HashMap mapping_hmap = new HashMap();
+			request.getSession().setAttribute("mapping_hmap", mapping_hmap);
+			HashSet expanded_hset = new HashSet();
+			request.getSession().setAttribute("expanded_hset", expanded_hset);
 
+            // to be implemented
+			String entire_terminology = (String) request.getParameter("entire_terminology");
+			if (!DataUtils.isNull(entire_terminology) && entire_terminology.compareTo("yes") == 0) {
+				String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
+				String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
+
+                ResolvedConceptReferencesIterator iterator = DataUtils.getEntitiesInCodingScheme(source_scheme, source_version);
+                if (iterator != null) {
+					String codes_str = "";
+					Vector v = new Vector();
+
+					//request.getSession().setAttribute("code2name_hmap", code2name_hmap);
+					HashMap code2name_hmap = new HashMap();
+					try {
+						while (iterator.hasNext()) {
+							ResolvedConceptReference ref = (ResolvedConceptReference) iterator.next();
+							v.add(ref.getConceptCode());
+							code2name_hmap.put(ref.getConceptCode(), ref.getEntityDescription().getContent());
+							//codes = codes + ref.getConceptCode() + "\n";
+						}
+				    } catch (Exception ex) {
+						ex.printStackTrace();
+					}
+
+					SortUtils.quickSort(v);
+					for (int i=0; i<v.size(); i++) {
+						String t = (String) v.elementAt(i);
+						codes_str = codes_str + t + "\n";
+					}
+
+					request.getSession().setAttribute("action", "upload_data");
+					request.getSession().setAttribute("codes", codes_str);
+					request.getSession().setAttribute("entire_source", "true");
+					request.getSession().setAttribute("code2name_hmap", code2name_hmap);
+				}
+			}
 
 			if (_mode_of_operation != null && _mode_of_operation.compareToIgnoreCase(NCImtBrowserProperties.BATCH_MODE_OF_OPERATION) == 0) {
 				hashcode = assignMappingUniqueIdentifier(identifier, mapping_version);
@@ -1071,8 +1113,12 @@ System.out.println("submitMetadataAction type: " + type);
 				String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 				String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
 
-				HashMap code2name_hmap = DataUtils.code2Name(source_scheme, source_version, list);
-				request.getSession().setAttribute("code2name_hmap", code2name_hmap);
+				String entire_source = (String) request.getSession().getAttribute("entire_source");
+				System.out.println("entire_source: " + entire_source);
+                if (DataUtils.isNull(entire_source)) {
+					HashMap code2name_hmap = DataUtils.code2Name(source_scheme, source_version, list);
+					request.getSession().setAttribute("code2name_hmap", code2name_hmap);
+				}
 			} else {
 				HashMap code2name_hmap = parseInputData(list, 1);
 				request.getSession().setAttribute("code2name_hmap", code2name_hmap);

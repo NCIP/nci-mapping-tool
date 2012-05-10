@@ -25,6 +25,7 @@
 
 
 <%
+  HashMap display_name_hmap = new HashMap();
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
   String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
@@ -480,12 +481,17 @@ if (mapping_hmap == null) {
 } 
 
 
+String entire_source = (String) request.getSession().getAttribute("entire_source");
+//System.out.println("entire_source: " + entire_source);
+
+
 if (list != null && list.size() > 0) {
     if (input_option.compareToIgnoreCase("Code") == 0) {
 	    if (source_scheme != null && source_scheme.compareTo("") != 0 && source_scheme.compareTo("Constants.LOCAL_DATA") != 0) {
-	            
-		    code2name_hmap = DataUtils.code2Name(source_scheme, source_version, list);
-		    request.getSession().setAttribute("code2name_hmap", code2name_hmap);
+		    if (DataUtils.isNull(entire_source)) {
+		        code2name_hmap = DataUtils.code2Name(source_scheme, source_version, list);
+		        request.getSession().setAttribute("code2name_hmap", code2name_hmap);
+		    }
 	    }
     }
 }
@@ -936,7 +942,6 @@ if (!readonly) {
         
         
         if (selected_hide_options == null || selected_hide_options.length == 0) {
-            System.out.println("(*) selected_hide_options == null || selected_hide_options.length == 0");
             selected_hide_options = new String[1];
             selected_hide_options[0] = DataUtils.default_hide_option;
         } 
@@ -1369,12 +1374,31 @@ if (show_options.contains(mappingData.getStatus())) {
     show_entry = true;
 }
 if (show_entry) {			 
+        
+			 source_scheme = mappingData.getSourceCodingScheme();
+			 source_version = mappingData.getSourceCodingSchemeVersion();
+			 target_scheme = mappingData.getTargetCodingScheme();
+			 target_version = mappingData.getTargetCodingSchemeVersion();
+
 			 
 			 source_code = mappingData.getSourceCode();
 			 source_name = mappingData.getSourceName();
 		 
 			 source_namespace = mappingData.getSourceCodeNamespace();
 
+        if (display_name_hmap.containsKey(source_namespace)) {
+            source_namespace = (String) display_name_hmap.get(source_namespace);
+        } else {
+      
+            //String short_name = DataUtils.getMappingDisplayName(DataUtils.getFormalName(source_scheme), source_namespace);
+            String short_name = (String) DataUtils._mapping_namespace_hmap.get(source_namespace);
+           
+            if (!DataUtils.isNull(short_name)) {
+		    display_name_hmap.put(source_namespace, short_name);
+		    source_namespace = short_name;
+	    }
+        }
+        
 			 rel = mappingData.getRel();
 			 
 			 
@@ -1386,10 +1410,16 @@ if (show_entry) {
 			 target_name = mappingData.getTargetName();
 			 target_namespace = mappingData.getTargetCodeNamespace();
 
-			 source_scheme = mappingData.getSourceCodingScheme();
-			 source_version = mappingData.getSourceCodingSchemeVersion();
-			 target_scheme = mappingData.getTargetCodingScheme();
-			 target_version = mappingData.getTargetCodingSchemeVersion();
+        if (display_name_hmap.containsKey(target_namespace)) {
+            target_namespace = (String) display_name_hmap.get(target_namespace);
+        } else {
+            //String short_name = DataUtils.getMappingDisplayName(DataUtils.getFormalName(target_scheme), target_namespace);
+            String short_name = (String) DataUtils._mapping_namespace_hmap.get(target_namespace);
+            if (!DataUtils.isNull(short_name)) {
+		    display_name_hmap.put(target_namespace, short_name);
+		    target_namespace = short_name;
+    	    }
+	}  
 
 			 source_scheme = DataUtils.getFormalName(source_scheme);   
 			 target_scheme = DataUtils.getFormalName(target_scheme);  
@@ -1500,9 +1530,6 @@ if (source_code.compareTo("N/A") != 0 && !is_local_data) {
 		
 <%	
 if (!readonly) {	
-
-System.out.println("mappingData.getComment(): " + mappingData.getComment());
-
 
       if (DataUtils.isNull(mappingData.getComment()) || mappingData.getComment().compareTo("") == 0) {
 %>
