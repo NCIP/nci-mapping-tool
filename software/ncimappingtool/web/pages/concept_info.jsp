@@ -344,9 +344,15 @@ if (src_definitions != null) {
          for (int i = 0; i < src_definitions.length; i++) {
              String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight";
              Definition p = src_definitions[i];
-             
-             Source source = p.getSource(0);
-             String src = source.getContent();
+             String src = "";
+             Source[] sources = p.getSource();
+             if (sources != null && sources.length > 0) {
+                 Source source = p.getSource(0);
+                 if (source != null) {
+                     src = source.getContent();
+                 }
+             }
+
 %>             
              
                 <tr class="<%=rowColor%>">

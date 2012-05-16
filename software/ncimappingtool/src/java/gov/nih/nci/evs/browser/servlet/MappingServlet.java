@@ -171,8 +171,13 @@ System.out.println("mapping file name: " + identifier);
 
 
               Vector options = new Vector();
-              //String[] entry_status = request.getParameterValues("entry_status");
-              options.add("Valid");
+              //entries
+              if (entries.indexOf("Valid") != -1) options.add("Valid");
+              if (entries.indexOf("Invalid") != -1) options.add("Invalid");
+              if (entries.indexOf("Pending") != -1) options.add("Pending");
+
+              //options.add("Valid");
+
 			  // Add mapping entries based on selected entry categories here -- to be implemented.
               List<MappingData> list = obj.getMappingData(options);
 
