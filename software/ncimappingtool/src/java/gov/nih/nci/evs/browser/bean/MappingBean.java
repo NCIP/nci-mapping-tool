@@ -944,7 +944,19 @@ System.out.println("submitMetadataAction type: " + type);
 
 		List list = (ArrayList) request.getSession().getAttribute("data");
 		String idx1_str = (String) request.getParameter("idx1");
+
+
+        //KLO 030712
+        int anchor = 0;
+        if (idx1_str != null) {
+			anchor = Integer.parseInt(idx1_str) + 1;
+		}
+		String anchor_str = new Integer(anchor).toString();
+		request.getSession().setAttribute("anchor", anchor_str);
+
+
 		int idx1 = Integer.parseInt(idx1_str);
+
 		String data_value = (String) list.get(idx1);
 
 		String idx2_str = (String) request.getParameter("idx2");

@@ -79,7 +79,7 @@
 	  var count = 0;
 	  for (i=0; i<selObj.options.length; i++) {
 	    if (selObj.options[i].selected) {
-	      entries = entries + selObj.options[i].value + "_";
+	        entries = entries + selObj.options[i].value + "_";
 	    }
 	  }
   
@@ -509,16 +509,7 @@ if (!DataUtils.isNull(source_scheme) && source_scheme.compareTo("LOCAL DATA") !=
 
                   <tr><td class="textbody">
 
-<!--                  
-	<h:commandButton
-		id="Export_Mapping"
-		value="Export_Mapping"
-		image="#{basePath}/images/continue.gif"
-		action="#{mappingBean.exportMappingAction}" 
-		onclick="javascript:cursor_wait();"
-		alt="Export Mapping" >
-	</h:commandButton> 
--->
+
 
 <a href="javascript:exportToFile();">
     <img src="<%= request.getContextPath() %>/images/continue.gif" alt="Continue" border="0">
