@@ -38,20 +38,29 @@ public class MappingServlet extends HttpServlet {
         execute(request, response);
    }
 
+
+//	   var url = "/ncimappingtool/mapping?action=export&key=" + key_str + "&format=" + export_format + "&entries=" + entries;
+
    public void execute(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
 		String action = (String) request.getParameter("action");
 		String format = (String) request.getParameter("format");
 
-		System.out.println("(*) ACTION: " + action);
-		System.out.println("(*) FORMAT: " + format);
+		String key = (String) request.getParameter("key");
+		String entries = (String) request.getParameter("entries");
 
 		if (action.compareTo("export") == 0 && (format.compareTo("draft_xml") == 0 || format.compareTo("final_xml") == 0)) {
+		System.out.println("(*) exportMappingToXMLAction: " + entries);
+
 			 exportMappingToXMLAction(request, response);
 		} else if (action.compareTo("export") == 0 && (format.compareTo("draft_xlsx") == 0 || format.compareTo("final_xlsx") == 0)) {
+		System.out.println("(*) exportMappingToExcelAction: " + entries);
+
 			 exportMappingToExcelAction(request, response);
 		} else if (action.compareTo("export") == 0 && format.compareTo("final_lexgrid_xml") == 0) {
+		System.out.println("(*) exportMappingToLexGridAction: " + entries);
+
 			 exportMappingToLexGridAction(request, response);
 		}
 
@@ -370,7 +379,6 @@ String format = (String) request.getParameter("format");
 			mapping_name = mapping_name + "_" + ext;
 
 System.out.println("mapping file name : " + mapping_name);
-
 
 			response.setHeader("Content-Disposition", "attachment; filename="
 					+ mapping_name);
