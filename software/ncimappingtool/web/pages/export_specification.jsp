@@ -74,14 +74,9 @@
 
     function exportToFile() {
           var entries = "";
-	  var selObj = document.getElementById('entry_status');
+	  
 	  var i;
 	  var count = 0;
-	  for (i=0; i<selObj.options.length; i++) {
-	    if (selObj.options[i].selected) {
-	        entries = entries + selObj.options[i].value + "_";
-	    }
-	  }
   
     
         var key = document.getElementById("mappingKey");
@@ -91,11 +86,19 @@
 	var j;
 	var n;
 	var formats;
-	var export_format;
-	
+
 	var export_format = "";
         if (stages[0].checked) {
-        
+  
+          var selObj = document.getElementById('entry_status');
+	  for (i=0; i<selObj.options.length; i++) {
+	    if (selObj.options[i].selected) {
+	        entries = entries + selObj.options[i].value + "_";
+	    }
+	  }
+  
+  
+  
            if (document.getElementById('draft_xml').checked == true) {
                export_format = "draft_xml";
            } else if (document.getElementById('draft_excel').checked == true) {
@@ -104,8 +107,10 @@
                alert("Please specify a format.");
            }
 
-        } else if (stages[1].checked) {
-        
+        } else {
+
+           entries = "Valid";
+ 
            if (document.getElementById('final_xml').checked == true) {
                export_format = "final_xml";
            } else if (document.getElementById('final_excel').checked == true) {
@@ -380,9 +385,16 @@ if (DataUtils.isNull(source_version)) {
  
 <%
     String stage = request.getParameter("stage");
+
+    
     if (DataUtils.isNull(stage)) {
         stage = "draft";
     }
+
+
+
+System.out.println("Stage: " + stage);
+
     
     String draft_checked = "";
     String final_checked = "";
