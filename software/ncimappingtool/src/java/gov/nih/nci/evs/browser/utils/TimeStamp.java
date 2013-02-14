@@ -50,7 +50,7 @@ import java.util.*;
 public class TimeStamp {
 
   public static String toString(int i) {
-	 return new Integer(i).toString();
+	 return Integer.valueOf(i).toString();
   }
 
   public static String AMorPM(int i) {
@@ -63,9 +63,9 @@ public class TimeStamp {
 
   public static String formatter(int i) {
 	  if (i < 10) {
-		  return "0" + new Integer(i).toString();
+		  return "0" + Integer.valueOf(i).toString();
 	  }
-	  return new Integer(i).toString();
+	  return Integer.valueOf(i).toString();
   }
 
 

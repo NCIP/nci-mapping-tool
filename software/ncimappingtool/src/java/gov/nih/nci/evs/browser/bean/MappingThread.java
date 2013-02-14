@@ -58,7 +58,7 @@ public class MappingThread implements Runnable
   boolean advanced = false;
 
   public void setAdvanced(boolean flag) {
-	  this.advanced = advanced;
+	  this.advanced = flag;
   }
 
   public MappingThread(HttpServletRequest request, HashMap mapping_hmap)
@@ -115,39 +115,26 @@ public class MappingThread implements Runnable
 	try {
 		vds = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 
-if (vds == null) {
-	System.out.println("MappingThread vds == null??? " + vsd_uri);
-}
-
-
-		ResolvedValueSetDefinition rvsd = null;
-		try {
-
-//System.out.println("MappingThread calling getCodedNodeSetForValueSetDefinition ..." + vsd_uri);
-
-            ResolvedValueSetCodedNodeSet rvscns = vds.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri), valueSetDefinitionRevisionId, csVersionList, csVersionTag);
-
-//System.out.println("MappingThread getCodedNodeSetForValueSetDefinition DONE" + vsd_uri);
-
-
-
-			if (rvscns == null) {
-				System.out.println("ERROR: rvscns not found -- " + vsd_uri);
-			} else {
-				System.out.println("rvscns FOUND -- " + vsd_uri);
-				this.vsd_cns = rvscns.getCodedNodeSet();
-		    }
-		} catch (Exception ex) {
-			System.out.println("??? vds.resolveValueSetDefinition throws exception");
-			return;
-		}
+		if (vds == null) {
+			System.out.println("MappingThread vds == null??? " + vsd_uri);
+		} else {
+			ResolvedValueSetDefinition rvsd = null;
+			try {
+				ResolvedValueSetCodedNodeSet rvscns = vds.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri), valueSetDefinitionRevisionId, csVersionList, csVersionTag);
+				if (rvscns == null) {
+					System.out.println("ERROR: rvscns not found -- " + vsd_uri);
+				} else {
+					System.out.println("rvscns FOUND -- " + vsd_uri);
+					this.vsd_cns = rvscns.getCodedNodeSet();
+				}
+			} catch (Exception ex) {
+				System.out.println("??? vds.resolveValueSetDefinition throws exception");
+				return;
+			}
+	    }
 	} catch (Exception ex) {
 		ex.printStackTrace();
 	}
-
-
-//System.out.println("MappingThread THREAD instantiated " + vsd_uri);
-
   }
 
 
@@ -379,7 +366,7 @@ if (vds == null) {
 						  }
 					  }
 					  synchronized (session) {
-						  session.setAttribute("counter", new Integer(i+1).toString());
+						  session.setAttribute("counter", Integer.valueOf(i+1).toString());
 					  }
 
 
@@ -432,7 +419,7 @@ if (vds == null) {
 
 			if (input_list == null || input_list.size() == 0) return;
 
-			String total_str = new Integer(input_list.size()).toString();
+			String total_str = Integer.valueOf(input_list.size()).toString();
 
 			synchronized (session) {
 				session.setAttribute("total", total_str);
@@ -489,7 +476,7 @@ if (vds == null) {
 						  }
 					  }
 					  synchronized (session) {
-						  session.setAttribute("counter", new Integer(i+1).toString());
+						  session.setAttribute("counter", Integer.valueOf(i+1).toString());
 					  }
 
 
@@ -794,7 +781,7 @@ if (vds == null) {
 						  }
 					  }
 					  synchronized (session) {
-						  session.setAttribute("counter", new Integer(i+1).toString());
+						  session.setAttribute("counter", Integer.valueOf(i+1).toString());
 					  }
 
 

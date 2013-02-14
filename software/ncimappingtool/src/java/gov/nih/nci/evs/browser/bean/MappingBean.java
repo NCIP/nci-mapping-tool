@@ -326,10 +326,11 @@ public class MappingBean {
 
 
     public String returnToHomeAction() {
+		/*
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
-
+        */
 		_mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
 		if (_mode_of_operation != null && _mode_of_operation.compareToIgnoreCase(NCImtBrowserProperties.BATCH_MODE_OF_OPERATION) == 0) {
 			return "start";
@@ -948,21 +949,24 @@ System.out.println("submitMetadataAction type: " + type);
 
         //KLO 030712
         int anchor = 0;
+        int idx1 = 0;
         if (idx1_str != null) {
 			anchor = Integer.parseInt(idx1_str) + 1;
+			idx1 = Integer.parseInt(idx1_str);
 		}
-		String anchor_str = new Integer(anchor).toString();
+		String anchor_str = Integer.valueOf(anchor).toString();
 		request.getSession().setAttribute("anchor", anchor_str);
 
-
-		int idx1 = Integer.parseInt(idx1_str);
+		//int idx1 = Integer.parseInt(idx1_str);
 
 		String data_value = (String) list.get(idx1);
 
-		String idx2_str = (String) request.getParameter("idx2");
-		int idx2 = Integer.parseInt(idx2_str);
+		int idx2 = 0;
 
-		List selected_matches = null;
+		String idx2_str = (String) request.getParameter("idx2");
+		if (idx2_str != null) idx2 = Integer.parseInt(idx2_str);
+
+		List selected_matches =  null;
 		selected_matches = (ArrayList) mapping_hmap.get(data_value);
 
 		MappingData mappingData = (MappingData) selected_matches.get(idx2);
@@ -980,11 +984,12 @@ System.out.println("submitMetadataAction type: " + type);
 	}
 
     public String ncimetaSearchAction() {
+		/*
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-
+        */
         return "ncimeta";
 	}
 
@@ -1250,8 +1255,8 @@ if (cs_uri_vec == null) {
 }
 
 AbsoluteCodingSchemeVersionReferenceList acsvrl = new AbsoluteCodingSchemeVersionReferenceList();
-Vector cs_name_vec = DataUtils.getCodingSchemeURNsInValueSetDefinition(vsdURI);
-AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+//Vector cs_name_vec = DataUtils.getCodingSchemeURNsInValueSetDefinition(vsdURI);
+//AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
 Vector ref_vec = new Vector();
 String key = vsdURI;
 
@@ -1526,7 +1531,7 @@ System.out.println("MappingBean MappingThread: vsdURI " + vsdURI);
         if (idx1_str != null) {
 			anchor = Integer.parseInt(idx1_str) + 1;
 		}
-		String anchor_str = new Integer(anchor).toString();
+		String anchor_str = Integer.valueOf(anchor).toString();
 		request.getSession().setAttribute("anchor", anchor_str);
 
         String associationName = "mapsTo";
@@ -1552,7 +1557,8 @@ System.out.println("MappingBean MappingThread: vsdURI " + vsdURI);
 		synchronized (request.getSession()) {
 			String message = null;
 			List list = (ArrayList) request.getSession().getAttribute("data");
-			int idx = Integer.parseInt(idx1_str);
+			int idx = 0;
+			if (idx1_str != null) idx = Integer.parseInt(idx1_str);
 			String input_data = (String) list.get(idx);
 
 			HashMap mapping_hmap = (HashMap) request.getSession().getAttribute("mapping_hmap");
@@ -1569,7 +1575,7 @@ System.out.println("MappingBean MappingThread: vsdURI " + vsdURI);
 			    request.getSession().setAttribute("mapping_hmap", mapping_hmap);
 				message = "Mapping entry saved successfully. ";
 				request.getSession().setAttribute("message", message);
-				request.getSession().setAttribute("anchor", new Integer(anchor).toString());
+				request.getSession().setAttribute("anchor", Integer.valueOf(anchor).toString());
 
 			} else {
 				message = "Mapping entry already exists -- data not saved.";
@@ -1614,7 +1620,7 @@ System.out.println("MappingBean MappingThread: vsdURI " + vsdURI);
 
         List list = (ArrayList) request.getSession().getAttribute("data");
 	    for (int lcv=0; lcv<list.size(); lcv++) {
-			String idx1_str = new Integer(lcv).toString();
+			String idx1_str = Integer.valueOf(lcv).toString();
 			String checkbox_name = "checkbox" + idx1_str;
 			String[] selected_list = request.getParameterValues(checkbox_name);
 			if (selected_list != null && selected_list.length > 0) {
@@ -1632,7 +1638,7 @@ System.out.println("MappingBean MappingThread: vsdURI " + vsdURI);
                 List new_mapping_list = new ArrayList();
                 if (mapping_list != null && mapping_list.size()>0) {
 				    for (int lcv2=0; lcv2<mapping_list.size(); lcv2++) {
-  					     String idx2_str = new Integer(lcv2).toString();
+  					     String idx2_str = Integer.valueOf(lcv2).toString();
   					     if (!hset.contains(idx2_str)) {
 							 MappingData mappingData = (MappingData) mapping_list.get(lcv2);
 							 new_mapping_list.add(mappingData);
@@ -1790,7 +1796,7 @@ System.out.println("matchText: " + matchText);
 
 		if (type.compareTo("valueset") == 0) {
 			String vsdURI = (String) request.getParameter("vsdURI");
-			String valueSetDefinitionName = (String) request.getParameter("valueSetDefinitionName");
+			//String valueSetDefinitionName = (String) request.getParameter("valueSetDefinitionName");
 			request.getSession().setAttribute("vsdURI", vsdURI);
 			request.getSession().setAttribute("valueSetDefinitionName", "valueSetDefinitionName");
 		}
@@ -2081,7 +2087,7 @@ System.out.println("mapping file name : " + mapping_name);
 
 		if (type.compareTo("valueset") == 0) {
 			String vsdURI = (String) request.getParameter("vsdURI");
-			String valueSetDefinitionName = (String) request.getParameter("valueSetDefinitionName");
+			//String valueSetDefinitionName = (String) request.getParameter("valueSetDefinitionName");
 			request.getSession().setAttribute("vsdURI", vsdURI);
 			request.getSession().setAttribute("valueSetDefinitionName", "valueSetDefinitionName");
 		}
@@ -2121,7 +2127,7 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
 
 		System.out.println("(*) entry_status: " + entry_status);
 
-		String type = (String) request.getParameter("type");
+		//String type = (String) request.getParameter("type");
         HashMap mapping_hmap = (HashMap) request.getSession().getAttribute("mapping_hmap");
 
 		// update rel and score values for all mapping entries
@@ -2191,7 +2197,7 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
 
         // save all data first
         updateMapping(request);
-		String type = (String) request.getParameter("type");
+		//String type = (String) request.getParameter("type");
 
 
         try {

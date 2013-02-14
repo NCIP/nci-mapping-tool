@@ -973,7 +973,7 @@ public class TreeUtils {
         if (version != null)
             csvt.setVersion(version);
         ResolvedConceptReferenceList matches = null;
-        Vector v = new Vector();
+        //Vector v = new Vector();
         try {
 			Entity concept = getConceptByCode(scheme, version, null, code);
 			if (concept == null) return null;
@@ -1145,7 +1145,7 @@ public class TreeUtils {
         if (version != null)
             csvt.setVersion(version);
         ResolvedConceptReferenceList matches = null;
-        Vector v = new Vector();
+        //Vector v = new Vector();
         try {
 
 			Entity concept = getConceptByCode(scheme, version, null, code);
@@ -1346,6 +1346,8 @@ public class TreeUtils {
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
+
+            if (cns == null) return null;
 
             cns = cns.restrictToCodes(crefs);
             ResolvedConceptReferenceList matches =
@@ -1811,7 +1813,7 @@ System.out.println("version: " + version);
         if (version != null)
             csvt.setVersion(version);
         ResolvedConceptReferenceList matches = null;
-        Vector v = new Vector();
+        //Vector v = new Vector();
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             LexBIGServiceConvenienceMethods lbscm =

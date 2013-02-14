@@ -38,7 +38,7 @@
   
   Vector show_options = (Vector) request.getSession().getAttribute("show_options");
   
-  String[] status_options = DataUtils.status_options;
+  String[] status_options = DataUtils.get_status_options();
  
   if (show_options == null) {
       show_options = new Vector();
@@ -881,7 +881,7 @@ if (show_refresh_button) {
 				    //String[] status_options = DataUtils.status_options;
 				    String default_status = (String) request.getSession().getAttribute("entry_status");
 				    if (DataUtils.isNull(default_status)) {
-				        default_status = DataUtils.default_status;
+				        default_status = DataUtils.get_default_status();
 				    }
 				    for (int i=0; i<status_options.length; i++) {
 					 String t = status_options[i];
@@ -935,7 +935,7 @@ if (!readonly) {
 
 			    <select id="hide_option" name="hide_option" size="2" multiple tabindex="4">
 			    <%
-				    String[] hide_options = DataUtils.hide_options;
+				    String[] hide_options = DataUtils.get_hide_options();
 
         String[] selected_hide_options = (String[]) request.getSession().getAttribute("selected_hide_options");
         
@@ -943,7 +943,7 @@ if (!readonly) {
         
         if (selected_hide_options == null || selected_hide_options.length == 0) {
             selected_hide_options = new String[1];
-            selected_hide_options[0] = DataUtils.default_hide_option;
+            selected_hide_options[0] = DataUtils.get_default_hide_option();
         } 
         
         //for (int k=0; k<selected_hide_options.length; k++) {
@@ -1391,7 +1391,7 @@ if (show_entry) {
         } else {
       
             //String short_name = DataUtils.getMappingDisplayName(DataUtils.getFormalName(source_scheme), source_namespace);
-            String short_name = (String) DataUtils._mapping_namespace_hmap.get(source_namespace);
+            String short_name = (String) DataUtils.get_mapping_namespace_hmap().get(source_namespace);
            
             if (!DataUtils.isNull(short_name)) {
 		    display_name_hmap.put(source_namespace, short_name);
@@ -1414,7 +1414,7 @@ if (show_entry) {
             target_namespace = (String) display_name_hmap.get(target_namespace);
         } else {
             //String short_name = DataUtils.getMappingDisplayName(DataUtils.getFormalName(target_scheme), target_namespace);
-            String short_name = (String) DataUtils._mapping_namespace_hmap.get(target_namespace);
+            String short_name = (String) DataUtils.get_mapping_namespace_hmap().get(target_namespace);
             if (!DataUtils.isNull(short_name)) {
 		    display_name_hmap.put(target_namespace, short_name);
 		    target_namespace = short_name;
@@ -1471,7 +1471,7 @@ if (source_code.compareTo("N/A") != 0 && !is_local_data) {
 			    <select id="<%=rel_id%>" name="<%=rel_id%>" size="1" tabindex="4">
 			    <%
 
-				    String[] rel_options = DataUtils.rel_options;
+				    String[] rel_options = DataUtils.get_rel_options();
 				    for (int i=0; i<rel_options.length; i++) {
 					 String t = rel_options[i];
 					 if (t.compareToIgnoreCase(rel) == 0) {
@@ -1494,7 +1494,7 @@ if (source_code.compareTo("N/A") != 0 && !is_local_data) {
 			    <select id="<%=score_id%>" name="<%=score_id%>" size="1" tabindex="4">
 			    <%
 
-				    String[] score_options = DataUtils.score_options;
+				    String[] score_options = DataUtils.get_score_options();
 				    for (int i=0; i<score_options.length; i++) {
 					 String t = score_options[i];
 					 if (t.compareTo(score) == 0) {

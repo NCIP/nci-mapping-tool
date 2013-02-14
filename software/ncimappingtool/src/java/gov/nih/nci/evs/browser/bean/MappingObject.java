@@ -179,9 +179,9 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 			String key = null;
 			if (uuid < 0) {
 				uuid = uuid * (-1);
-				key = "MN" + new Integer(uuid).toString();
+				key = "MN" + Integer.valueOf(uuid).toString();
 			} else {
-			    key = "M" + new Integer(uuid).toString();
+			    key = "M" + Integer.valueOf(uuid).toString();
 			}
 			return key;
 
@@ -209,7 +209,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 			} else {
 				_uuid += NULL_STRING_HASH_CODE;
 			}
-			_key = "M" + new Integer(_uuid).toString();
+			_key = "M" + Integer.valueOf(_uuid).toString();
 			*/
 
 		}
@@ -524,7 +524,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
             for (int k=0; k<_data.size(); k++) {
 			    String input_data = (String) _data.get(k);
 
-			    List<MappingEntry> entries = new ArrayList();
+			    //List<MappingEntry> entries = new ArrayList();
 			    List selected_matches = (ArrayList) _mapping_hmap.get(input_data);
 
 			    if (selected_matches != null) {
@@ -552,7 +552,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
             for (int k=0; k<_data.size(); k++) {
 			   String input_data = (String) _data.get(k);
 
-			   List<MappingEntry> entries = new ArrayList();
+			   //List<MappingEntry> entries = new ArrayList();
 			   List selected_matches = (ArrayList) _mapping_hmap.get(input_data);
 
 			   if (selected_matches != null) {

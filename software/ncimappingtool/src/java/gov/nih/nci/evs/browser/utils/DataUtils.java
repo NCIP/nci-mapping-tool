@@ -156,13 +156,12 @@ public class DataUtils {
         Arrays.asList(new String[] { "a", "an", "and", "by", "for", "of", "on",
             "in", "nos", "the", "to", "with" });
 
-    public static String TYPE_ROLE = "type_role";
-    public static String TYPE_ASSOCIATION = "type_association";
-    public static String TYPE_SUPERCONCEPT = "type_superconcept";
-    public static String TYPE_SUBCONCEPT = "type_subconcept";
-    public static String TYPE_INVERSE_ROLE = "type_inverse_role";
-    public static String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
-
+    public static final String TYPE_ROLE = "type_role";
+    public static final String TYPE_ASSOCIATION = "type_association";
+    public static final String TYPE_SUPERCONCEPT = "type_superconcept";
+    public static final String TYPE_SUBCONCEPT = "type_subconcept";
+    public static final String TYPE_INVERSE_ROLE = "type_inverse_role";
+    public static final String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
 
     public String _ncicbContactURL = null;
     public String _terminologySubsetDownloadURL = null;
@@ -174,6 +173,7 @@ public class DataUtils {
     public String _ncimURL = null;
     public String _ncitURL = null;
 
+/*
     public static HashMap _namespace2CodingScheme = null;
 
     public static HashMap _formalName2LocalNameHashMap = null;
@@ -213,27 +213,73 @@ public class DataUtils {
     public static HashMap _formalName2VersionsHashMap = null;
     public static HashMap _versionReleaseDateHashMap = null;
 
-
+*/
     public static String[] rel_options = new String[] {"SY", "BT", "NT", "RO"};
-
     public static String[] score_options = new String[] {"0", "1", "2", "3", "4", "5", "6"};
 
-    public static String[] status_options = new String[] {"Valid", "Invalid", "Pending"}; //, "Undecided"};
-    public static String   default_status = "Undecided";
+    private static HashMap _namespace2CodingScheme = null;
 
-    public static String[] export_options = new String[] {"ALL", "Valid", "Invalid", "Pending"}; //, "Undecided"};
-    public static String   default_export_option = "ALL";
+    private static HashMap _formalName2LocalNameHashMap = null;
+    private static HashMap _localName2FormalNameHashMap = null;
+    private static HashMap _formalName2MetadataHashMap = null;
+    private static HashMap _displayName2FormalNameHashMap = null;
 
-    public static String[] hide_options = new String[] {"NONE", "Valid", "Invalid", "Pending"}; //, "Undecided"};
+    private static HashMap _formalNameVersion2LocalNameHashMap = null;
+    private static HashMap _localNameVersion2FormalNameVersionHashMap = null;
+    private static HashMap _formalNameVersion2MetadataHashMap = null;
+    private static HashMap _displayNameVersion2FormalNameVersionHashMap = null;
+    private static HashMap _uri2CodingSchemeNameHashMap = null;
+    private static HashMap _codingSchemeName2URIHashMap = null;
 
-    public static String   default_hide_option = "NONE";
+    //private static Vector _nonConcept2ConceptAssociations = null;
 
-    public static Vector _valueset_item_vec = null;
-    public static Vector valueSetDefinitionOnServer_uri_vec = null;
+    private static final String[] _nonConcept2ConceptAssociations = new String[] {"domain", "range", "instance"};
 
-    public static String _mode_of_operation = null;
+    private static String _defaultOntologiesToSearchOnStr = null;
 
-    public static HashMap _mapping_namespace_hmap = null;
+    private static HashSet _vocabulariesWithConceptStatusHashSet = null;
+    private static HashSet _vocabulariesWithoutTreeAccessHashSet = null;
+
+    private static HashMap _formalName2NCImSABHashMap = null;
+
+    private static HashMap _isMappingHashMap = null;
+    private static HashMap _mappingDisplayNameHashMap = null;
+
+    private static HashMap _codingSchemeTagHashMap = null;
+
+    private static final HashMap _valueSetDefinitionHierarchyHashMap = null;
+    private static Vector  _availableValueSetDefinitionSources = null;
+    private static Vector  _valueSetDefinitionHierarchyRoots = null;
+
+    private static HashMap _codingScheme2MappingCodingSchemes = null;
+
+    private static Vector _valueSetDefinitionMetadata = null;
+
+
+    private static HashMap _formalName2VersionsHashMap = null;
+    private static HashMap _versionReleaseDateHashMap = null;
+
+    private static Vector _source_code_schemes = null;
+
+    private static HashMap sourceValueSetTree = null;
+    private static HashMap terminologyValueSetTree = null;
+
+
+    private static final String[] status_options = new String[] {"Valid", "Invalid", "Pending"}; //, "Undecided"};
+    private static final String   default_status = "Undecided";
+
+    private static final String[] export_options = new String[] {"ALL", "Valid", "Invalid", "Pending"}; //, "Undecided"};
+    private static final String   default_export_option = "ALL";
+
+    private static final String[] hide_options = new String[] {"NONE", "Valid", "Invalid", "Pending"}; //, "Undecided"};
+
+    private static final String   default_hide_option = "NONE";
+
+    private static Vector _valueset_item_vec = null;
+    private static Vector valueSetDefinitionOnServer_uri_vec = null;
+
+    private static String _mode_of_operation = null;
+    private static HashMap _mapping_namespace_hmap = null;
 
 
     // ==================================================================================
@@ -242,11 +288,91 @@ public class DataUtils {
         // setCodingSchemeMap();
     }
 
+
+    static {
+		setCodingSchemeMap();
+
+		if (_valueSetDefinitionMetadata == null) {
+			_valueSetDefinitionMetadata = getValueSetDefinitionMetadata();
+        }
+
+        if (_namespace2CodingScheme == null) {
+            _namespace2CodingScheme = getNamespaceId2CodingSchemeFormalNameMapping();
+		}
+
+		if (_defaultOntologiesToSearchOnStr == null) {
+            _defaultOntologiesToSearchOnStr = getDefaultOntologiesToSearchOnStr();
+		}
+
+	}
+
+	public static HashMap get_mapping_namespace_hmap() {
+		return _mapping_namespace_hmap;
+	}
+
+
     public static List getOntologyList() {
         if (_ontologies == null)
             setCodingSchemeMap();
         return _ontologies;
     }
+
+    public static HashMap get_localName2FormalNameHashMap() {
+		return _localName2FormalNameHashMap;
+	}
+
+
+
+
+    public static String[] get_status_options() {
+		return Arrays.copyOf(status_options, status_options.length);
+	}
+
+    public static String get_default_status() {
+		return default_status;
+	}
+
+    public static String[] get_export_options() {
+		return Arrays.copyOf(export_options, export_options.length);
+	}
+
+    public static String get_default_export_option() {
+	    return default_export_option;
+    }
+
+    public static String[] get_hide_options() {
+	    return Arrays.copyOf(hide_options, hide_options.length);
+    }
+
+    public static String get_default_hide_option() {
+		return default_hide_option;
+	}
+
+	public static String[] get_rel_options() {
+		return Arrays.copyOf(rel_options, rel_options.length);
+	}
+
+	public static String[] get_score_options() {
+		return Arrays.copyOf(score_options, score_options.length);
+	}
+
+
+    public static HashSet get_vocabulariesWithoutTreeAccessHashSet() {
+		return _vocabulariesWithoutTreeAccessHashSet;
+	}
+
+
+    private static boolean isCodingSchemeSupported(String codingSchemeName) {
+        if (_codingSchemeHashSet == null)
+            setCodingSchemeMap();
+        return _codingSchemeHashSet.contains(codingSchemeName);
+    }
+
+
+    public static HashMap get_codingSchemeName2URIHashMap() {
+		return _codingSchemeName2URIHashMap;
+	}
+
 
     public static String getDefaultOntologiesToSearchOnStr() {
         if (_ontologies == null)
@@ -264,12 +390,13 @@ public class DataUtils {
         return _defaultOntologiesToSearchOnStr;
     }
 
+/*
     private static boolean isCodingSchemeSupported(String codingSchemeName) {
         if (_codingSchemeHashSet == null)
             setCodingSchemeMap();
         return _codingSchemeHashSet.contains(codingSchemeName);
     }
-
+*/
 
 
      private static void setMappingDisplayNameHashMap() {
@@ -340,6 +467,7 @@ public class DataUtils {
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return;
             }
             CodingSchemeRenderingList csrl = null;
             try {
@@ -1356,8 +1484,10 @@ public class DataUtils {
             // EVSApplicationService lbSvc = rsu.createLexBIGService();
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
-            if (csrl == null)
+            if (csrl == null) {
                 _logger.warn("csrl is NULL");
+                return null;
+			}
 
             CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
             for (int i = 0; i < csrs.length; i++) {
@@ -2456,7 +2586,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
     public static Vector getSynonyms(String scheme, String version, String tag,
         String code) {
-        Vector v = new Vector();
+        //Vector v = new Vector();
         Entity concept = getConceptByCode(scheme, version, tag, code);
         // KLO, 091009
         // getSynonyms(concept);
@@ -2784,9 +2914,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
             CodingSchemeRendering csr = csrs[i];
             if (csr != null && csr.getRenderingDetail() != null) {
                 Boolean isActive = null;
-                if (csr == null) {
-                    _logger.warn("\tcsr == null???");
-                } else if (csr.getRenderingDetail() == null) {
+                if (csr.getRenderingDetail() == null) {
                     _logger.warn("\tcsr.getRenderingDetail() == null");
                 } else if (csr.getRenderingDetail().getVersionStatus() == null) {
                     _logger
@@ -2867,7 +2995,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
         }
 
         if (key.indexOf("%20") != -1) {
-            key.replaceAll("%20", " ");
+            key = key.replaceAll("%20", " ");
         }
 
         if (_csnv2codingSchemeNameMap == null) {
@@ -2890,7 +3018,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
         if (_csnv2VersionMap == null)
             setCodingSchemeMap();
         if (key.indexOf("%20") != -1) {
-            key.replaceAll("%20", " ");
+            key = key.replaceAll("%20", " ");
         }
 
         if (_csnv2VersionMap == null) {
@@ -3225,18 +3353,22 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
     }
 
+
+
     // [#25034] Remove hyperlink from instances on the Relationship tab. (KLO,
     // 121709)
     public static boolean isNonConcept2ConceptAssociation(String associationName) {
+		/*
         if (_nonConcept2ConceptAssociations == null) {
             _nonConcept2ConceptAssociations = new Vector();
             _nonConcept2ConceptAssociations.add("domain");
             _nonConcept2ConceptAssociations.add("range");
             _nonConcept2ConceptAssociations.add("instance");
         }
+        */
         if (associationName == null)
             return false;
-        return _nonConcept2ConceptAssociations.contains(associationName);
+        return Arrays.asList(_nonConcept2ConceptAssociations).contains(associationName);
     }
 
     // [#25027] Encountering "Service Temporarily Unavailable" on display of
@@ -3265,6 +3397,8 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
+
+            if (cns == null) return null;
 
             cns = cns.restrictToCodes(crefs);
 
@@ -3356,6 +3490,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
+            if (cns == null) return null;
 
             cns = cns.restrictToCodes(crefs);
 
@@ -3375,7 +3510,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
                         propertyNames, propertyTypes, resolveObjects,
                         maxToReturn);
 
-                HashMap hmap = new HashMap();
+                //HashMap hmap = new HashMap();
                 if (rcrl == null) {
                     _logger.warn("Concep not found.");
                     return null;
@@ -3550,6 +3685,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return v;
             }
 
 			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -3711,7 +3847,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
         if (version != null)
             csvt.setVersion(version);
 
-		List list = new ArrayList();
+		//List list = new ArrayList();
 		try {
 			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
@@ -4475,9 +4611,32 @@ System.out.println("vsd_str " + vsd_str);
 		return v;
 	}
 
+    static {
+		_availableValueSetDefinitionSources = new Vector();
+		HashSet hset = new HashSet();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        if (list != null) {
+			for (int i=0; i<list.size(); i++) {
+				String uri = (String) list.get(i);
+				ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+				java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
 
+				while (sourceEnum.hasMoreElements()) {
+					Source src = (Source) sourceEnum.nextElement();
+					String src_str = src.getContent();
+					if (!hset.contains(src_str)) {
+						hset.add(src_str);
+						_availableValueSetDefinitionSources.add(src_str);
+					}
+				}
+			}
+			SortUtils.quickSort(_availableValueSetDefinitionSources);
+	    }
+	}
 
     public static Vector getAvailableValueSetDefinitionSources() {
+		/*
 		if (_availableValueSetDefinitionSources != null) return _availableValueSetDefinitionSources;
 		_availableValueSetDefinitionSources = new Vector();
 		HashSet hset = new HashSet();
@@ -4498,7 +4657,10 @@ System.out.println("vsd_str " + vsd_str);
 				}
 			}
 		}
+
 		return SortUtils.quickSort(_availableValueSetDefinitionSources);
+		*/
+		return _availableValueSetDefinitionSources;
 	}
 
 
@@ -4518,8 +4680,24 @@ System.out.println("vsd_str " + vsd_str);
 		}
 	}
 
+    static {
+		_valueSetDefinitionMetadata = new Vector();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        if (list != null) {
+			for (int i=0; i<list.size(); i++) {
+				String uri = (String) list.get(i);
+				ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+				String metadata = getValueSetDefinitionMetadata(vsd);
+				_valueSetDefinitionMetadata.add(metadata);
+			}
+			SortUtils.quickSort(_valueSetDefinitionMetadata);
+	    }
+
+	}
 
 	public static Vector getValueSetDefinitionMetadata() {
+		/*
 		if (_valueSetDefinitionMetadata != null) return _valueSetDefinitionMetadata;
 		_valueSetDefinitionMetadata = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
@@ -4532,6 +4710,7 @@ System.out.println("vsd_str " + vsd_str);
 			_valueSetDefinitionMetadata.add(metadata);
 		}
 		SortUtils.quickSort(_valueSetDefinitionMetadata);
+		*/
 		return _valueSetDefinitionMetadata;
 	}
 
@@ -4630,6 +4809,7 @@ System.out.println("vsd_str " + vsd_str);
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return null;
             }
             CodingSchemeRenderingList csrl = null;
             try {
@@ -4758,6 +4938,7 @@ System.out.println("vsd_str " + vsd_str);
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return null;
             }
             CodingSchemeRenderingList csrl = null;
             try {
@@ -4913,8 +5094,8 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 		}
 
 
-        Vector cs_name_vec = new Vector();
-        Vector cs_version_vec = new Vector();
+        //Vector cs_name_vec = new Vector();
+        //Vector cs_version_vec = new Vector();
         HashSet hset = new HashSet();
 
         HashMap csnv2codesMap = new HashMap();
@@ -5062,11 +5243,7 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 							_codingSchemeTagHashMap = new HashMap();
 						}
 						String key = null;
-						if (version == null) {
-							key = codingSchemeName + "$null";
-						} else {
-							key = codingSchemeName + "$" + version;
-						}
+						key = codingSchemeName + "$" + version;
 						_codingSchemeTagHashMap.put(key, tag_str);
 						return tag_str;
 					}
@@ -5175,7 +5352,42 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 		return null;
 	}
 
+
+    static {
+		_valueset_item_vec = new Vector();
+		valueSetDefinitionOnServer_uri_vec = new Vector();
+		Vector key_vec = new Vector();
+
+		HashMap hmap = new HashMap();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        for (int i=0; i<list.size(); i++) {
+			String t = (String) list.get(i);
+			ValueSetDefinition vsd = findValueSetDefinitionByURI(t);
+			if (vsd != null) {
+				String name = vsd.getValueSetDefinitionName();
+				String uri = vsd.getValueSetDefinitionURI();
+				if (name == null) {
+					name = "<NOT ASSIGNED>";
+				}
+				hmap.put(name, vsd);
+			    valueSetDefinitionOnServer_uri_vec.add(uri);
+			    key_vec.add(name);
+		    }
+		}
+
+		key_vec = SortUtils.quickSort(key_vec);
+		for (int i=0; i<key_vec.size(); i++) {
+			String key = (String) key_vec.elementAt(i);
+			ValueSetDefinition vsd = (ValueSetDefinition) hmap.get(key);
+			_valueset_item_vec.add(new SelectItem(vsd.getValueSetDefinitionURI(), key)); // value, label
+		}
+
+	}
+
+
 	public static Vector getValueSetDefinitions() {
+		/*
 		if (_valueset_item_vec != null) return _valueset_item_vec;
 
 		_valueset_item_vec = new Vector();
@@ -5206,6 +5418,7 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 			ValueSetDefinition vsd = (ValueSetDefinition) hmap.get(key);
 			_valueset_item_vec.add(new SelectItem(vsd.getValueSetDefinitionURI(), key)); // value, label
 		}
+		*/
 		return _valueset_item_vec;
 	}
 
@@ -5353,5 +5566,20 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
         }
         return null;
     }
+
+	public static String getValueSetDefinitionURIByName(String vsd_name) {
+		//Vector v = new Vector();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        for (int i=0; i<list.size(); i++) {
+			String uri = (String) list.get(i);
+			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+			String name = vsd.getValueSetDefinitionName();
+			if (name != null && name.compareTo(vsd_name) == 0) {
+				return uri;
+			}
+		}
+		return null;
+	}
 
 }

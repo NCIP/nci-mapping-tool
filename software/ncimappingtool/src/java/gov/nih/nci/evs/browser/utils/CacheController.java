@@ -741,7 +741,7 @@ public class CacheController {
 
     public JSONArray HashMap2JSONArray(HashMap hmap) {
 
-        JSONObject json = new JSONObject();
+        //JSONObject json = new JSONObject();
         JSONArray nodesArray = null;
         try {
             nodesArray = new JSONArray();
@@ -1125,16 +1125,17 @@ System.out.println("Exception thrown by HashMap2JSONArray???");
                     tree.getCurrentFocus());
 
            // _cache.put(new Element(getTreeKey(tree), json));
-
-           _cache.put(new Element(getTreeKey(tree, codingSchemeVersion), json));
+           if (json != null) {
+			   _cache.put(new Element(getTreeKey(tree, codingSchemeVersion), json));
+		   }
         }
     }
-
+/*
     private static String getTreeKey(LexEvsTree tree) {
         return getTreeKey(tree.getCodingScheme(), tree.getCurrentFocus()
             .getCode());
     }
-
+*/
     private static String getTreeKey(LexEvsTree tree, String version) {
         return getTreeKey(tree.getCodingScheme(), version, tree.getCurrentFocus()
             .getCode());

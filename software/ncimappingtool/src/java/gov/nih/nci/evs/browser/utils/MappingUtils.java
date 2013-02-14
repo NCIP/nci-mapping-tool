@@ -119,9 +119,9 @@ import gov.nih.nci.evs.browser.bean.*;
 
 public class MappingUtils {
 
-    public static Vector<String> supportedSearchTechniqueNames;
+    private static Vector<String> supportedSearchTechniqueNames;
 
-    public static int MAX_RETURN = -1;
+    public static final int MAX_RETURN = -1;
 
     private static Logger _logger = Logger.getLogger(MappingUtils.class);
 
@@ -1101,7 +1101,7 @@ System.out.println("matchAlgorithm: " + matchAlgorithm);
 
 	public static ResolvedConceptReferencesIterator matchConceptCode(String scheme, String version, String matchText, String source, String matchAlgorithm) {
 		LexBIGService lbs = RemoteServerUtil.createLexBIGService();
-		Vector v = new Vector();
+		//Vector v = new Vector();
 		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
 		if (version != null) versionOrTag.setVersion(version);
 		CodedNodeSet cns = null;
@@ -1331,7 +1331,7 @@ System.out.println("algorithm: " + algorithm);
 
 
 	public static Vector getSynonyms(String scheme, String version, String tag, String code) {
-		Vector v = new Vector();
+		//Vector v = new Vector();
 		Entity concept = getConceptByCode(scheme, version, tag, code);
 /*
 		if (concept != null) {
@@ -2614,7 +2614,7 @@ System.out.println("process_codingscheme_mapping algorithm: " + algorithm);
 		targetCodingSchemeVersion = target_version;
 
 		ArrayList list = new ArrayList();
-		HashSet hset = new HashSet();
+		//HashSet hset = new HashSet();
 		String source = null;
 		boolean ranking = false;
 
