@@ -281,8 +281,8 @@ searchText_vec.add("adverse");
 	public void lexicalMatchInBatch(File output, String codingSchemeName, String version) throws Exception {
 
         OutputStreamWriter osWriter = null;
-		Vector algorithms = getSupportedSearchTechniqueNames();
-		Vector excluded_algorithms = getExcludedAlgorithms();
+		//Vector algorithms = getSupportedSearchTechniqueNames();
+		//Vector excluded_algorithms = getExcludedAlgorithms();
 		String algorithm = null;
 
 		try {
@@ -296,7 +296,7 @@ searchText_vec.add("adverse");
 		try {
 			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
 			if (version != null) versionOrTag.setVersion(version);
-            LexBIGService lbs = new RemoteServerUtil().createLexBIGService();
+            //LexBIGService lbs = new RemoteServerUtil().createLexBIGService();
 			for (int i=0; i<searchText_vec.size(); i++) {
 				String t = (String) searchText_vec.elementAt(i);
 
@@ -821,7 +821,7 @@ System.out.println("Output file " + outputfile + " generated.");
     public static ResolvedConceptReferencesIterator searchByName(String scheme, String version, String matchText, String source, String matchAlgorithm, boolean ranking, int maxToReturn) {
 		String matchText0 = matchText;
 		String matchAlgorithm0 = matchAlgorithm;
-		matchText0 = matchText0.trim();
+		//matchText0 = matchText0.trim();
 System.out.println("searchByName scheme: " + scheme);
 System.out.println("searchByName version: " + version);
 System.out.println("searchByName matchText: " + matchText);
@@ -1125,7 +1125,7 @@ System.out.println("matchAlgorithm: " + matchAlgorithm);
 					long ms = System.currentTimeMillis(), delay = 0;
                     iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
 
-                    int size = iterator.numberRemaining();
+                    //int size = iterator.numberRemaining();
                 }  catch (Exception e) {
                     System.out.println("Method: matchConceptCode");
                     System.out.println("* ERROR: cns.resolve throws exceptions.");
@@ -1311,7 +1311,7 @@ System.out.println("algorithm: " + algorithm);
 
 
     public static void testStringTokenizer(String in, String delim) {
-		Vector fillers = getFillers();
+		//Vector fillers = getFillers();
 		//System.out.println("String: " + in);
 		//System.out.println("delim: " + delim);
 
@@ -1969,14 +1969,14 @@ for (int i=0; i<u.size(); i++) {
         _logger.debug("searchByProperties excludeDesignation: "
             + excludeDesignation);
 
-        if (source != null)
-            sourceList =
-                ConvenienceMethods.createLocalNameList(new String[] { source });
+        //if (source != null)
+        //    sourceList =
+        //        ConvenienceMethods.createLocalNameList(new String[] { source });
         NameAndValueList qualifierList = null;
 
         String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
-        matchText0 = matchText0.trim();
+        //matchText0 = matchText0.trim();
         if (matchText == null || matchText.length() == 0) {
             return null;
         }
@@ -2003,10 +2003,10 @@ for (int i=0; i<u.size(); i++) {
                 versionOrTag.setVersion(version);
 
             try {
-                if (lbSvc == null) {
+                /*if (lbSvc == null) {
                     _logger.warn("lbSvc = null");
                     return null;
-                }
+                }*/
 
                 cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
                 if (cns != null) {

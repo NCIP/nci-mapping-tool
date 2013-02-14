@@ -551,7 +551,7 @@ System.out.println("searchByProperties version: " + version);
         CodedNodeSet.PropertyType[] propertyTypes = null;
         LocalNameList propertyNames = null;
         LocalNameList sourceList = null;
-        propertyTypes = getAllNonPresentationPropertyTypes();
+        //propertyTypes = getAllNonPresentationPropertyTypes();
 
         LocalNameList contextList = null;
         NameAndValueList qualifierList = null;
@@ -693,9 +693,7 @@ if (searchResultsIterator == null) return null;
             //ConceptReferenceList codeList (to be derived based on ResolvedConceptReferencesIterator searchResultsIterator)
             ConceptReferenceList codeList = new ConceptReferenceList();
 
-System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrieving refs");
-
-			if (searchResultsIterator != null) {
+			//if (searchResultsIterator != null) {
 				int lcv = 0;
 				while(searchResultsIterator.hasNext()){
 					ResolvedConceptReference[] refs = searchResultsIterator.next(100).getResolvedConceptReference();
@@ -705,9 +703,10 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 						codeList.addConceptReference((ConceptReference) ref);
 					}
 				}
+				/*
 			} else {
 				System.out.println("resolved_value_set.jsp ResolvedConceptReferencesIterator == NULL???");
-			}
+			}*/
 
             mapping = mapping.restrictToCodes(codeList, context);
             ResolvedConceptReferencesIterator itr = mapping.resolveMapping(sortOptionList);
@@ -1050,7 +1049,7 @@ System.out.println(s);
 			String sourceCodingSchemeVersion = null;
 			sourceCodingSchemeVersion = source_version;
 
-			HashSet hset = new HashSet();
+			//HashSet hset = new HashSet();
 			String source = null;
 			boolean ranking = false;
 
@@ -1238,8 +1237,8 @@ System.out.println(s);
 			String targetCodingSchemeVersion = null;
 			targetCodingSchemeVersion = target_version;
 
-			ArrayList list = new ArrayList();
-			HashSet hset = new HashSet();
+			//ArrayList list = new ArrayList();
+			//HashSet hset = new HashSet();
 			String source = null;
 			boolean ranking = false;
 

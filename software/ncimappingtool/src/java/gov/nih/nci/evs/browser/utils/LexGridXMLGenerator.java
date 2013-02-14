@@ -123,7 +123,7 @@ public class LexGridXMLGenerator {
 	  int score_int = md.getScore();
 	  String score = Integer.valueOf(score_int).toString();
 	  String target_ns = md.getTargetCodeNamespace();
-	  String target_cs = md.getTargetCodingScheme();
+	  //String target_cs = md.getTargetCodingScheme();
 	  String target_code = md.getTargetCode();
 
       out.println("        <lgRel:source sourceEntityCodeNamespace=\"" + source_ns + "\" sourceEntityCode=\"" + source_code + "\">");

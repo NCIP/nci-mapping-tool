@@ -230,7 +230,7 @@ System.out.println("(*) UploadServlet ...action " + action);
 		}
 
 
-        long ms = System.currentTimeMillis();
+        //long ms = System.currentTimeMillis();
 
         if (action.compareTo("upload_data") == 0) {
 			if (type.compareTo("codingscheme") == 0) {

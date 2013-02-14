@@ -127,8 +127,13 @@ public class MappingBean {
 
 
     public void MappingBean() {
-        _mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
+        //_mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
 	}
+
+    static {
+		_mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
+	}
+
 
     public String getStatus() {
         return _status;
@@ -206,7 +211,7 @@ public class MappingBean {
         	_init();
         	return null;
         }
-        if (_mappings == null || _mappings.keySet().size() < 1)
+        if (_mappings.keySet().size() < 1)
         	return null;
         return _mappings.get(_name);
     }
@@ -1162,11 +1167,11 @@ System.out.println("submitMetadataAction type: " + type);
 			request.getSession().setAttribute("algorithm", algorithm);
 
 
-			if (list == null) {
+			/*if (list == null) {
 				String message = "No mapping data has been entered.";
 				request.getSession().setAttribute("message", message);
 				return "message";
-			}
+			}*/
 
 
 String source_scheme = Constants.LOCAL_DATA;
@@ -1291,11 +1296,11 @@ request.getSession().setAttribute("acsvrl", acsvrl);
 
 
 
-			if (list == null) {
+			/*if (list == null) {
 				String message = "No mapping data has been entered.";
 				request.getSession().setAttribute("message", message);
 				return "message";
-			}
+			}*/
 
 String source_scheme = DataUtils.key2CodingSchemeName(source_cs);
 String source_version = DataUtils.key2CodingSchemeVersion(source_cs);
@@ -1956,15 +1961,15 @@ System.out.println("(*) saveComponentSubsetAction : " + type);
 			String message = "Restriction data saved.";
 
 			//CodedNodeSet cns = ob.toCNS();
-			if (ob != null) {
+			//if (ob != null) {
 				_restrictions.put(mapping_key, ob);
 			//_restrictions.put(mapping_key, ob);
 
 				request.getSession().setAttribute("restrictions", _restrictions);
 
-			} else {
+			/*} else {
 				message = "ERROR: Unable to save restriction data.";
-			}
+			}*/
 			request.getSession().setAttribute("message", message);
 		}
 

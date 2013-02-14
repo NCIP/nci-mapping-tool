@@ -44,11 +44,11 @@ public class MappingServlet extends HttpServlet {
    public void execute(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
-		String action = (String) request.getParameter("action");
-		String format = (String) request.getParameter("format");
+		String action = HTTPUtils.cleanXSS((String) request.getParameter("action"));
+		String format = HTTPUtils.cleanXSS((String) request.getParameter("format"));
 
-		String key = (String) request.getParameter("key");
-		String entries = (String) request.getParameter("entries");
+		//String key = (String) request.getParameter("key");
+		String entries = HTTPUtils.cleanXSS((String) request.getParameter("entries"));
 
 		if (action.compareTo("export") == 0 && (format.compareTo("draft_xml") == 0 || format.compareTo("final_xml") == 0)) {
 		System.out.println("(*) exportMappingToXMLAction: " + entries);
@@ -78,9 +78,9 @@ public class MappingServlet extends HttpServlet {
 System.out.println("exportMappingToExcelAction ...");
 
         //new MappingBean().updateMapping(request);
-		String type = (String) request.getParameter("type");
+		//String type = (String) request.getParameter("type");
 
-		String entries = (String) request.getParameter("entries");
+		String entries = HTTPUtils.cleanXSS((String) request.getParameter("entries"));
 		if (entries.startsWith("ALL")) {
 			entries = "Valid_Invalid_Pending";
 		}
@@ -96,7 +96,7 @@ String key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 System.out.println("key: " + key);
 
 
-            String[] entry_status = request.getParameterValues("entry_status");
+            //String[] entry_status = request.getParameterValues("entry_status");
 
 
 			HashMap mappings = (HashMap) request.getSession().getAttribute("mappings");
@@ -107,7 +107,7 @@ System.out.println("key: " + key);
 				request.getSession().setAttribute("mappings", mappings);
 			}
 
-			HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
+			//HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
 			MappingObject obj = (MappingObject) mappings.get(key);
 			PrintWriter out = response.getWriter();
 
@@ -259,7 +259,7 @@ System.out.println("mapping file name: " + identifier);
 
     public void exportMappingToXMLAction(HttpServletRequest request, HttpServletResponse response ) {
         //new MappingBean().updateMapping(request);
-		String type = (String) request.getParameter("type");
+		//String type = (String) request.getParameter("type");
 
 		String entries = (String) request.getParameter("entries");
 		if (entries.startsWith("ALL")) {
@@ -278,7 +278,7 @@ System.out.println("key: " + key);
 
 String format = (String) request.getParameter("format");
 
-            String[] entry_status = request.getParameterValues("entry_status");
+            //String[] entry_status = request.getParameterValues("entry_status");
 
 
             //Vector options = toVector(entry_status);
@@ -303,7 +303,7 @@ String format = (String) request.getParameter("format");
 				System.out.println("mapping obj cannot be found for key : " + key);
 			} else {
 				mapping_name = obj.getName();
-				mapping_version = obj.getVersion();
+				//mapping_version = obj.getVersion();
 			}
 			String xml = "";
 
@@ -362,7 +362,7 @@ String format = (String) request.getParameter("format");
 
     public void exportMappingToLexGridAction(HttpServletRequest request, HttpServletResponse response ) {
         //new MappingBean().updateMapping(request);
-		String type = (String) request.getParameter("type");
+		//String type = (String) request.getParameter("type");
 
         try {
         	//String xml = null;
@@ -382,11 +382,11 @@ String format = (String) request.getParameter("format");
 				request.getSession().setAttribute("mappings", mappings);
 			}
 
-			HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
+			//HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
 			MappingObject obj = (MappingObject) mappings.get(key);
 
 			String mapping_name = obj.getName();
-			String mapping_version = obj.getVersion();
+			//String mapping_version = obj.getVersion();
 
 			mapping_name = mapping_name.replaceAll(" ", "_");
 			//mapping_name = mapping_name + ".xml";
