@@ -853,7 +853,7 @@ public class CartActionBean {
 		}
 		return false;
 	}
-
+/*
 	private boolean inSelectedlist(String uri, String version) {
 		for (int x = 0; x < _selectedVersionItems.size(); x++) {
 			if (_selectedVersionItems.get(x).contains(uri + "|" + version))
@@ -861,7 +861,7 @@ public class CartActionBean {
 		}
 		return false;
 	}
-
+*/
 	public String dumpSelectedlist() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Listing selected versions...\n");
@@ -1141,7 +1141,7 @@ public class CartActionBean {
 
         _messageflag = false;
 
-        SearchCart search = new SearchCart();
+        //SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
         StringBuffer sb = new StringBuffer();
 

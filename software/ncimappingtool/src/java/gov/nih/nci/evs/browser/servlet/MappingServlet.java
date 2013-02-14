@@ -92,7 +92,7 @@ System.out.println("(*) Options: " + entries);
 
 			long ms = System.currentTimeMillis();
 
-String key = (String) request.getParameter("key");
+String key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 System.out.println("key: " + key);
 
 
@@ -109,15 +109,20 @@ System.out.println("key: " + key);
 
 			HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
 			MappingObject obj = (MappingObject) mappings.get(key);
+			PrintWriter out = response.getWriter();
 
-if (obj == null) {
-	System.out.println("mapping obj cannot be found for key : " + key);
+			String identifier = null;
+			if (obj == null) {
+				  String t = "mapping obj cannot be found for key : " + key;
+				  System.out.println(t);
+				  out.println(t);
+				  out.flush();
+				  out.close();
+				  return;
 
-}
-
-			String identifier = obj.getName();
-			//String mapping_version = obj.getVersion();
-
+			} else {
+				identifier = obj.getName();
+		    }
 			//String identifier = (String) request.getParameter("identifier");
 			if (identifier == null) {
 				identifier = "mapping";
@@ -144,7 +149,6 @@ System.out.println("mapping file name: " + identifier);
 			response.setHeader("Content-Disposition", "attachment; filename="
 						+ identifier);
 
-              PrintWriter out = response.getWriter();
 
 			  out.println("<table>");
 			  out.println("   <th class=\"dataTableHeader\" width=\"60px\" scope=\"col\" align=\"left\">Source</th>");
@@ -202,7 +206,7 @@ System.out.println("mapping file name: " + identifier);
 				  String rel = md.getRel();
 
 				  int score = md.getScore();
-				  String score_obj = new Integer(score).toString();
+				  String score_obj = Integer.valueOf(score).toString();
 				  String targetCode = md.getTargetCode();
 				  String targetName = md.getTargetName();
 				  //String targetCodingScheme,
@@ -292,12 +296,15 @@ String format = (String) request.getParameter("format");
 			HashMap status_hmap = (HashMap) request.getSession().getAttribute("status_hmap");
 			MappingObject obj = (MappingObject) mappings.get(key);
 
+			String mapping_name = null;
+			String mapping_version = null;
+
 			if (obj == null) {
 				System.out.println("mapping obj cannot be found for key : " + key);
+			} else {
+				mapping_name = obj.getName();
+				mapping_version = obj.getVersion();
 			}
-
-			String mapping_name = obj.getName();
-			String mapping_version = obj.getVersion();
 			String xml = "";
 
 			if (obj != null) {
@@ -306,7 +313,11 @@ String format = (String) request.getParameter("format");
 				sb = sb.append(obj.toXML(options));
 			}
 
-			mapping_name = mapping_name.replaceAll(" ", "_");
+			if (mapping_name == null) {
+				mapping_name = "unknown_mapping";
+			} else {
+				mapping_name = mapping_name.replaceAll(" ", "_");
+			}
 
 			String ext = format.replace("_xml", ".xml");
 			mapping_name = mapping_name + "_" + ext;
@@ -314,9 +325,13 @@ String format = (String) request.getParameter("format");
 			response.setHeader("Content-Disposition", "attachment; filename="
 					+ mapping_name);
 
-System.out.println("mapping file name : " + mapping_name);
+//System.out.println("mapping file name : " + mapping_name);
+//System.out.println("mapping sb.length() : " + sb.length());
 
-System.out.println("mapping sb.length() : " + sb.length());
+            if (sb == null) {
+				sb = new StringBuffer();
+				sb.append("Content not available.");
+			}
 
 			response.setContentLength(sb.length());
 

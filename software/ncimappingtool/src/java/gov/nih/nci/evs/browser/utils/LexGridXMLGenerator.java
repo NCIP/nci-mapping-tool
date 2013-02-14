@@ -121,7 +121,7 @@ public class LexGridXMLGenerator {
 	  String source_code = md.getSourceCode();
 	  String rel = md.getRel();
 	  int score_int = md.getScore();
-	  String score = new Integer(score_int).toString();
+	  String score = Integer.valueOf(score_int).toString();
 	  String target_ns = md.getTargetCodeNamespace();
 	  String target_cs = md.getTargetCodingScheme();
 	  String target_code = md.getTargetCode();

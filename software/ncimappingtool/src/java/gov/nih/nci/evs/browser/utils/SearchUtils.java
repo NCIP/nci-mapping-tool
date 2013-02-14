@@ -461,9 +461,12 @@ public class SearchUtils {
             RemoteServerUtil rsu = new RemoteServerUtil();
             // EVSApplicationService lbSvc = rsu.createLexBIGService();
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) return null;
             CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
-            if (csrl == null)
+            if (csrl == null) {
                 _logger.warn("csrl is NULL");
+                return null;
+			}
 
             CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
             for (int i = 0; i < csrs.length; i++) {
@@ -702,6 +705,7 @@ public class SearchUtils {
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
+            if (cns == null) return null;
 
             cns = cns.restrictToCodes(crefs);
             ResolvedConceptReferenceList matches =
@@ -1230,7 +1234,7 @@ public class SearchUtils {
         String matchAlgorithm) throws Exception {
 
         LexBIGService lbs = RemoteServerUtil.createLexBIGService();
-        Vector v = new Vector();
+        //Vector v = new Vector();
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);
@@ -1287,7 +1291,7 @@ public class SearchUtils {
     public static CodedNodeSet matchConceptCode_CNS(
         String scheme, String version, String code) throws Exception {
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-        Vector v = new Vector();
+        //Vector v = new Vector();
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);

@@ -98,6 +98,7 @@ public class ValueSetSearchUtils
             return "literalContains";
     }
 
+/*
 	public static void resolveValueSetDefinition(ValueSetDefinition vsd) {
         //String URL = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
         //String URL = "http://ncias-d499-v.nci.nih.gov:29080/lexevsapi60";
@@ -120,26 +121,19 @@ public class ValueSetSearchUtils
 				rvsd = vds.resolveValueSetDefinition(vsd, csvList, null, null);
 
 			} catch (Exception ex) {
-				System.out.println("??? vds.resolveValueSetDefinition throws exception");
+				ex.printStackTrace();
 				return;
 			}
 
 			ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
-			System.out.println("Definition Resolve Time: " + (System.currentTimeMillis() - time));
-
             if (itr == null) {
 				System.out.println("vds.resolveValueSetDefinition returns null???");
+				return;
 			}
 
 			int count = 0;
 
 			time = System.currentTimeMillis();
-			/*
-			while(itr.hasNext()){
-				count += itr.next(1000).getResolvedConceptReferenceCount();
-			}
-			*/
-
 		    while(itr.hasNext()){
 				ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
 				for(ResolvedConceptReference ref : refs){
@@ -157,7 +151,9 @@ public class ValueSetSearchUtils
 		}
 
 	}
+*/
 
+/*
 	public static void exportValueSetDefinition(ValueSetDefinition vsd) {
         //String URL = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
         //String URL = "http://ncias-d499-v.nci.nih.gov:29080/lexevsapi60";
@@ -177,7 +173,7 @@ public class ValueSetSearchUtils
                 System.out.println(sb.toString());
 
 			} catch (Exception ex) {
-				System.out.println("??? vds.resolveValueSetDefinition throws exception");
+				ex.printStackTrace();
 				return;
 			}
 
@@ -189,7 +185,7 @@ public class ValueSetSearchUtils
 		}
 
 	}
-
+*/
 
       public static AbsoluteCodingSchemeVersionReferenceList getEntireAbsoluteCodingSchemeVersionReferenceList() {
         boolean includeInactive = false;
@@ -199,11 +195,11 @@ public class ValueSetSearchUtils
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return null;
             }
 
             CodingSchemeRenderingList csrl = null;
             try {
-
                 csrl = lbSvc.getSupportedCodingSchemes();
 
             } catch (LBInvocationException ex) {
@@ -214,22 +210,19 @@ public class ValueSetSearchUtils
             }
 
             CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
-
-            System.out.println("csrs.length: " + csrs.length);
-
-
             for (int i = 0; i < csrs.length; i++) {
                 int j = i + 1;
                 CodingSchemeRendering csr = csrs[i];
                 CodingSchemeSummary css = csr.getCodingSchemeSummary();
                 String formalname = css.getFormalName();
-
-                System.out.println(formalname);
-
                 Boolean isActive = null;
+                /*
                 if (csr == null) {
                     _logger.warn("\tcsr == null???");
-                } else if (csr.getRenderingDetail() == null) {
+                } else
+                */
+
+                if (csr.getRenderingDetail() == null) {
                     _logger.warn("\tcsr.getRenderingDetail() == null");
                 } else if (csr.getRenderingDetail().getVersionStatus() == null) {
                     _logger
@@ -267,7 +260,6 @@ public class ValueSetSearchUtils
                         acsvr.setCodingSchemeURN(cs.getCodingSchemeURI());
                         acsvr.setCodingSchemeVersion(representsVersion);
 
-                        System.out.println(cs.getCodingSchemeURI() + " " + representsVersion);
                         list.addAbsoluteCodingSchemeVersionReference(acsvr);
 
                     } catch (Exception ex) {
@@ -281,17 +273,19 @@ public class ValueSetSearchUtils
                 }
             }
         } catch (Exception e) {
-            // e.printStackTrace();
+            e.printStackTrace();
             // return null;
         }
         return list;
     }
 
-
+/*
       public static Boolean isCodeInValueSet(String code, String codingScheme, String vsd_uri) {
+		  Boolean retval = null;
 		  try {
 				String URL = "http://ncias-q541-v.nci.nih.gov:29080/lexevsapi60";
 				URL = "http://localhost:19280/lexevsapi60";
+
 				LexEVSDistributed distributed =
 					(LexEVSDistributed)
 					ApplicationServiceProvider.getApplicationServiceFromUrl(URL, "EvsServiceInfo");
@@ -322,36 +316,32 @@ public class ValueSetSearchUtils
 				ex.printStackTrace();
 		  }
 
-          return null;
+          return retval;
 	  }
-
+*/
 
 
     public ResolvedConceptReferencesIteratorWrapper searchByCode(
         String vsd_uri, String matchText, int maxToReturn) {
-        String matchText0 = matchText;
+
+		if (matchText == null) return null;
+        //String matchText0 = matchText;
         String matchAlgorithm0 = "exactMatch";
-        matchText0 = matchText0.trim();
+        //matchText0 = matchText0.trim();
 
         _logger.debug("searchByCode ..." + matchText);
-
-System.out.println("============================ searchByCode ====================================");
-
-        long ms = System.currentTimeMillis(), delay = 0;
+        //long ms = System.currentTimeMillis(), delay = 0;
         long tnow = System.currentTimeMillis();
         long total_delay = 0;
         boolean debug_flag = false;
 
         boolean preprocess = true;
-        if (matchText == null || matchText.length() == 0) {
+        //if (matchText == null || matchText.length() == 0) {
+		if (matchText.length() == 0) {
             return null;
         }
 
         matchText = matchText.trim();
-
-System.out.println("matchText: " + matchText);
-System.out.println("vsd_uri: " + vsd_uri);
-
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
         try {
@@ -362,6 +352,7 @@ System.out.println("vsd_uri: " + vsd_uri);
             }
             java.lang.String valueSetDefinitionRevisionId = null;
             AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
+            /*
             Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
             if (cs_ref_vec != null) {
 				csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
@@ -369,6 +360,7 @@ System.out.println("vsd_uri: " + vsd_uri);
 System.out.println("cs_ref_vec = null??? ");
 
 			}
+			*/
 
             String csVersionTag = null;
 
@@ -403,17 +395,11 @@ System.out.println("cs_ref_vec = null??? ");
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-
-System.out.println("ERROR: searchByCode throws exceptions.");
-
 			return null;
 		}
 
         total_delay = System.currentTimeMillis() - tnow;
         _logger.debug("Total search delay: (millisec.): " + total_delay);
-
-System.out.println("Total search delay: (millisec.): " + total_delay);
-
         return new ResolvedConceptReferencesIteratorWrapper(iterator);
 
     }
@@ -423,19 +409,22 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
     public ResolvedConceptReferencesIteratorWrapper searchByName(
         String vsd_uri, String matchText, String matchAlgorithm, int maxToReturn) {
-        String matchText0 = matchText;
+
+		if (matchText == null) return null;
+
+        //String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
-        matchText0 = matchText0.trim();
+        //matchText0 = matchText0.trim();
 
         _logger.debug("searchByName ..." + matchText);
 
-        long ms = System.currentTimeMillis(), delay = 0;
+        //long ms = System.currentTimeMillis(), delay = 0;
         long tnow = System.currentTimeMillis();
         long total_delay = 0;
         boolean debug_flag = false;
 
         boolean preprocess = true;
-        if (matchText == null || matchText.length() == 0) {
+        if (matchText.length() == 0) {
             return null;
         }
 
@@ -444,7 +433,6 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         {
             matchAlgorithm = findBestContainsAlgorithm(matchText);
         }
-        System.out.println("findBestContainsAlgorithm matchAlgorithm: " + matchAlgorithm);
 
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
@@ -456,9 +444,10 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
             }
             java.lang.String valueSetDefinitionRevisionId = null;
             AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
+            /*
             Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
             if (cs_ref_vec != null) csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
-
+            */
 
             String csVersionTag = null;
 
@@ -478,17 +467,13 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
             CodedNodeSet.SearchDesignationOption option = null;
             String language = null;
-
-System.out.println("Step 1 restrictToAnonymous");
             cns = cns.restrictToAnonymous(CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY);
-System.out.println("Step 2 restrictToMatchingDesignations");
             cns = cns.restrictToMatchingDesignations(matchText, option, matchAlgorithm, language);
             SortOptionList sortOptions = null;
             LocalNameList filterOptions = null;
             LocalNameList propertyNames = null;
             CodedNodeSet.PropertyType[] propertyTypes = null;
             boolean resolveObjects = false;
-System.out.println("Step 3 resolve");
             iterator = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
 
 		} catch (Exception ex) {
@@ -498,10 +483,6 @@ System.out.println("Step 3 resolve");
 
         total_delay = System.currentTimeMillis() - tnow;
         _logger.debug("Total search delay: (millisec.): " + total_delay);
-
-
-System.out.println("Total search delay: (millisec.): " + total_delay);
-
         return new ResolvedConceptReferencesIteratorWrapper(iterator);
 
     }
@@ -529,19 +510,21 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
     public ResolvedConceptReferencesIteratorWrapper searchByProperties(
         String vsd_uri, String matchText, boolean excludeDesignation, String matchAlgorithm, int maxToReturn) {
-        String matchText0 = matchText;
+		if (matchText == null) return null;
+
+        //String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
-        matchText0 = matchText0.trim();
+        //matchText0 = matchText0.trim();
 
         _logger.debug("searchByProperties ..." + matchText);
 
-        long ms = System.currentTimeMillis(), delay = 0;
+        //long ms = System.currentTimeMillis(), delay = 0;
         long tnow = System.currentTimeMillis();
         long total_delay = 0;
         boolean debug_flag = false;
 
         boolean preprocess = true;
-        if (matchText == null || matchText.length() == 0) {
+        if (matchText.length() == 0) {
             return null;
         }
 
@@ -550,8 +533,6 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         {
             matchAlgorithm = findBestContainsAlgorithm(matchText);
         }
-        System.out.println("findBestContainsAlgorithm matchAlgorithm: " + matchAlgorithm);
-
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
         try {
@@ -562,10 +543,10 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
             }
             java.lang.String valueSetDefinitionRevisionId = null;
             AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
-
+            /*
             Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
             if (cs_ref_vec != null) csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
-
+            */
             String csVersionTag = null;
 
             ResolvedValueSetCodedNodeSet rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
@@ -584,12 +565,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
             CodedNodeSet.SearchDesignationOption option = null;
             String language = null;
-
-System.out.println("Step 1 restrictToAnonymous");
             cns = cns.restrictToAnonymous(CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY);
-System.out.println("Step 2 restrictToMatchingDesignations");
-
-
 			LocalNameList propertyNames = new LocalNameList();
 			CodedNodeSet.PropertyType[] propertyTypes = null;
 			if (!excludeDesignation) {
@@ -607,7 +583,6 @@ System.out.println("Step 2 restrictToMatchingDesignations");
             LocalNameList filterOptions = null;
             propertyNames = null;
             boolean resolveObjects = false;
-System.out.println("Step 3 resolve");
             iterator = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
 
 		} catch (Exception ex) {
@@ -617,9 +592,6 @@ System.out.println("Step 3 resolve");
 
         total_delay = System.currentTimeMillis() - tnow;
         _logger.debug("Total search delay: (millisec.): " + total_delay);
-
-System.out.println("Total search delay: (millisec.): " + total_delay);
-
         return new ResolvedConceptReferencesIteratorWrapper(iterator);
 
     }
@@ -650,21 +622,12 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 	}
 
 
-
-
-
-
-
 	public static void main(String[] args) {
-
 		try {
-
-           System.out.println("Calling getEntireAbsoluteCodingSchemeVersionReferenceList ...");
-
            AbsoluteCodingSchemeVersionReferenceList list1 = getEntireAbsoluteCodingSchemeVersionReferenceList();
-
-
-
+           if (list1 != null) {
+			   System.out.println("Count: " + list1.getAbsoluteCodingSchemeVersionReferenceCount());
+		   }
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

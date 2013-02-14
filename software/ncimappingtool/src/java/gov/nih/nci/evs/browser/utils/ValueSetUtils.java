@@ -1,69 +1,11 @@
 package gov.nih.nci.evs.browser.utils;
 
-import java.util.*;
 import java.io.*;
-import java.net.*;
-import org.LexGrid.LexBIG.caCore.interfaces.*;
-import org.LexGrid.LexBIG.LexBIGService.*;
-import org.LexGrid.LexBIG.Impl.*;
-
-import gov.nih.nci.system.client.*;
-import gov.nih.nci.evs.security.*;
-
-import gov.nih.nci.evs.browser.bean.*;
+import java.util.*;
 
 
 import org.apache.log4j.*;
-
-import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
-import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
-
-
-import gov.nih.nci.system.client.ApplicationServiceProvider;
-
-import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
-import org.LexGrid.LexBIG.Utility.Constructors;
-import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
-import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
-import org.LexGrid.naming.Mappings;
-import org.LexGrid.naming.SupportedCodingScheme;
-import org.LexGrid.util.PrintUtility;
-import org.LexGrid.valueSets.DefinitionEntry;
-import org.LexGrid.valueSets.EntityReference;
-import org.LexGrid.valueSets.PropertyMatchValue;
-import org.LexGrid.valueSets.PropertyReference;
-import org.LexGrid.valueSets.ValueSetDefinition;
-import org.LexGrid.valueSets.types.DefinitionOperator;
-import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
-import org.lexgrid.valuesets.dto.ResolvedValueSetDefinition;
-import org.LexGrid.valueSets.ValueSetDefinitionReference;
-import org.LexGrid.commonTypes.EntityDescription;
-import org.LexGrid.valueSets.CodingSchemeReference;
-
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-
-import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
-import org.LexGrid.LexBIG.Exceptions.LBException;
-
-import org.lexgrid.valuesets.dto.ResolvedValueSetCodedNodeSet;
-
-
-import org.LexGrid.LexBIG.DataModel.Core.AbsoluteCodingSchemeVersionReference;
-import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
-
-
-import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
-import org.LexGrid.codingSchemes.CodingScheme;
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
-import org.LexGrid.LexBIG.DataModel.Core.types.CodingSchemeVersionStatus;
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
-
-import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
-
-import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
-import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
-
-
+import gov.nih.nci.evs.browser.common.*;
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -110,273 +52,424 @@ import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
  * @author EVS Team
  * @version 1.0
  *
- *          Modification history Initial implementation kim.ong@ngc.com
+ *      Modification history Initial implementation kim.ong@ngc.com
  *
  */
 
 
+public class ValueSetUtils {
 
-public class ValueSetUtils
-{
-	  public static AbsoluteCodingSchemeVersionReferenceList defaultAbsoluteCodingSchemeVersionReferenceList = null;
-	  public static HashMap _valueSetDefinitionURI2VSD_map = null;
-	  private static Logger _logger = Logger.getLogger(ValueSetUtils.class);
+	private static Logger _logger = Logger.getLogger(DataUtils.class);
+	private static Random rand = new Random();
 
+    public ValueSetUtils() {
 
-/**
-* Resolve a value set definition provided using the supplied set of coding scheme versions.
-* This method also takes in list of ValueSetDefinitions (referencedVSDs) that are referenced by the ValueSetDefinition (vsDef).
-* If referencedVSDs list is provided, these ValueSetDefinitions will be used to resolve vsDef.
-*
-* @param valueSetDefinition - value set definition object
-* @param csVersionList - list of coding scheme versions to use in resolution. IF the value set definition uses a version that isn't mentioned in this list,
-* the resolve function will return the codingScheme and version that was used as a default for the resolution.
-* @param versionTag - the tag (e.g. "devel", "production", ...) to be used to determine which coding scheme to be used
-* @param referencedVSDs - List of ValueSetDefinitions referenced by vsDef. If provided, these ValueSetDefinitions will be used to resolve vsDef.
-* @param sortOptionList - List of sort options to apply during resolution. If supplied, the sort algorithms will be applied in the order provided. Any
-* algorithms not valid to be applied in context of node set iteration, as specified in the sort extension description,
-* will result in a parameter exception. Available algorithms can  be retrieved through the LexBIGService getSortExtensions()
-* method after being defined to the LexBIGServiceManager extension registry.
-* @return Resolved Value Domain Definition
-* @throws LBException
-*/
-//public ResolvedValueSetDefinition resolveValueSetDefinition(ValueSetDefinition vsDef, AbsoluteCodingSchemeVersionReferenceList csVersionList, String versionTag, HashMap<String, ValueSetDefinition> referencedVSDs, SortOptionList sortOptionList) throws LBException;
+	}
 
+    public static void println(PrintWriter out, String text) {
+        out.println(text);
+    }
 
-//////////////////////////////////////////////////////////////////////////////////
+    public static Vector<String> parseData(String line) {
+		if (line == null) return null;
+        String tab = "|";
+        return parseData(line, tab);
+    }
 
-    public static ResolvedConceptReferencesIterator resolveValueSetDefinition(ValueSetDefinition vsd,
-        String scheme, String version) {
-        HashMap<String, ValueSetDefinition> referencedVSDs = null;
-		ResolvedConceptReferencesIterator iterator = null;
-		boolean failOnAllErrors = false;
-		String csVersionTag = null;//"PRODUCTION";
-
-		SortOptionList sortOptionList = null;
-
-        AbsoluteCodingSchemeVersionReferenceList csVersionList = new AbsoluteCodingSchemeVersionReferenceList();
-		String cs_uri = DataUtils.codingSchemeName2URI(scheme);
-
-System.out.println("(***) resolveValueSetDefinition ...cs_uri " +  cs_uri);
-System.out.println("resolveValueSetDefinition ...version " +  version);
+    public static Vector<String> parseData(String line, String tab) {
+		if (line == null) return null;
+        Vector data_vec = new Vector();
+        StringTokenizer st = new StringTokenizer(line, tab);
+        while (st.hasMoreTokens()) {
+            String value = st.nextToken();
+            if (value.compareTo("null") == 0)
+                value = " ";
+            data_vec.add(value);
+        }
+        return data_vec;
+    }
 
 
-		csVersionList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_uri, version));
-
-        try {
-        	LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-			ResolvedValueSetDefinition rvsd = null;
-			try {
-				System.out.println("Calling vsd_service.resolveValueSetDefinition ...");
-
-				rvsd = vsd_service.resolveValueSetDefinition(vsd, csVersionList, csVersionTag, referencedVSDs, sortOptionList);
-
-				//rvsd = vsd_service.resolveValueSetDefinition(vsd, csVersionList, null, null);
-
-				System.out.println("Exiting vsd_service.resolveValueSetDefinition ...");
-
-				if (rvsd != null) {
-					System.out.println("rvsd != null");
-			    	iterator = rvsd.getResolvedConceptReferenceIterator();
-			    	if (iterator == null) {
-				    	System.out.println("rvsd.getResolvedConceptReferenceIterator() returns NULL???");
-					} else {
-						System.out.println("rvsd.getResolvedConceptReferenceIterator() returns iterator != null OK");
-					}
+	private String generateRandomString() {
+		int i = rand.nextInt();
+		//String t = new Integer(i).toString();
+		String t = Integer.valueOf(i).toString();
+		t = t.replace("-", "n");
+		return "_" + t;
+	}
 
 
-			    	return iterator;
-				} else {
-					System.out.println("rvsd == null???");
-				}
+    private String generateID(TreeItem node) {
+		String node_id = null;
+		if (node == null) {
+			node_id = "root";
+		} else {
+			node_id = "N_" + replaceNodeID(node._code);
+		}
+		return node_id;
+	}
 
 
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				System.out.println("Error: vsd_service.resolveValueSetDefinition throws exception.");
+
+      private List<TreeItem> Move_NCIt_to_Top(List<TreeItem> children) {
+		  List<TreeItem> new_children = new ArrayList<TreeItem>();
+
+		  for (TreeItem childItem : children) {
+			  if (childItem._text.compareTo("NCI Thesaurus") == 0) {
+				  new_children.add(childItem);
+			  }
+		  }
+
+		  for (TreeItem childItem : children) {
+			  if (childItem._text.compareTo("NCI Thesaurus") != 0) {
+				  new_children.add(childItem);
+			  }
+		  }
+		  return new_children;
+	  }
+
+
+
+
+    public void printTree(PrintWriter out, TreeItem root) {
+		if (root == null) {
+			System.out.println("(*) printTree aborted -- root is null???");
+			return;
+		}
+
+		//TreeItem root = new TreeItem("<Root>", "Root node");
+		for (String association : root._assocToChildMap.keySet()) {
+			List<TreeItem> children = root._assocToChildMap.get(association);
+
+			// Collections.sort(children);
+			SortUtils.quickSort(children);
+
+			//children = Move_NCIt_to_Top(children);
+
+			for (TreeItem childItem : children) {
+				String child_node_id = generateID(childItem);
+				printTree(out, childItem, child_node_id, null, "root", 0);
 			}
+		}
+	}
+
+
+    public void printTree(PrintWriter out, TreeItem ti, String node_id, TreeItem parent, String parent_node_id, int depth) {
+        printTreeNode(out, ti, node_id, parent, parent_node_id);
+		for (String association : ti._assocToChildMap.keySet()) {
+			List<TreeItem> children = ti._assocToChildMap.get(association);
+			// Collections.sort(children);
+			SortUtils.quickSort(children);
+			for (TreeItem childItem : children) {
+				String child_node_id = generateID(childItem);
+				printTree(out, childItem, child_node_id, ti, node_id, depth+1);
+			}
+		}
+	}
+
+
+
+    public void printTree(PrintWriter out, TreeItem ti, String node_id, TreeItem parent, String parent_node_id, int depth, String dictionary) {
+        printTreeNode(out, ti, node_id, parent, parent_node_id, dictionary);
+		for (String association : ti._assocToChildMap.keySet()) {
+			List<TreeItem> children = ti._assocToChildMap.get(association);
+			// Collections.sort(children);
+			SortUtils.quickSort(children);
+			for (TreeItem childItem : children) {
+				String child_node_id = generateID(childItem);
+				printTree(out, childItem, child_node_id, ti, node_id, depth+1, dictionary);
+			}
+		}
+	}
+
+
+
+
+    private void printTreeNode(PrintWriter out, TreeItem node, String node_id, TreeItem parent, String parent_node_id) {
+		if (node == null) return;
+
+		try {
+			String image = "[+]";
+			boolean expandable = true;
+			if (!node._expandable) {
+				image = ".";
+				expandable = false;
+			}
+
+			boolean expanded = expandable;
+
+            String parent_code = null;
+            if (parent != null) {
+			    parent_code = parent._code;
+			}
+
+
+			String code = node._code;
+			boolean isHasMoreNode = false;
+
+			String node_label = node_id;//"N_" + replaceNodeID(code);
+		    String node_name = node._text;
+
+		    println(out, "");
+		    println(out, "newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
+		    println(out, "newNodeData = { label:\"" + node_name + "\", id:\"" + code + "\", href:newNodeDetails };");
+
+		    if (expanded) {
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", true);");
+/*
+		    } else if (isHasMoreNode) {
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
+*/
+		    } else {
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
+		    }
+
+		    if (expandable || isHasMoreNode) {
+			    println(out, node_label + ".isLeaf = false;");
+			    println(out, node_label + ".ontology_node_child_count = 1;");
+
+		    } else {
+				println(out, node_label + ".ontology_node_child_count = 0;");
+			    println(out, node_label + ".isLeaf = true;");
+
+		    }
 
 		} catch (Exception ex) {
-			//ex.printStackTrace();
-			System.out.println("Error: getLexEVSValueSetDefinitionServices throws exception.");
+            ex.printStackTrace();
 		}
-		return null;
+
+    }
+
+
+
+    private void printTreeNode(PrintWriter out, TreeItem node, String node_id, TreeItem parent, String parent_node_id, String dictionary) {
+		if (node == null) return;
+
+		try {
+			String image = "[+]";
+			boolean expandable = true;
+			if (!node._expandable) {
+				image = ".";
+				expandable = false;
+			}
+
+			boolean expanded = expandable;
+
+            String parent_code = null;
+            if (parent != null) {
+			    parent_code = parent._code;
+			}
+
+
+			String code = node._code;
+			boolean isHasMoreNode = false;
+
+			String node_label = node_id;//"N_" + replaceNodeID(code);
+		    String node_name = node._text;
+
+		    println(out, "");
+		    println(out, "newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
+		    println(out, "newNodeData = { label:\"" + node_name + "\", id:\"" + code + "\", href:newNodeDetails };");
+
+		    if (expanded) {
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", true);");
+/*
+		    } else if (isHasMoreNode) {
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
+*/
+		    } else {
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
+		    }
+
+		    if (expandable || isHasMoreNode) {
+			    println(out, node_label + ".isLeaf = false;");
+			    println(out, node_label + ".ontology_node_child_count = 1;");
+
+		    } else {
+				println(out, node_label + ".ontology_node_child_count = 0;");
+			    println(out, node_label + ".isLeaf = true;");
+
+		    }
+
+		    if (node_name.compareTo(dictionary) == 0) {
+				println(out, node_label + ".checked();");
+			}
+
+
+		} catch (Exception ex) {
+            ex.printStackTrace();
+		}
+
+    }
+
+
+
+//////////////////////////////////////////////////////////////////////
+//[#31626] Change value set hierarchy node labels.
+//    private static final int  STANDARD_VIEW = 1;
+//    private static final int  TERMINOLOGY_VIEW = 2;
+
+    public void printTree(PrintWriter out, TreeItem root, int view, String dictionary) {
+		if (root == null) {
+			System.out.println("(*) printTree aborted -- root is null???");
+			return;
+		}
+
+		for (String association : root._assocToChildMap.keySet()) {
+			List<TreeItem> children = root._assocToChildMap.get(association);
+			SortUtils.quickSort(children);
+			for (TreeItem childItem : children) {
+				String scheme = childItem._text;
+				if (scheme.compareTo(dictionary) == 0) {
+					String child_node_id = generateID(childItem);
+					printTree(out, childItem, child_node_id, null, "root", 0, view);
+				}
+			}
+		}
 	}
 
 
-	  public static ValueSetDefinition generateValueSetDefinition(ComponentObject ob) {
-		ValueSetDefinition vsd = new ValueSetDefinition();
-		String valueSetDefinitionURI = "myURI";
-		vsd.setValueSetDefinitionURI(valueSetDefinitionURI);
 
-		DefinitionEntry vDefinitionEntry = null;
-		Long ruleOrderCount = new Long(0);
-		if(ob.getType().compareTo("EnumerationOfCodes") == 0) {
 
-			String codes = ob.getCodes();
-			String lines[] = codes.split("\\n");
-			for(int i = 0; i < lines.length; i++) {
-				String code = lines[i];
-				code = code.trim();
-				DefinitionEntry entry = new DefinitionEntry();
-				EntityReference entity_ref = new EntityReference();
-				entity_ref.setEntityCode(code);
-
-				String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary());
-				entity_ref.setEntityCodeNamespace(cs_name);
-
-				entry.setEntityReference(entity_ref);
-				entry.setRuleOrder(ruleOrderCount);
-				entry.setOperator(DefinitionOperator.OR);
-				vsd.addDefinitionEntry(entry);
-				ruleOrderCount++;
-			}
-		} else {
-
-			DefinitionEntry entry = componentObject2DefinitionEntry(ob);
-			entry.setRuleOrder(ruleOrderCount);
-			entry.setOperator(DefinitionOperator.OR);
-			vsd.addDefinitionEntry(entry);
+    public void printTree(PrintWriter out, TreeItem root, int view) {
+		if (root == null) {
+			System.out.println("(*) printTree aborted -- root is null???");
+			return;
 		}
-		return vsd;
-	  }
 
+		//TreeItem root = new TreeItem("<Root>", "Root node");
+		for (String association : root._assocToChildMap.keySet()) {
+			List<TreeItem> children = root._assocToChildMap.get(association);
+			// Collections.sort(children);
+			SortUtils.quickSort(children);
 
-
-    public static DefinitionEntry componentObject2DefinitionEntry(ComponentObject ob) {
-
-		DefinitionEntry entry = new DefinitionEntry();
-        //EntityReference entity_ref = new EntityReference();
-        //entry.setEntityReference(entity_ref);
-
-
-        String cs_name = ob.getVocabulary();
-System.out.println("componentObject2DefinitionEntry  cs_name = ob.getVocabulary(): " + ob.getVocabulary());
-
-
-		String type = ob.getType();
-        if (type.compareTo("Code") == 0) {
-			EntityReference entity_ref = new EntityReference();
-			entity_ref.setEntityCode(ob.getFocusConceptCode());
-			//cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary());
-
-
-
-
-			entity_ref.setEntityCodeNamespace(cs_name);
-			entry.setEntityReference(entity_ref);
-
-		} else if (type.compareTo("Property") == 0) {
-			PropertyReference pr = new PropertyReference();
-			//String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary());
-
-			String codingschemename = DataUtils.uri2CodingSchemeName(cs_name);
-
-			pr.setCodingScheme(codingschemename);
-
-			pr.setPropertyName(ob.getPropertyName());
-
-			PropertyMatchValue pmv = new PropertyMatchValue();
-			pmv.setMatchAlgorithm(ob.getAlgorithm());
-			pmv.setContent(ob.getMatchText());
-
-			pr.setPropertyMatchValue(pmv);
-			entry.setPropertyReference(pr);
-
-		} else if (type.compareTo("Relationship") == 0) {
-
-			EntityReference entity_ref = new EntityReference();
-			entity_ref.setEntityCode(ob.getFocusConceptCode());
-
-
-System.out.println("(DEBUG) FocusConceptCode: " + ob.getFocusConceptCode());
-
-			//cs_name = ob.getVocabulary();//DataUtils.getCodingSchemeName(ob.getVocabulary());
-
-			String codingschemename = DataUtils.uri2CodingSchemeName(cs_name);
-
-			entity_ref.setEntityCodeNamespace(codingschemename);
-System.out.println("(DEBUG) cs_name: " + cs_name);
-
-System.out.println("(DEBUG) codingschemename: " + codingschemename);
-
-
-            if (ob.getInclude_focus_node() != null && ob.getInclude_focus_node().compareToIgnoreCase("true") == 0) {
-				entity_ref.setLeafOnly(Boolean.FALSE);
-
-System.out.println("(DEBUG) setLeafOnly to Boolean.FALSE: ");
-
-
-			} else {
-				entity_ref.setLeafOnly(Boolean.TRUE);
-
-System.out.println("(DEBUG) setLeafOnly to Boolean.TRUE: ");
+			if (view == Constants.TERMINOLOGY_VIEW) {
+				children = Move_NCIt_to_Top(children);
 			}
 
 
-
-
-			entity_ref.setReferenceAssociation(ob.getRel_search_association());
-
-System.out.println("(DEBUG) Rel_search_association: " + ob.getRel_search_association());
-
-
-            if (ob.getTransitivity() != null && ob.getTransitivity().compareToIgnoreCase("true") == 0) {
-				entity_ref.setTransitiveClosure(Boolean.TRUE);
-
-System.out.println("(DEBUG) setTransitiveClosure Boolean.TRUE ");
-
-
-			} else {
-				entity_ref.setTransitiveClosure(Boolean.FALSE);
-
-
-System.out.println("(DEBUG) setTransitiveClosure Boolean.FALSE ");
-
+			for (TreeItem childItem : children) {
+				String child_node_id = generateID(childItem);
+				printTree(out, childItem, child_node_id, null, "root", 0, view);
 			}
-
-
-
-            if (ob.getSelectedDirection() != null && ob.getSelectedDirection().compareToIgnoreCase("forward") == 0) {
-				entity_ref.setTargetToSource(Boolean.FALSE);
-
-System.out.println("(DEBUG) setTargetToSource Boolean.FALSE ");
-
-
-			} else {
-				entity_ref.setTargetToSource(Boolean.TRUE);
-
-System.out.println("(DEBUG) setTargetToSource Boolean.TRUE ");
-
-			}
-			entry.setEntityReference(entity_ref);
-
-		} else if (type.compareTo("EntireVocabulary") == 0) {
-            CodingSchemeReference codingSchemeReference = new CodingSchemeReference();
-            codingSchemeReference.setCodingScheme(ob.getCodingSchemeReference());
-            entry.setCodingSchemeReference(codingSchemeReference);
-
-		} else if (type.compareTo("ValueSetReference") == 0) {
-            ValueSetDefinitionReference valueSetDefinitionReference = new ValueSetDefinitionReference();
-            valueSetDefinitionReference.setValueSetDefinitionURI (ob.getValueSetReference());
-
-            System.out.println("(* testing VSD URI *) ValueSetReference: " + ob.getValueSetReference());
-
-            entry.setValueSetDefinitionReference(valueSetDefinitionReference);
-        }
-
-		return entry;
+		}
 	}
 
-      public static ValueSetDefinition getValueSetDefinitionByURI(String valueSetDefinitionURI) {
-		  ValueSetDefinition vsd = null;
-		  try {
-			  LexEVSValueSetDefinitionServices vds = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-			  String valueSetDefinitionRevisionId = null;
-			  vsd = vds.getValueSetDefinition(new URI(valueSetDefinitionURI), valueSetDefinitionRevisionId);
-		  } catch (Exception ex) {
-			  ex.printStackTrace();
-		  }
-		  return vsd;
-	  }
+
+    public void printTree(PrintWriter out, TreeItem ti, String node_id, TreeItem parent, String parent_node_id, int depth, int view) {
+        printTreeNode(out, ti, node_id, parent, parent_node_id, view);
+		for (String association : ti._assocToChildMap.keySet()) {
+			List<TreeItem> children = ti._assocToChildMap.get(association);
+			// Collections.sort(children);
+			SortUtils.quickSort(children);
+			for (TreeItem childItem : children) {
+				String child_node_id = generateID(childItem);
+				printTree(out, childItem, child_node_id, ti, node_id, depth+1);
+			}
+		}
+	}
+
+
+
+    public void printTree(PrintWriter out, TreeItem ti, String node_id, TreeItem parent, String parent_node_id, int depth, int view, String dictionary) {
+        printTreeNode(out, ti, node_id, parent, parent_node_id, view);
+		for (String association : ti._assocToChildMap.keySet()) {
+			List<TreeItem> children = ti._assocToChildMap.get(association);
+			// Collections.sort(children);
+			SortUtils.quickSort(children);
+			for (TreeItem childItem : children) {
+				String child_node_id = generateID(childItem);
+				printTree(out, childItem, child_node_id, ti, node_id, depth+1);
+			}
+		}
+	}
+
+
+
+    private void printTreeNode(PrintWriter out, TreeItem node, String node_id, TreeItem parent, String parent_node_id, int view) {
+		if (node == null) return;
+
+		try {
+			String image = "[+]";
+			boolean expandable = true;
+			if (!node._expandable) {
+				image = ".";
+				expandable = false;
+			}
+
+			boolean expanded = expandable;
+
+            String parent_code = null;
+            if (parent != null) {
+			    parent_code = parent._code;
+			}
+
+
+			String code = node._code;
+			boolean isHasMoreNode = false;
+
+			String node_label = node_id;//"N_" + replaceNodeID(code);
+		    String node_name = node._text;
+
+		    println(out, "");
+		    //KLO testing
+		    if (view == Constants.STANDARD_VIEW && parent_node_id.compareTo("root") == 0) {
+			    println(out, "newNodeData = { label:\"" + node_name + "\", id:\"" + code + "\"};");
+
+			} else {
+				println(out, "newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
+			    println(out, "newNodeData = { label:\"" + node_name + "\", id:\"" + code + "\", href:newNodeDetails };");
+			}
+
+		    if (expanded) {
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", true);");
+/*
+		    } else if (isHasMoreNode) {
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
+*/
+		    } else {
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
+		    }
+
+		    if (expandable || isHasMoreNode) {
+			    println(out, node_label + ".isLeaf = false;");
+			    println(out, node_label + ".ontology_node_child_count = 1;");
+
+		    } else {
+				println(out, node_label + ".ontology_node_child_count = 0;");
+			    println(out, node_label + ".isLeaf = true;");
+
+		    }
+
+		} catch (Exception ex) {
+            ex.printStackTrace();
+		}
+
+    }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    private String replaceNodeID(String code) {
+		/*
+		code = code.replaceAll(":", "cCc");
+        code = code.replaceAll("-", "cDc");
+        code = code.replaceAll("_", "cUc");
+        code = code.replaceAll("/", "cSc");
+        code = code.replaceAll(".", "cEc");
+		return code;
+		*/
+		String s = "" + code.hashCode();
+		s = s.replace("-", "n");
+		return s + generateRandomString();
+	}
+
+    public static void main(String[] args) throws Exception {
+        //new ValueSetUtils();
+    }
+
 }
+
+
+

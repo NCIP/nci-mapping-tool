@@ -213,11 +213,11 @@ import gov.nih.nci.evs.browser.bean.*;
 */
 
 		public String getStatus() {
-			return status;
+			return this.status;
 		}
 
 		public void setStatus(String status) {
-			status = status;
+			this.status = status;
 		}
 
 
@@ -225,42 +225,42 @@ import gov.nih.nci.evs.browser.bean.*;
 			return mappingName;
 		}
 		public void setMappingName(String mappingName) {
-			mappingName = mappingName;
+			this.mappingName = mappingName;
 		}
 
 		public String getMappingVersion() {
 			return mappingVersion;
 		}
 		public void setMappingVersion(String mappingVersion) {
-			mappingVersion = mappingVersion;
+			this.mappingVersion = mappingVersion;
 		}
 
 		public String getSourceCodingSchemeName() {
 			return sourceCodingSchemeName;
 		}
 		public void setFromCS(String from_cs) {
-			sourceCodingSchemeName = from_cs;
+			this.sourceCodingSchemeName = from_cs;
 		}
 
 		public String getSourceCodingSchemeVersion() {
 			return sourceCodingSchemeVersion;
 		}
 		public void setSourceCodingSchemeVersion(String sourceCodingSchemeVersion) {
-			sourceCodingSchemeVersion = sourceCodingSchemeVersion;
+			this.sourceCodingSchemeVersion = sourceCodingSchemeVersion;
 		}
 
 		public String getTargetCodingSchemeName() {
 			return targetCodingSchemeName;
 		}
 		public void setTargetCodingSchemeName(String targetCodingSchemeName) {
-			targetCodingSchemeName = targetCodingSchemeName;
+			this.targetCodingSchemeName = targetCodingSchemeName;
 		}
 
 		public String getTargetCodingSchemeVersion() {
 			return targetCodingSchemeVersion;
 		}
 		public void setTargetCodingSchemeVersion(String targetCodingSchemeVersion) {
-			targetCodingSchemeVersion = targetCodingSchemeVersion;
+			this.targetCodingSchemeVersion = targetCodingSchemeVersion;
 		}
 
 		public static String computeKey(String name, String version) {
@@ -277,7 +277,7 @@ import gov.nih.nci.evs.browser.bean.*;
 			} else {
 				uuid += NULL_STRING_HASH_CODE;
 			}
-			String key = "M" + new Integer(uuid).toString();
+			String key = "M" + Integer.valueOf(uuid).toString();
 			return key;
 
 		}

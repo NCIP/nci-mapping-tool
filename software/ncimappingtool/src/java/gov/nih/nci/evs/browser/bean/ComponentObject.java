@@ -243,13 +243,11 @@ import org.LexGrid.valueSets.ValueSetDefinition;
 				entityTypes.addEntry("concept");
 
 				cns = lbSvc.getNodeSet(this._vocabulary, csvt, entityTypes);
-				ResolvedConceptReferencesIterator iterator = toIterator();
+				//ResolvedConceptReferencesIterator iterator = toIterator();
 				ConceptReferenceList codeList = new ConceptReferenceList();
 
 				String codes = _codes;
-				if (codes == null) {
-					codes = "";
-				}
+
 				codes = codes.trim();
 				if (codes.compareTo("") == 0) {
 					return null;
@@ -296,7 +294,7 @@ import org.LexGrid.valueSets.ValueSetDefinition;
                 iterator = new SearchUtils().searchByAssociation(
 					    this._vocabulary, this._version, this._focusConceptCode, this._rel_search_association,
 					    resolveForward, resolveBackward, resolveAssociationDepth, -1);
-
+/*
 			} else if (_type.compareTo("ValueSetReference") == 0) {
                 String coding_scheme_name = this._vocabulary;
                 String coding_scheme_version = this._version;
@@ -310,7 +308,7 @@ import org.LexGrid.valueSets.ValueSetDefinition;
 				} else {
 					System.out.println("(*) vsd == null???");
 				}
-
+*/
 			} else {
 				CodedNodeSet cns = codes2CodedNodeSet();
 				try {

@@ -125,12 +125,33 @@ public class HTTPUtils {
 			size = MIN_FONT_SIZE;
 		else {
 			// Calculate an intermediate font size
+			/*
+			size = MIN_FONT_SIZE
+					+ Math.round((MAX_FONT_SIZE / MAX_STR_LEN)
+							/ (MIN_FONT_SIZE / value.length()));
+		    */
+			size = MIN_FONT_SIZE
+					+ Math.round(((float) MAX_FONT_SIZE / (float) MAX_STR_LEN)
+							/ ((float) MIN_FONT_SIZE / (float) value.length()));
+		}
+    	return size;
+    }
+    /*
+    public static int maxFontSize(String value) {
+    	int size;
+		if (value == null || value.length() == 0)
+			size = MAX_FONT_SIZE;
+		else if (value.length() >= MAX_STR_LEN)
+			size = MIN_FONT_SIZE;
+		else {
+			// Calculate an intermediate font size
 			size = MIN_FONT_SIZE
 					+ Math.round((MAX_FONT_SIZE / MAX_STR_LEN)
 							/ (MIN_FONT_SIZE / value.length()));
 		}
     	return size;
     }
+    */
 
     public static String replaceAll(String string, String regex,
         String replaceWith) {
@@ -197,7 +218,7 @@ public class HTTPUtils {
         HttpServletRequest request = getRequest();
         printRequestAttributes(request);
     }
-    
+
     public static void printRequestParameters(HttpServletRequest request) {
         _logger.debug(" ");
         _logger.debug(Utils.SEPARATOR);
@@ -236,7 +257,7 @@ public class HTTPUtils {
         } catch (Exception e) {
             _logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
         }
-        return map; 
+        return map;
     }
 
     public static void printAttributes() {

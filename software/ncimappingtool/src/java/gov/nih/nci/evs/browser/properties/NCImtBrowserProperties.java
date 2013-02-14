@@ -66,7 +66,7 @@ public class NCImtBrowserProperties {
     private static HashMap _configurableItemMap;
 
     // KLO
-    public static final String DEBUG_ON = "DEBUG_ON";
+    private static final String DEBUG_ON = "DEBUG_ON";
     public static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";
     public static final String LG_CONFIG_FILE = "LG_CONFIG_FILE";
     public static final String MAXIMUM_RETURN = "MAXIMUM_RETURN";
@@ -96,10 +96,10 @@ public class NCImtBrowserProperties {
         "STANDARD_FTP_REPORT_URL";
     public static final String STANDARD_FTP_REPORT_INFO =
         "STANDARD_FTP_REPORT_INFO";
-    public static int STANDARD_FTP_REPORT_INFO_MAX = 20;
+    public static final int STANDARD_FTP_REPORT_INFO_MAX = 20;
 
-    public static String MAPPING_DIR = "MAPPING_DIR";
-    public static String MODE_OF_OPERATION = "MODE_OF_OPERATION";
+    public static final String MAPPING_DIR = "MAPPING_DIR";
+    public static final String MODE_OF_OPERATION = "MODE_OF_OPERATION";
 
     public static final String BATCH_MODE_OF_OPERATION = "batch";
     public static final String INTERACTIVE_MODE_OF_OPERATION = "interactive";
@@ -107,7 +107,7 @@ public class NCImtBrowserProperties {
     private static NCImtBrowserProperties _browserProperties = null;
     private static Properties _properties = new Properties();
 
-    public static boolean _debugOn = false;
+    private static boolean _debugOn = false;
     private static int _maxToReturn = 1000;
     private static int _maxTreeLevel = 1000;
     private static String _service_url = null;
@@ -138,6 +138,110 @@ public class NCImtBrowserProperties {
     private NCImtBrowserProperties() {
     }
 
+
+
+    static {
+		try {
+			_browserProperties = new NCImtBrowserProperties();
+			loadProperties();
+
+			_debugOn = Boolean.parseBoolean(getProperty(DEBUG_ON));
+
+			String max_str =
+				_browserProperties
+					.getProperty(_browserProperties.MAXIMUM_RETURN);
+			_maxToReturn = Integer.parseInt(max_str);
+
+			String max_tree_level_str =
+				_browserProperties
+					.getProperty(_browserProperties.MAXIMUM_TREE_LEVEL);
+			_maxTreeLevel = Integer.parseInt(max_tree_level_str);
+
+			_service_url =
+				_browserProperties
+					.getProperty(_browserProperties.EVS_SERVICE_URL);
+			// _logger.info("EVS_SERVICE_URL: " + service_url);
+
+			_lg_config_file =
+				_browserProperties
+					.getProperty(_browserProperties.LG_CONFIG_FILE);
+			// _logger.info("LG_CONFIG_FILE: " + lg_config_file);
+
+			_sort_by_score =
+				_browserProperties
+					.getProperty(_browserProperties.SORT_BY_SCORE);
+			_ncicb_contact_url =
+				_browserProperties
+					.getProperty(_browserProperties.NCICB_CONTACT_URL);
+			_mail_smtp_server =
+				_browserProperties
+					.getProperty(_browserProperties.MAIL_SMTP_SERVER);
+			_terminology_subset_download_url =
+				_browserProperties
+					.getProperty(_browserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
+			_term_suggestion_application_url =
+				_browserProperties
+					.getProperty(_browserProperties.TERM_SUGGESTION_APPLICATION_URL);
+			_license_page_option =
+				_browserProperties
+					.getProperty(_browserProperties.LICENSE_PAGE_OPTION);
+			_ncim_url =
+				_browserProperties
+					.getProperty(_browserProperties.NCIM_URL);
+			_ncit_url =
+				_browserProperties
+					.getProperty(_browserProperties.NCIT_URL);
+
+			_mapping_dir =
+				_browserProperties
+					.getProperty(_browserProperties.MAPPING_DIR);
+
+			_mode_of_operation =
+				_browserProperties
+					.getProperty(_browserProperties.MODE_OF_OPERATION);
+
+			String pagination_time_out_str =
+				_browserProperties
+					.getProperty(_browserProperties.PAGINATION_TIME_OUT);
+			if (pagination_time_out_str != null) {
+				_pagination_time_out =
+					Integer.parseInt(pagination_time_out_str);
+			}
+
+			String minimum_search_string_length_str =
+				_browserProperties
+					.getProperty(_browserProperties.MINIMUM_SEARCH_STRING_LENGTH);
+			if (minimum_search_string_length_str != null) {
+				int min_search_string_length =
+					Integer.parseInt(minimum_search_string_length_str);
+				if (min_search_string_length > 1) {
+					_minimum_search_string_length =
+						min_search_string_length;
+				}
+			}
+			String sliding_window_half_width_str =
+				_browserProperties
+					.getProperty(_browserProperties.SLIDING_WINDOW_HALF_WIDTH);
+			if (sliding_window_half_width_str != null) {
+				int sliding_window_halfwidth =
+					Integer.parseInt(sliding_window_half_width_str);
+				if (sliding_window_halfwidth > 1) {
+					_sliding_window_half_width =
+						sliding_window_halfwidth;
+				}
+			}
+			_standard_ftp_report_url = getProperty(STANDARD_FTP_REPORT_URL);
+			_standard_ftp_report_info_list = StandardFtpReportInfo.parse(
+				STANDARD_FTP_REPORT_INFO, STANDARD_FTP_REPORT_INFO_MAX);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+	}
+
+	public static boolean get_debugOn() {
+		return _debugOn;
+	}
     /**
      * Gets the single instance of NCImtBrowserProperties.
      *
@@ -145,7 +249,8 @@ public class NCImtBrowserProperties {
      *
      * @throws Exception the exception
      */
-    public static NCImtBrowserProperties getInstance() throws Exception {
+    public static NCImtBrowserProperties getInstance() {//throws Exception {
+		/*
         if (_browserProperties == null) {
             synchronized (NCImtBrowserProperties.class) {
 
@@ -200,8 +305,6 @@ public class NCImtBrowserProperties {
                         _browserProperties
                             .getProperty(_browserProperties.NCIT_URL);
 
-//System.out.println("_ncit_url: " + _ncit_url);
-
                     _mapping_dir =
                         _browserProperties
                             .getProperty(_browserProperties.MAPPING_DIR);
@@ -209,11 +312,6 @@ public class NCImtBrowserProperties {
                     _mode_of_operation =
                         _browserProperties
                             .getProperty(_browserProperties.MODE_OF_OPERATION);
-
-
-//System.out.println("(*) NCImtBrowserProperties _mapping_dir: " + _mapping_dir);
-//System.out.println("(*) NCImtBrowserProperties _mode_of_operation: " + _mode_of_operation);
-
 
                     String pagination_time_out_str =
                         _browserProperties
@@ -251,6 +349,7 @@ public class NCImtBrowserProperties {
                 }
             }
         }
+        */
 
         return _browserProperties;
     }

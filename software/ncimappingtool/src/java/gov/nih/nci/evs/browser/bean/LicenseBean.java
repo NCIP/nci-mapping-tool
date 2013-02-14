@@ -110,7 +110,7 @@ public class LicenseBean extends Object {
 
     public static String resolveCodingSchemeCopyright(String codingSchemeName,
         String version) {
-        LexBIGService lbs = RemoteServerUtil.createLexBIGService();
+//        LexBIGService lbs = RemoteServerUtil.createLexBIGService();
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);

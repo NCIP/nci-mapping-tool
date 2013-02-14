@@ -15,7 +15,7 @@ import org.LexGrid.LexBIG.Utility.Iterators.*;
 import gov.nih.nci.evs.browser.utils.*;
 import gov.nih.nci.evs.browser.properties.*;
 import gov.nih.nci.evs.browser.common.*;
-import gov.nih.nci.evs.searchlog.*;
+//import gov.nih.nci.evs.searchlog.*;
 import org.apache.log4j.*;
 
 import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
@@ -460,7 +460,7 @@ mappingIteratorBean.initialize();
             source = "ALL";
         }
 
-        if (NCImtBrowserProperties._debugOn) {
+        if (NCImtBrowserProperties.get_debugOn()) {
             try {
                 _logger.debug(Utils.SEPARATOR);
                 _logger.debug("* criteria: " + matchText);
@@ -480,7 +480,7 @@ mappingIteratorBean.initialize();
         versions.add(version);
 
 
-        Utils.StopWatch stopWatch = new Utils.StopWatch();
+        //Utils.StopWatch stopWatch = new Utils.StopWatch();
         Vector<org.LexGrid.concepts.Entity> v = null;
 
         boolean excludeDesignation = true;
@@ -789,9 +789,9 @@ mappingIteratorBean.initialize();
     }
 
     public String linkAction() {
-        HttpServletRequest request =
+		/*        HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
-                .getExternalContext().getRequest();
+                .getExternalContext().getRequest(); */
         return "";
     }
 
@@ -921,7 +921,7 @@ mappingIteratorBean.initialize();
             // _logger.warn("ontologySelectionChanged; event.getNewValue() == null ");
             return;
         }
-        String newValue = (String) event.getNewValue();
+        //String newValue = (String) event.getNewValue();
 
         HttpServletResponse response =
             (HttpServletResponse) FacesContext.getCurrentInstance()
@@ -1196,7 +1196,7 @@ int selected_knt = 0;
             source = "ALL";
         }
 
-        if (NCImtBrowserProperties._debugOn) {
+        if (NCImtBrowserProperties.get_debugOn()) {
             try {
                 _logger.debug(Utils.SEPARATOR);
                 _logger.debug("* criteria: " + matchText);
@@ -1480,7 +1480,7 @@ int selected_knt = 0;
 
 					request.setAttribute("algorithm", matchAlgorithm);
 					coding_scheme =
-						(String) DataUtils._localName2FormalNameHashMap
+						(String) DataUtils.get_localName2FormalNameHashMap()
 							.get(coding_scheme);
 
 					String convertJSPString = HTTPUtils.convertJSPString(matchText);
@@ -1659,7 +1659,7 @@ int selected_knt = 0;
         bean.setMatchText(matchText);
 
 
-        if (NCImtBrowserProperties._debugOn) {
+        if (NCImtBrowserProperties.get_debugOn()) {
             _logger.debug(Utils.SEPARATOR);
             _logger.debug("* criteria: " + matchText);
             _logger.debug("* source: " + source);
@@ -1678,7 +1678,7 @@ int selected_knt = 0;
             maxToReturn = Integer.parseInt(max_str);
         } catch (Exception ex) {
         }
-        Utils.StopWatch stopWatch = new Utils.StopWatch();
+        //Utils.StopWatch stopWatch = new Utils.StopWatch();
         Vector<org.LexGrid.concepts.Entity> v = null;
 
         boolean excludeDesignation = true;
@@ -1974,11 +1974,11 @@ int selected_knt = 0;
 			}
 
             _logger.debug("AdvancedSearchActon size: " + size);
-
+/*
             // Write a search log entry
             SearchLog.writeEntry(searchFields, size, HTTPUtils
                 .getRefererParmDecode(request));
-
+*/
             if (size > 1) {
 
                 request.getSession().setAttribute("search_results", v);
@@ -2042,9 +2042,9 @@ int selected_knt = 0;
 	//resolveValueSetAction
 
     public String resolveValueSetAction() {
-        HttpServletRequest request =
+		/*        HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
-                .getExternalContext().getRequest();
+                .getExternalContext().getRequest(); */
 
         return "resolve_value_set";
 
@@ -2052,9 +2052,9 @@ int selected_knt = 0;
 
 
     public String continueResolveValueSetAction() {
-        HttpServletRequest request =
+        /*HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
-                .getExternalContext().getRequest();
+                .getExternalContext().getRequest();*/
 
 
         return "resolved_value_set";
@@ -2063,9 +2063,9 @@ int selected_knt = 0;
 
 
     public String exportValueSetAction() {
-        HttpServletRequest request =
+        /*HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
-                .getExternalContext().getRequest();
+                .getExternalContext().getRequest();*/
 
 
         return "exported_value_set";

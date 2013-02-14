@@ -7,42 +7,42 @@ import gov.nih.nci.evs.utils.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
- * Copyright 2008,2009 NGIT. This software was developed in conjunction 
- * with the National Cancer Institute, and so to the extent government 
- * employees are co-authors, any rights in such works shall be subject 
+ * Copyright 2008,2009 NGIT. This software was developed in conjunction
+ * with the National Cancer Institute, and so to the extent government
+ * employees are co-authors, any rights in such works shall be subject
  * to Title 17 of the United States Code, section 105.
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
  * are met:
- *   1. Redistributions of source code must retain the above copyright 
- *      notice, this list of conditions and the disclaimer of Article 3, 
- *      below. Redistributions in binary form must reproduce the above 
- *      copyright notice, this list of conditions and the following 
- *      disclaimer in the documentation and/or other materials provided 
+ *   1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the disclaimer of Article 3,
+ *      below. Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
  *      with the distribution.
- *   2. The end-user documentation included with the redistribution, 
+ *   2. The end-user documentation included with the redistribution,
  *      if any, must include the following acknowledgment:
- *      "This product includes software developed by NGIT and the National 
+ *      "This product includes software developed by NGIT and the National
  *      Cancer Institute."   If no such end-user documentation is to be
  *      included, this acknowledgment shall appear in the software itself,
  *      wherever such third-party acknowledgments normally appear.
- *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must 
+ *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must
  *      not be used to endorse or promote products derived from this software.
  *   4. This license does not authorize the incorporation of this software
- *      into any third party proprietary programs. This license does not 
- *      authorize the recipient to use any trademarks owned by either NCI 
- *      or NGIT 
- *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED 
- *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
- *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE 
+ *      into any third party proprietary programs. This license does not
+ *      authorize the recipient to use any trademarks owned by either NCI
+ *      or NGIT
+ *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED
+ *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE
  *      DISCLAIMED. IN NO EVENT SHALL THE NATIONAL CANCER INSTITUTE,
- *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT, 
- *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
- *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
- *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
- *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
- *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *      POSSIBILITY OF SUCH DAMAGE.
  * <!-- LICENSE_TEXT_END -->
  */
@@ -148,7 +148,7 @@ public class AppProperties {
         }
 
         _logger.info("getAppVersion returns " + _appVersion);
-        return _appVersion;    	
+        return _appVersion;
     }
 
     public String getAnthillBuildTagBuilt() {
@@ -163,9 +163,9 @@ public class AppProperties {
         }
 
         _logger.info("getAnthillBuildTagBuilt returns " + _buildTag);
-        return _buildTag;    	
-    }    
-    
+        return _buildTag;
+    }
+
     public boolean isDebugOn() {
         return Boolean.parseBoolean(getProperty(DEBUG_ON));
     }
@@ -187,8 +187,8 @@ public class AppProperties {
     public String getMailSmtpServer() {
         return getProperty(MAIL_SMTP_SERVER);
     }
-    
-    private ArrayList<VocabInfo> parseVocabList(String prefix, int max, 
+
+    private ArrayList<VocabInfo> parseVocabList(String prefix, int max,
         boolean appendOthers) {
         ArrayList<VocabInfo> list = new ArrayList<VocabInfo>();
         for (int i=0; i<max; ++i) {
@@ -213,7 +213,7 @@ public class AppProperties {
 
     private ArrayList<VocabInfo> getVocabulariesDefault() {
         if (_defaultVocabList == null) {
-            _defaultVocabList = parseVocabList(VOCABULARY_PREFIX, 
+            _defaultVocabList = parseVocabList(VOCABULARY_PREFIX,
                 VOCABULARY_MAX, true);
             VocabInfo.debug(_defaultVocabList);
         }
@@ -222,7 +222,7 @@ public class AppProperties {
 
     private ArrayList<VocabInfo> getVocabulariesCDISC() {
         if (_cdiscVocabList == null) {
-            _cdiscVocabList = parseVocabList(CDISC_VOCABULARY_PREFIX, 
+            _cdiscVocabList = parseVocabList(CDISC_VOCABULARY_PREFIX,
                 CDISC_VOCABULARY_MAX, false);
             VocabInfo.debug(_cdiscVocabList);
         }
@@ -251,7 +251,7 @@ public class AppProperties {
         return null;
     }
 
-    public String[] getVocabularyEmails(Prop.Version version, 
+    public String[] getVocabularyEmails(Prop.Version version,
         String vocabularyName) {
         ArrayList<VocabInfo> list = getVocabularies(version);
         Iterator<VocabInfo> iterator = list.iterator();
@@ -265,8 +265,8 @@ public class AppProperties {
         }
         return new String[0];
     }
-    
-    public String getVocabularyEmailsString(Prop.Version version, 
+
+    public String getVocabularyEmailsString(Prop.Version version,
         String vocabularyName) {
         String[] emails = getVocabularyEmails(version, vocabularyName);
         return StringUtils.toString(emails, ";");
@@ -282,19 +282,21 @@ public class AppProperties {
         return list;
     }
 
+/*
     public String getSources() {
         return getProperty(CADSR_SOURCES);
     }
-    
+
+
     public String[] getCADSREmail() {
         if (_cadsrEmail != null)
             return _cadsrEmail;
-        
+
         String value = getProperty(CADSR_EMAIL);
         String[] list = StringUtils.toStrings(value, ";", false);
         return _cadsrEmail = list;
     }
-    
+
     public String getCADSREmailString() {
         return getProperty(CADSR_EMAIL);
     }
@@ -303,7 +305,7 @@ public class AppProperties {
         return _cadsrSourceList = getList(
             CADSR_SOURCES, _cadsrSourceList, "_cadsrSourceList");
     }
-    
+
     public String getCADSRTypes() {
         return getProperty(CADSR_TYPES);
     }
@@ -312,11 +314,11 @@ public class AppProperties {
         return _cadsrTypeList = getList(
             CADSR_TYPES, _cadsrTypeList, "_cadsrTypeList");
     }
-    
+
     public String[] getCDISCEmail() {
         if (_cdiscEmail != null)
             return _cdiscEmail;
-        
+
         String value = getProperty(CDISC_EMAIL);
         String[] list = StringUtils.toStrings(value, ";", false);
         return _cdiscEmail = list;
@@ -330,7 +332,7 @@ public class AppProperties {
         return _cdiscRequestTypeList = getList(
             CDISC_REQUEST_TYPES, _cdiscRequestTypeList, "_cdiscRequestTypeList");
     }
-    
+
     public String getCDISCCodes() {
         return getProperty(CDISC_CODES);
     }
@@ -339,7 +341,7 @@ public class AppProperties {
         return _cdiscCodeList = getList(
             CDISC_CODES, _cdiscCodeList, "_cdiscCodeList");
     }
-    
+
     public ArrayList<QuickLinkInfo> getCDISCQuickLinks() {
         if (_cdiscQuickLinkList == null) {
             String value = getProperty(CDISC_QUICKLINKS);
@@ -347,4 +349,5 @@ public class AppProperties {
         }
         return _cdiscQuickLinkList;
     }
+    */
 }
