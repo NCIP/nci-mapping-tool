@@ -1222,7 +1222,7 @@ public class DataUtils {
 
             CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
             csvt.setVersion(version);
-            String desc = null;
+            /* String desc = null;
             try {
                 desc =
                     lbscm
@@ -1234,7 +1234,7 @@ public class DataUtils {
             } catch (Exception e) {
                 desc = "<not found>";
 
-            }
+            }*/
 
             // Iterate through all hierarchies and levels ...
             String[] hierarchyIDs = lbscm.getHierarchyIDs(scheme, csvt);
@@ -1284,7 +1284,7 @@ public class DataUtils {
             lbscm.setLexBIGService(lbSvc);
             CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
             csvt.setVersion(version);
-            String desc = null;
+            /*String desc = null;
             try {
                 desc =
                     lbscm
@@ -1294,7 +1294,7 @@ public class DataUtils {
                         .getContent();
             } catch (Exception e) {
                 desc = "<not found>";
-            }
+            }*/
 
             // Iterate through all hierarchies and levels ...
             String[] hierarchyIDs = lbscm.getHierarchyIDs(scheme, csvt);
@@ -1359,11 +1359,11 @@ public class DataUtils {
 
     public static String getVersion(String scheme) {
         String info = getReleaseDate(scheme);
-        // String version = getVocabularyVersionByTag(scheme, "PRODUCTION");
-
+        /*
         String full_name = DataUtils.getMetadataValue(scheme, "full_name");
-        if (full_name == null || full_name.compareTo("null") == 0)
+        if (full_name == null || full_name.compareTo("null") == 0) {
             full_name = scheme;
+		}*/
         String version =
             getMetadataValue(scheme, "term_browser_version");
 
@@ -3407,7 +3407,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
                 propertyNames.addEntry(propertyName);
                 CodedNodeSet.PropertyType[] propertyTypes = null;
 
-                long ms = System.currentTimeMillis(), delay = 0;
+                //long ms = System.currentTimeMillis(), delay = 0;
                 SortOptionList sortOptions = null;
                 LocalNameList filterOptions = null;
                 boolean resolveObjects = true; // needs to be set to true
@@ -3499,7 +3499,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
                 if (propertyName != null) propertyNames.addEntry(propertyName);
                 CodedNodeSet.PropertyType[] propertyTypes = null;
 
-                long ms = System.currentTimeMillis(), delay = 0;
+                //long ms = System.currentTimeMillis(), delay = 0;
                 SortOptionList sortOptions = null;
                 LocalNameList filterOptions = null;
                 boolean resolveObjects = true; // needs to be set to true

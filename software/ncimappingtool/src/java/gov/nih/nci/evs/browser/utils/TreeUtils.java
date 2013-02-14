@@ -1,6 +1,8 @@
 package gov.nih.nci.evs.browser.utils;
 
 import java.util.*;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.LexGrid.LexBIG.DataModel.Collections.*;
 import org.LexGrid.LexBIG.DataModel.Core.*;
@@ -669,7 +671,7 @@ public class TreeUtils {
                 return null;
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
-            String hier_id = hierarchyDefn.getLocalId();
+            //String hier_id = hierarchyDefn.getLocalId();
 
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
@@ -758,8 +760,9 @@ public class TreeUtils {
 
             // return getAssociatedConcepts(scheme, version, code, assocName,
             // !associationsNavigatedFwd);
-            if (associationsToNavigate != null
-                && associationsToNavigate.length == 1) {
+            //if (associationsToNavigate != null
+            //    && associationsToNavigate.length == 1) {
+			if (associationsToNavigate.length == 1) {
                 if (associationsToNavigate[0].compareTo("subClassOf") == 0) {
                     return getAssociatedConcepts(scheme, version, code,
                         "subClassOf", true);
@@ -978,7 +981,6 @@ public class TreeUtils {
 			Entity concept = getConceptByCode(scheme, version, null, code);
 			if (concept == null) return null;
 			String entityCodeNamespace = concept.getEntityCodeNamespace();
-			//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
 			ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
 			focus.setCodingSchemeName(entityCodeNamespace);
             String name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
@@ -1105,7 +1107,7 @@ public class TreeUtils {
                         }
                     }
                 } else {
-                    _logger.warn("WARNING: childAssociationList == null.");
+                    //_logger.warn("WARNING: childAssociationList == null.");
                 }
             }
             hmap.put(code, ti);
@@ -1152,7 +1154,6 @@ public class TreeUtils {
 			if (concept == null) return null;
 
 			String entityCodeNamespace = concept.getEntityCodeNamespace();
-			//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
 			ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
 			focus.setCodingSchemeName(entityCodeNamespace);
             String name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
@@ -1217,7 +1218,7 @@ public class TreeUtils {
                         Association child = pathsToChildren.next();
                         // KLO 091009 remove anonymous nodes
 
-                        child = processForAnonomousNodes(child);
+                        //child = processForAnonomousNodes(child);
 
                         String childNavText =
                             getDirectionalLabel(lbscm, scheme, csvt, child,
@@ -1279,7 +1280,7 @@ public class TreeUtils {
                         }
                     }
                 } else {
-                    _logger.warn("WARNING: childAssociationList == null.");
+                    //_logger.warn("WARNING: childAssociationList == null.");
                 }
             }
             hmap.put(code, ti);
@@ -1343,11 +1344,11 @@ public class TreeUtils {
                 cns =
                     lbSvc.getCodingSchemeConcepts(codingSchemeName,
                         versionOrTag);
+                if (cns == null) return null;
             } catch (Exception e1) {
                 e1.printStackTrace();
+                return null;
             }
-
-            if (cns == null) return null;
 
             cns = cns.restrictToCodes(crefs);
             ResolvedConceptReferenceList matches =
@@ -1439,11 +1440,13 @@ public class TreeUtils {
             String dirName = assoc.getDirectionalName();
             if (dirName != null)
                 try {
-                    rAssoc.setDirectionalName(lbscm.isForwardName(scheme, csvt,
-                        dirName) ? lbscm.getAssociationReverseName(assoc
-                        .getAssociationName(), scheme, csvt) : lbscm
-                        .getAssociationReverseName(assoc.getAssociationName(),
-                            scheme, csvt));
+					/*
+                    rAssoc.setDirectionalName(lbscm.isForwardName(scheme, csvt, dirName) ?
+                         lbscm.getAssociationReverseName(assoc.getAssociationName(), scheme, csvt):
+                         lbscm.getAssociationReverseName(assoc.getAssociationName(), scheme, csvt));
+                    */
+                    rAssoc.setDirectionalName(lbscm.getAssociationReverseName(assoc.getAssociationName(), scheme, csvt));
+
                 } catch (LBException e) {
                 }
 
@@ -1592,7 +1595,7 @@ public class TreeUtils {
                 }
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -1667,10 +1670,6 @@ public class TreeUtils {
 
     public static ResolvedConceptReferenceList getHierarchyRoots(
         String codingScheme, String version) {
-
-System.out.println("scheme: " + codingScheme);
-System.out.println("version: " + version);
-
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);
@@ -1684,7 +1683,6 @@ System.out.println("version: " + version);
             lbscm.setLexBIGService(lbSvc);
             String hierarchyID = getHierarchyID(codingScheme, version);
 
-            System.out.println("hierarchyID: " + hierarchyID);
             ResolvedConceptReferenceList rcrl = lbscm.getHierarchyRoots(codingScheme, versionOrTag,
                 hierarchyID);
 
@@ -1698,8 +1696,6 @@ System.out.println("version: " + version);
 
         } catch (Exception ex) {
 			ex.printStackTrace();
-
-			System.out.println("lbscm.getHierarchyRoots throws exception???");
             return null;
         }
     }
@@ -1931,7 +1927,7 @@ System.out.println("version: " + version);
             }
         }
 
-        List list = ResolvedConceptReferenceList2List(roots);
+        List list = resolvedConceptReferenceList2List(roots);
         SortUtils.quickSort(list);
         return list;
     }
@@ -1951,7 +1947,7 @@ System.out.println("version: " + version);
             list = cns.resolveToList(null, null, null, 500);// .getResolvedConceptReference();
             if (list == null)
                 return null;
-            return ResolvedConceptReferenceList2List(list);
+            return resolvedConceptReferenceList2List(list);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -2040,12 +2036,12 @@ System.out.println("version: " + version);
                 modified_roots.addResolvedConceptReference(rcr);
             }
         }
-        List list = ResolvedConceptReferenceList2List(modified_roots);
+        List list = resolvedConceptReferenceList2List(modified_roots);
         SortUtils.quickSort(list);
         return list;
     }
 
-    public List ResolvedConceptReferenceList2List(
+    public List resolvedConceptReferenceList2List(
         ResolvedConceptReferenceList rcrl) {
         ArrayList list = new ArrayList();
         for (int i = 0; i < rcrl.getResolvedConceptReferenceCount(); i++) {
@@ -2077,7 +2073,7 @@ System.out.println("version: " + version);
                 return null;
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
-            String hier_id = hierarchyDefn.getLocalId();
+            //String hier_id = hierarchyDefn.getLocalId();
 
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
@@ -2115,7 +2111,7 @@ System.out.println("version: " + version);
                 return null;
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
-            String hier_id = hierarchyDefn.getLocalId();
+            //String hier_id = hierarchyDefn.getLocalId();
 
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
@@ -2140,13 +2136,8 @@ System.out.println("version: " + version);
 				Entity concept = getConceptByCode(scheme, version, null, code);
 				if (concept != null) {
 					String entityCodeNamespace = concept.getEntityCodeNamespace();
-					//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
 					ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
 					focus.setCodingSchemeName(entityCodeNamespace);
-					//String name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
-
-					//ConceptReference graphFocus =
-					//    ConvenienceMethods.createConceptReference(code, scheme);
 					matches =
 						cng.resolveAsList(focus, associationsNavigatedFwd,
 							!associationsNavigatedFwd, 1, 1, new LocalNameList(),
@@ -2216,10 +2207,14 @@ System.out.println("version: " + version);
 
 
     public static void relabelTreeNodes(HashMap hmap) {
-		Iterator it = hmap.keySet().iterator();
+		//Iterator it = hmap.keySet().iterator();
+		Iterator it = hmap.entrySet().iterator();
 		while (it.hasNext()) {
-			String key = (String) it.next();
-			TreeItem ti = (TreeItem) hmap.get(key);
+            Entry thisEntry = (Entry) it.next();
+			String key = (String) thisEntry.getKey();
+			//TreeItem ti = (TreeItem) hmap.get(key);
+			TreeItem ti = (TreeItem) thisEntry.getValue();
+
 			for (String association : ti._assocToChildMap.keySet()) {
 				List<TreeItem> children = ti._assocToChildMap.get(association);
 				for (TreeItem childItem : children) {
@@ -2234,14 +2229,6 @@ System.out.println("version: " + version);
 	}
 
 	public static HashMap combine(HashMap hmap1, HashMap hmap2) {
-
-		if (hmap1 == null) {
-			System.out.println("(********) hmap1 == null" );
-		}
-		if (hmap2 == null) {
-			System.out.println("(********) hmap2 == null" );
-		}
-
 		if (hmap1 == null && hmap2 == null) return null;
 		if (hmap1 == null && hmap2 != null) return hmap2;
 		if (hmap2 == null && hmap1 != null) return hmap1;
@@ -2250,34 +2237,56 @@ System.out.println("version: " + version);
 		ti._expandable = false;
 
 		TreeItem root = null;
-		Iterator it = hmap1.keySet().iterator();
-		while (it.hasNext()) {
-			String key = (String) it.next();
-			root = (TreeItem) hmap1.get(key);
-			if (root != null) {
-				for (String association : root._assocToChildMap.keySet()) {
-					List<TreeItem> children = root._assocToChildMap.get(association);
-					for (TreeItem childItem : children) {
-						ti.addChild(association, childItem);
-						ti._expandable = true;
+		Iterator it = null;
+		if (hmap1 != null) {
+/*
+			it = hmap1.keySet().iterator();
+			while (it.hasNext()) {
+				String key = (String) it.next();
+				root = (TreeItem) hmap1.get(key);
+*/
+
+			it = hmap1.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry thisEntry = (Entry) it.next();
+				String key = (String) thisEntry.getKey();
+				root = (TreeItem) thisEntry.getValue();
+				if (root != null) {
+					for (String association : root._assocToChildMap.keySet()) {
+						List<TreeItem> children = root._assocToChildMap.get(association);
+						for (TreeItem childItem : children) {
+							ti.addChild(association, childItem);
+							ti._expandable = true;
+						}
 					}
 				}
 			}
-		}
-		it = hmap2.keySet().iterator();
-		while (it.hasNext()) {
-			String key = (String) it.next();
-			root = (TreeItem) hmap2.get(key);
-			if (root != null) {
-				for (String association : root._assocToChildMap.keySet()) {
-					List<TreeItem> children = root._assocToChildMap.get(association);
-					for (TreeItem childItem : children) {
-						ti.addChild(association, childItem);
-						ti._expandable = true;
+	    }
+
+	    if (hmap2 != null) {
+			/*
+			it = hmap2.keySet().iterator();
+			while (it.hasNext()) {
+				String key = (String) it.next();
+				root = (TreeItem) hmap2.get(key);
+			*/
+			it = hmap2.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry thisEntry = (Entry) it.next();
+				String key = (String) thisEntry.getKey();
+				root = (TreeItem) thisEntry.getValue();
+
+				if (root != null) {
+					for (String association : root._assocToChildMap.keySet()) {
+						List<TreeItem> children = root._assocToChildMap.get(association);
+						for (TreeItem childItem : children) {
+							ti.addChild(association, childItem);
+							ti._expandable = true;
+						}
 					}
 				}
 			}
-		}
+	    }
 		HashMap hmap = new HashMap();
 		hmap.put("<Root>", ti);
 		return hmap;

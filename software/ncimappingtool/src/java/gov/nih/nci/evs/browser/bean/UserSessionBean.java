@@ -237,7 +237,7 @@ System.out.println("(*******************) SearchAction cs_version " + cs_version
             return "message";
         }
 
-        if (matchText != null && matchText.length() < 3
+        if (matchText.length() < 3
               //&& matchAlgorithm.compareTo("contains") == 0) {
 			  && matchAlgorithm.compareTo("exactMatch") != 0) {
             String message = "Please enter a search string of length no less than 3.";

@@ -109,6 +109,7 @@ public class HTTPUtils {
 
     }
 
+/*
     public static String appendNCIT(String link) {
     	String nciturl = null;
     	if (link.contains("/ncitbrowser")) return link;
@@ -116,6 +117,7 @@ public class HTTPUtils {
     	link = nciturl + "/ncitbrowser";
     	return link;
     }
+*/
 
     public static int maxFontSize(String value) {
     	int size;

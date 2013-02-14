@@ -269,7 +269,7 @@ public class SearchUtils {
             lbscm.setLexBIGService(lbSvc);
             CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
             csvt.setVersion(version);
-            String desc = null;
+            /*String desc = null;
             try {
                 desc =
                     lbscm
@@ -279,7 +279,7 @@ public class SearchUtils {
                         .getContent();
             } catch (Exception e) {
                 desc = "<not found>";
-            }
+            }*/
 
             // Iterate through all hierarchies and levels ...
             String[] hierarchyIDs = lbscm.getHierarchyIDs(scheme, csvt);
@@ -321,7 +321,7 @@ public class SearchUtils {
             lbscm.setLexBIGService(lbSvc);
             CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
             csvt.setVersion(version);
-            String desc = null;
+            /*String desc = null;
             try {
                 desc =
                     lbscm
@@ -331,7 +331,7 @@ public class SearchUtils {
                         .getContent();
             } catch (Exception e) {
                 desc = "<not found>";
-            }
+            }*/
 
             // Iterate through all hierarchies and levels ...
             String[] hierarchyIDs = lbscm.getHierarchyIDs(scheme, csvt);
@@ -458,7 +458,7 @@ public class SearchUtils {
 
         Vector<String> v = new Vector();
         try {
-            RemoteServerUtil rsu = new RemoteServerUtil();
+            // RemoteServerUtil rsu = new RemoteServerUtil();
             // EVSApplicationService lbSvc = rsu.createLexBIGService();
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             if (lbSvc == null) return null;
@@ -1632,8 +1632,8 @@ public class SearchUtils {
         // Score all items ...
 
         int knt = 0, nloops = 0;
-        long msTotal = System.currentTimeMillis(), msTotal_toSortNext = 0, msTotal_sorted =
-            0;
+        //long msTotal = System.currentTimeMillis(), msTotal_toSortNext = 0, msTotal_sorted = 0;
+        long msTotal_toSortNext = 0, msTotal_sorted = 0;
         while (toSort.hasNext()) {
             ++nloops;
             // Working in chunks of 100.
@@ -2328,10 +2328,10 @@ public class SearchUtils {
                     versionOrTag.setVersion(version);
 
                 try {
-                    if (lbSvc == null) {
+                    /*if (lbSvc == null) {
                         _logger.warn("lbSvc = null");
                         return null;
-                    }
+                    }*/
 
                     //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
                     cns = getNodeSet(lbSvc, scheme, versionOrTag);
@@ -2563,13 +2563,12 @@ public class SearchUtils {
 			}
 			decorator.setMaxToReturn(maxToReturn);
 
-
-			try {
+			/*try {
 				int numberRemaining = decorator.numberRemaining();
 
 			} catch (Exception ex) {
 				ex.printStackTrace();
-			}
+			}*/
 
 			return decorator;
 		} catch (Exception ex) {
@@ -2585,7 +2584,7 @@ public class SearchUtils {
 		Vector codingSchemeNames = new Vector();
         String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
-        matchText0 = matchText0.trim();
+        //matchText0 = matchText0.trim();
 
         boolean containsMapping = false;
         _logger.debug("searchByAssociations..." + matchText);
@@ -2640,10 +2639,10 @@ public class SearchUtils {
                 // i++;
 
                 try {
-                    if (lbSvc == null) {
+                    /*if (lbSvc == null) {
                         _logger.warn("lbSvc = null");
                         return null;
-                    }
+                    }*/
 
                     // KLO, 022410 change failed
                     //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
@@ -2774,12 +2773,12 @@ public class SearchUtils {
 							new QuickUnionIterator(cns_vec, sortCriteria, null,
 								restrictToProperties, null, resolveConcepts);
 
-						try {
+						/*try {
 							int quickIteratorNumberRemaining = quickUnionIterator.numberRemaining();
 
 						} catch (Exception ex) {
 							ex.printStackTrace();
-						}
+						}*/
 
 
 /*
@@ -3094,9 +3093,9 @@ public class SearchUtils {
         _logger.debug("searchByProperties excludeDesignation: "
             + excludeDesignation);
 
-        if (source != null)
-            sourceList =
-                ConvenienceMethods.createLocalNameList(new String[] { source });
+        //if (source != null)
+        //    sourceList =
+        //        ConvenienceMethods.createLocalNameList(new String[] { source });
         NameAndValueList qualifierList = null;
 
         String matchText0 = matchText;
@@ -3128,10 +3127,10 @@ public class SearchUtils {
                 versionOrTag.setVersion(version);
 
             try {
-                if (lbSvc == null) {
+                /*if (lbSvc == null) {
                     _logger.warn("lbSvc = null");
                     return null;
-                }
+                }*/
 
                 cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
 
@@ -3679,7 +3678,7 @@ public class SearchUtils {
 
         String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
-        matchText0 = matchText0.trim();
+        //matchText0 = matchText0.trim();
         String message = null;
 
         long ms = System.currentTimeMillis();
@@ -3721,10 +3720,10 @@ public class SearchUtils {
                 versionOrTag.setVersion(version);
 
             try {
-                if (lbSvc == null) {
+                /*if (lbSvc == null) {
                     _logger.warn("lbSvc = null");
                     return null;
-                }
+                }*/
 
                 // KLO, 022410 change failed
                 //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
