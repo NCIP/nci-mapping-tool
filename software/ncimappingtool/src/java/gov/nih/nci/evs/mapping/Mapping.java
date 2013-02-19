@@ -150,6 +150,10 @@ import gov.nih.nci.evs.browser.bean.*;
 			this.mappingElements = mappingElements;
 		}
 
+        public void setUUID(int uuid) {
+			this.UUID = uuid;
+		}
+
 
         public void setNCIMVersion(String NCImVersion) {
 			this.NCImVersion = NCImVersion;
@@ -220,6 +224,9 @@ import gov.nih.nci.evs.browser.bean.*;
 			this.status = status;
 		}
 
+        public int getUUID() {
+			return this.UUID;
+		}
 
 		public String getMappingName() {
 			return mappingName;

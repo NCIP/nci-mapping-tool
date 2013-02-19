@@ -336,7 +336,7 @@ String format = (String) request.getParameter("format");
 			response.setContentLength(sb.length());
 
 			ServletOutputStream ouputStream = response.getOutputStream();
-			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+			ouputStream.write(sb.toString().getBytes("UTF8"), 0, sb.length());
 			ouputStream.flush();
 			ouputStream.close();
 

@@ -95,6 +95,22 @@ public class CacheController {
     private static Cache _cache = null;
     private static CacheManager _cacheManager = null;
 
+
+    static {
+		String cacheName = "treeCache";
+		_cacheManager = getCacheManager();
+        if (!_cacheManager.cacheExists(cacheName)) {
+            _cacheManager.addCache(cacheName);
+			_logger.debug("cache added");
+        }
+        _cache = _cacheManager.getCache(cacheName);
+    }
+
+     public static CacheController getInstance() {
+ 		return new CacheController();
+	}
+
+/*
     public CacheController(String cacheName) {
         _cacheManager = getCacheManager();
         if (!_cacheManager.cacheExists(cacheName)) {
@@ -113,6 +129,7 @@ public class CacheController {
         }
         return _instance;
     }
+*/
 
     private static CacheManager getCacheManager() {
         if (_cacheManager != null)

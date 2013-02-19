@@ -120,7 +120,7 @@ public class MappingThread implements Runnable
 		} else {
 			ResolvedValueSetDefinition rvsd = null;
 			try {
-				ResolvedValueSetCodedNodeSet rvscns = vds.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri), valueSetDefinitionRevisionId, csVersionList, csVersionTag);
+				ResolvedValueSetCodedNodeSet rvscns = vds.getCodedNodeSetForValueSetDefinition(new URI(this.vsd_uri), this.valueSetDefinitionRevisionId, this.csVersionList, this.csVersionTag);
 				if (rvscns == null) {
 					System.out.println("ERROR: rvscns not found -- " + vsd_uri);
 				} else {
