@@ -217,8 +217,8 @@ public class DataUtils {
     public static HashMap _versionReleaseDateHashMap = null;
 
 */
-    public static final String[] rel_options = new String[] {"SY", "BT", "NT", "RO"};
-    public static final String[] score_options = new String[] {"0", "1", "2", "3", "4", "5", "6"};
+    private static final String[] rel_options = new String[] {"SY", "BT", "NT", "RO"};
+    private static final String[] score_options = new String[] {"0", "1", "2", "3", "4", "5", "6"};
 
     private static HashMap _namespace2CodingScheme = null;
 

@@ -435,7 +435,7 @@ Iterator it = mapping_hmap.keySet().iterator();
 			    <select id="rel" name="rel" size="1" tabindex="4">
 			    <%
 
-				    String[] rel_options = DataUtils.rel_options;
+				    String[] rel_options = DataUtils.get_rel_options();
 				    for (int i=0; i<rel_options.length; i++) {
 					 String t = rel_options[i];
 					 if (t.compareTo(rel) == 0) {
@@ -458,7 +458,7 @@ Iterator it = mapping_hmap.keySet().iterator();
 			    <select id="score" name="score" size="1" tabindex="4">
 			    <%
 
-				    String[] score_options = DataUtils.score_options;
+				    String[] score_options = DataUtils.get_score_options();
 				    for (int i=0; i<score_options.length; i++) {
 					 String t = score_options[i];
 					 if (t.compareTo(score) == 0) {
