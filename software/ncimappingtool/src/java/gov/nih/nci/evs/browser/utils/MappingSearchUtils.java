@@ -928,15 +928,17 @@ System.out.println("relaValue: " + relaValue);
 									}
 
 									if (ac.getAssociationQualifiers() != null) {
-										String qualifiers = "";
+										//String qualifiers = "";
+										StringBuffer buf = new StringBuffer();
 										for (NameAndValue qual : ac
 												.getAssociationQualifiers()
 												.getNameAndValue()) {
 											String qualifier_name = qual.getName();
 											String qualifier_value = qual.getContent();
-											qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+											//qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+											buf.append((qualifier_name + ":" + qualifier_value) + "$");
 										}
-										s = s + "|" + qualifiers;
+										s = s + "|" + buf.toString();
 									}
 
 
@@ -945,10 +947,6 @@ System.out.println("relaValue: " + relaValue);
 									} else {
 										s = s + "|" + ac.getCodeNamespace();
 									}
-
-
-System.out.println(s);
-
 									list.add(s);
 
 								}
@@ -1088,10 +1086,10 @@ System.out.println(s);
 					//System.out.println("source_entity not found: " + sourceCode);
 				} else {
 					//System.out.println("source_entity found: " + sourceCode);
-					if (source_entity != null) {
+					//if (source_entity != null) {
 						sourceName = source_entity.getEntityDescription().getContent();
 						sourceCodeNamespace = source_entity.getEntityCodeNamespace();
-					}
+					//}
 
 					if(input_option.compareToIgnoreCase("Code") == 0) {
 						System.out.println("calling getSynonyms: sourceCode " + sourceCode);
@@ -1282,7 +1280,7 @@ System.out.println(s);
 														sourceCode);
 				}
 				if (source_entity != null) {
-					if (source_entity != null) {
+					if (source_entity.getEntityDescription() != null) {
 						sourceName = source_entity.getEntityDescription().getContent();
 						sourceCodeNamespace = source_entity.getEntityCodeNamespace();
 					}

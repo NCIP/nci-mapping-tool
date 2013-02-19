@@ -191,7 +191,8 @@ if (version != null) {
 
         Vector<String> ontologies_to_search_on =
             DataUtils.parseData(ontologiesToSearchOn);
-        String value = "";
+        //String value = "";
+        StringBuffer buf = new StringBuffer();
         for (int i = 0; i < ontologies_to_search_on.size(); i++) {
             String s = ontologies_to_search_on.elementAt(i);
             String csName = DataUtils.key2CodingSchemeName(s);
@@ -211,9 +212,10 @@ if (version != null) {
                 }
             }
             displayName += " (" + term_browser_version + ")";
-            value = value + displayName + "<br/>";
+            //value = value + displayName + "<br/>";
+            buf.append(displayName + "<br/>");
         }
-        return value;
+        return buf.toString();//value;
     }
 
     public static String getPipeSeparator(Boolean[] display) {

@@ -1057,14 +1057,16 @@ mappingIteratorBean.initialize();
 Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 
 // check if selection status has been changed.
-String ontologiesToSearchOnStr = "|";
+//String ontologiesToSearchOnStr = "|";
+StringBuffer buf = new StringBuffer();
 if (ontology_list != null) {
 	for (int i = 0; i < ontology_list.length; ++i) {
-		ontologiesToSearchOnStr =
-			ontologiesToSearchOnStr + ontology_list[i] + "|";
+		//ontologiesToSearchOnStr =
+		//	ontologiesToSearchOnStr + ontology_list[i] + "|";
+		buf.append(ontology_list[i] + "|");
 	}
 }
-
+String ontologiesToSearchOnStr = buf.toString();
 
 for (int i = 0; i < display_name_vec.size(); i++) {
 	 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
@@ -1106,15 +1108,20 @@ request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchO
 int selected_knt = 0;
 
 		Vector ontologies_to_search_on = new Vector();
-		ontologiesToSearchOnStr = "|";
+		//ontologiesToSearchOnStr = "|";
+		StringBuffer buf2 = new StringBuffer();
+		buf2.append("|");
 		for (int i = 0; i < display_name_vec.size(); i++) {
 			 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
 			 if (info.getSelected()) {
 				 selected_knt++;
 				 ontologies_to_search_on.add(info.getLabel());
-				 ontologiesToSearchOnStr = ontologiesToSearchOnStr + info.getLabel() + "|";
+				 //ontologiesToSearchOnStr = ontologiesToSearchOnStr + info.getLabel() + "|";
+				 buf2.append(info.getLabel() + "|");
 			 }
 		}
+		ontologiesToSearchOnStr = buf2.toString();
+
 
 		ontology_list = new String[ontologies_to_search_on.size()];
 		ontologiesToSearchOn = new ArrayList<String>();
@@ -1141,14 +1148,20 @@ int selected_knt = 0;
             } else {
 
                 if (ontology_list_str == null) {
-                    ontology_list_str = "";
+                    //ontology_list_str = "";
+                    StringBuffer buf3 = new StringBuffer();
+
                     for (int i = 0; i < ontology_list.length; ++i) {
-                        ontology_list_str =
-                            ontology_list_str + ontology_list[i];
+                        //ontology_list_str =
+                        //    ontology_list_str + ontology_list[i];
+                        buf3.append(ontology_list[i]);
                         if (i < ontology_list.length - 1) {
-                            ontology_list_str = ontology_list_str + "|";
+                            //ontology_list_str = ontology_list_str + "|";
+                            buf3.append("|");
                         }
                     }
+                    ontology_list_str = buf3.toString();
+
                 }
                 request.getSession().setAttribute("ontologiesToSearchOn",
                     ontologiesToSearchOnStr);
@@ -1243,21 +1256,29 @@ int selected_knt = 0;
         ontologiesToSearchOn = new ArrayList<String>();
 
         ontologiesToSearchOnStr = "|";
+        StringBuffer buf3 = new StringBuffer();
+        buf3.append("|");
         for (int i = 0; i < ontology_list.length; ++i) {
             list.add(ontology_list[i]);
             ontologiesToSearchOn.add(ontology_list[i]);
-            ontologiesToSearchOnStr =
-                ontologiesToSearchOnStr + ontology_list[i] + "|";
+            //ontologiesToSearchOnStr =
+            //    ontologiesToSearchOnStr + ontology_list[i] + "|";
+            buf3.append(ontology_list[i] + "|");
         }
+        ontologiesToSearchOnStr = buf3.toString();
 
         if (ontology_list_str == null) {
-            ontology_list_str = "";
+			StringBuffer buf4 = new StringBuffer();
+            //ontology_list_str = "";
             for (int i = 0; i < ontology_list.length; ++i) {
-                ontology_list_str = ontology_list_str + ontology_list[i];
+                //ontology_list_str = ontology_list_str + ontology_list[i];
+                buf4.append(ontology_list[i]);
                 if (i < ontology_list.length - 1) {
-                    ontology_list_str = ontology_list_str + "|";
+                    //ontology_list_str = ontology_list_str + "|";
+                    buf4.append("|");
                 }
             }
+            ontology_list_str = buf4.toString();
         }
 
         if (ontologiesToSearchOn.size() == 0) {
@@ -2092,13 +2113,16 @@ int selected_knt = 0;
 
         String[] ontology_list = request.getParameterValues("ontology_list");
 
-        String ontologiesToSearchOnStr = "|";
+        //String ontologiesToSearchOnStr = "|";
+        StringBuffer buf = new StringBuffer();
         if (ontology_list != null) {
 			for (int i = 0; i < ontology_list.length; ++i) {
-				ontologiesToSearchOnStr =
-					ontologiesToSearchOnStr + ontology_list[i] + "|";
+				buf.append(ontology_list[i] + "|");
+				//ontologiesToSearchOnStr =
+				//	ontologiesToSearchOnStr + ontology_list[i] + "|";
 			}
 	    }
+	    String ontologiesToSearchOnStr = buf.toString();
 
 	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 		String action_cs = action_coding_scheme;
@@ -2154,13 +2178,17 @@ int selected_knt = 0;
         String[] ontology_list = request.getParameterValues("ontology_list");
         //String action_cs = (String) request.getParameter("cs_name");
 
-        String ontologiesToSearchOnStr = "|";
+        //String ontologiesToSearchOnStr = "|";
+        StringBuffer buf = new StringBuffer();
+        buf.append("|");
         if (ontology_list != null) {
 			for (int i = 0; i < ontology_list.length; ++i) {
-				ontologiesToSearchOnStr =
-					ontologiesToSearchOnStr + ontology_list[i] + "|";
+				//ontologiesToSearchOnStr =
+				//	ontologiesToSearchOnStr + ontology_list[i] + "|";
+					buf.append(ontology_list[i] + "|");
 			}
 	    }
+	    String ontologiesToSearchOnStr = buf.toString();
 
 	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 
@@ -2337,7 +2365,7 @@ int selected_knt = 0;
 		try {
 			int numberRemaining = iterator.numberRemaining();
 			System.out.println("getFirstResolvedConceptReference numberRemaining: " + numberRemaining);
-			while (iterator != null && iterator.hasNext()) {
+			while (iterator.hasNext()) {
 				//ResolvedConceptReference[] refs = iterator.next(1).getResolvedConceptReference();
 				//return refs[0];
 				ResolvedConceptReference ref = (ResolvedConceptReference) iterator.next();

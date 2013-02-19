@@ -5,6 +5,8 @@ import java.util.*;
 import java.net.URI;
 import java.io.*;
 
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.faces.context.*;
 import javax.faces.event.*;
@@ -502,7 +504,8 @@ request.getSession().setAttribute("expanded_hset", expanded_hset);
 
                 ResolvedConceptReferencesIterator iterator = DataUtils.getEntitiesInCodingScheme(source_scheme, source_version);
                 if (iterator != null) {
-					String codes_str = "";
+					//String codes_str = "";
+					StringBuffer buf = new StringBuffer();
 					Vector v = new Vector();
 
 					//request.getSession().setAttribute("code2name_hmap", code2name_hmap);
@@ -521,8 +524,10 @@ request.getSession().setAttribute("expanded_hset", expanded_hset);
 					SortUtils.quickSort(v);
 					for (int i=0; i<v.size(); i++) {
 						String t = (String) v.elementAt(i);
-						codes_str = codes_str + t + "\n";
+						//codes_str = codes_str + t + "\n";
+						buf.append(t + "\n");
 					}
+					String codes_str = buf.toString();
 
 					request.getSession().setAttribute("action", "upload_data");
 					request.getSession().setAttribute("codes", codes_str);
@@ -919,12 +924,12 @@ System.out.println("submitMetadataAction type: " + type);
 		}
 
 		 //List selected_matches = null;
-		 Iterator it = mapping_hmap.keySet().iterator();
+		 Iterator it = mapping_hmap.entrySet().iterator();
 		 while (it.hasNext()) {
-			String key = (String) it.next();
-
+			Entry thisEntry = (Entry) it.next();
+			String key = (String) thisEntry.getKey();
 			System.out.println("\n(***) saveMappingAction key: " + key);
-			selected_matches = (ArrayList) mapping_hmap.get((String)key);
+			selected_matches = (ArrayList) thisEntry.getValue();
 
 			if (selected_matches != null) {
 				System.out.println("\n(***) saveMappingAction selected_matches.size(): " + selected_matches.size());
@@ -1263,8 +1268,10 @@ AbsoluteCodingSchemeVersionReferenceList acsvrl = new AbsoluteCodingSchemeVersio
 //Vector cs_name_vec = DataUtils.getCodingSchemeURNsInValueSetDefinition(vsdURI);
 //AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
 Vector ref_vec = new Vector();
-String key = vsdURI;
+//String key = vsdURI;
 
+StringBuffer buf = new StringBuffer();
+buf.append(vsdURI);
 
 for (int i=0; i<cs_uri_vec.size(); i++) {
 	String cs_uri = (String) cs_uri_vec.elementAt(i);
@@ -1278,9 +1285,11 @@ for (int i=0; i<cs_uri_vec.size(); i++) {
 		//acsvrl.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_name, version));
 		acsvrl.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_uri, version));
 		ref_vec.add(cs_name + "$" + version);
-		key = key + "|" + cs_name + "$" + version;
+		//key = key + "|" + cs_name + "$" + version;
+		buf.append("|" + cs_name + "$" + version);
 	}
 }
+String key = buf.toString();
 request.getSession().setAttribute("acsvrl", acsvrl);
 
 
@@ -1730,10 +1739,12 @@ System.out.println("matchText: " + matchText);
 			return "delete";
 		}
 
-        Iterator it = mappings.keySet().iterator();
+
+		Iterator it = mappings.entrySet().iterator();
 		while (it.hasNext()) {
-			String key = (String) it.next();
-			MappingObject obj = (MappingObject) mappings.get(key);
+			Entry thisEntry = (Entry) it.next();
+			String key = (String) thisEntry.getKey();
+			MappingObject obj = (MappingObject) thisEntry.getValue();
 			String obj_id = obj.getKey();
 			if (obj_id.compareTo(mapping_id) == 0) {
 				mappings.remove(obj_id);
@@ -1759,14 +1770,15 @@ System.out.println("matchText: " + matchText);
 			System.out.println("cloneMappingAction mapping_id == null???: ");
 			String msg = "Please check one from the list.";
 			request.getSession().setAttribute("message", msg);
-
 			return "message";
 		}
 
-        Iterator it = mappings.keySet().iterator();
+
+		Iterator it = mappings.entrySet().iterator();
 		while (it.hasNext()) {
-			String key = (String) it.next();
-			MappingObject obj = (MappingObject) mappings.get(key);
+			Entry thisEntry = (Entry) it.next();
+			String key = (String) thisEntry.getKey();
+			MappingObject obj = (MappingObject) thisEntry.getValue();
 			String obj_id = obj.getKey();
 			if (obj_id.compareTo(mapping_id) == 0) {
 		    // to be implemented
@@ -2126,7 +2138,8 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
     }
 
     public void updateMapping(HttpServletRequest request) {
-		String checkedEntryIds = "";
+		//String checkedEntryIds = "";
+		StringBuffer buf = new StringBuffer();
 		String entry_status = (String) request.getParameter("entry_status");
 		request.getSession().setAttribute("entry_status", entry_status);
 
@@ -2156,7 +2169,8 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
 					   MappingData mappingData = (MappingData) selected_matches.get(lcv2);
 					   if (!DataUtils.isNull(checkbox_status)) {
 						   mappingData.setStatus(entry_status);
-						   checkedEntryIds = checkedEntryIds + checkbox_name + "|";
+						   //checkedEntryIds = checkedEntryIds + checkbox_name + "|";
+						   buf.append(checkbox_name + "|");
 					   }
 
 					   String rel = (String) request.getParameter(rel_id);
@@ -2177,7 +2191,9 @@ System.out.println("uploadMappingAction set action to upload_mapping ");
 				   }
 			   }
 			}
+
 	    }
+	    String checkedEntryIds = buf.toString();
 	    request.getSession().setAttribute("checkedEntryIds", checkedEntryIds);
 	}
 

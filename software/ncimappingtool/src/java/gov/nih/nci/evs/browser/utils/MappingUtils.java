@@ -178,14 +178,17 @@ public class MappingUtils {
 		Vector fillers = getFillers();
 		StringTokenizer st = new StringTokenizer(str, delim);
 		int knt = 0;
-		String retstr = "";
+		//String retstr = "";
+		StringBuffer buf = new StringBuffer();
 		while(st.hasMoreTokens()) {
 			String val = st.nextToken();
-			//System.out.println("\t" + val + " " + val.length());
 			if (!fillers.contains(val)) {
-			    retstr = retstr + " " + val;
+			    //retstr = retstr + " " + val;
+			    buf.append(" " + val);
 			}
 		}
+		String retstr = buf.toString();
+
 		retstr = retstr.trim();
 		return retstr;
 	}
@@ -471,12 +474,7 @@ System.out.println("lexical matching vbt: " + vbt);
             System.out.println("\tWARNING: exception thrown??? " + algorithm);
 		} finally {
 			osWriter.flush();
-			if (osWriter != null) {
-				System.out.println("Closing osWriter");
-				osWriter.close();
-			} else {
-				System.out.println("osWriter not open");
-			}
+			osWriter.close();
 		}
 		return matched_algorithms;
 	}
@@ -616,14 +614,8 @@ System.out.println("Output file " + outputfile + " generated.");
 
 		} finally {
 			osWriter.flush();
-			if (osWriter != null) {
-				System.out.println("Closing osWriter");
-				osWriter.close();
-			} else {
-				System.out.println("osWriter not open");
-			}
+			osWriter.close();
 		}
-
 
 		return;// matched_algorithms;
 	}
@@ -670,7 +662,7 @@ System.out.println("Output file " + outputfile + " generated.");
 		try {
 			osWriter.write("\t" + ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 
@@ -679,7 +671,7 @@ System.out.println("Output file " + outputfile + " generated.");
 			osWriter.write(label + ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
 			//System.out.println(label + ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
 		} catch (Exception e) {
-
+            e.printStackTrace();
 		}
 	}
 
@@ -689,7 +681,7 @@ System.out.println("Output file " + outputfile + " generated.");
 		try {
 			osWriter.write("\t" + ref.getEntityCode() + ":" + ref.getEntityDescription().getContent());
 		} catch (Exception e) {
-
+            e.printStackTrace();
 		}
 	}
 
@@ -1437,7 +1429,7 @@ System.out.println("algorithm: " + algorithm);
 
 	public String getSynonym(String delimed_str) {
 		Vector u = parseData(delimed_str) ;
-		if (u == null) return null;
+		//if (u == null) return null;
 		return (String) u.elementAt(0);
 	}
 
@@ -1803,7 +1795,7 @@ for (int i=0; i<u.size(); i++) {
 
         Vector<String> v = null;
 
-        if (qualifiervalue != null && qualifiervalue.compareTo("") != 0) {
+        if (qualifiervalue.compareTo("") != 0) {
             qualifierList = new NameAndValueList();
             NameAndValue nv = new NameAndValue();
             nv.setName(qualifiername);
@@ -2235,7 +2227,7 @@ for (int i=0; i<u.size(); i++) {
 
         Vector<String> v = null;
 
-        if (code != null && code.compareTo("") != 0) {
+        if (code.compareTo("") != 0) {
             qualifierList = new NameAndValueList();
             NameAndValue nv = new NameAndValue();
             nv.setName("source-code");
@@ -2407,7 +2399,7 @@ for (int i=0; i<u.size(); i++) {
 						    	 }
 							 }
 
-						 } else if (source_abbrev != null && source_abbrev.compareTo("") != 0) {
+						 } else if (source_abbrev.compareTo("") != 0) {
 							 if (source_code_hset.size() > 0 && target_code_hset.size() > 0) {
 								 Iterator it_source = source_code_hset.iterator();
 								 while (it_source.hasNext()) {
@@ -2514,7 +2506,7 @@ for (int i=0; i<u.size(); i++) {
 											if (source_entity != null) {
 												String sourceName = "";
 												String sourceCodeNamespace = "";
-												if (source_entity != null) {
+												if (source_entity.getEntityDescription() != null) {
 													sourceName = source_entity.getEntityDescription().getContent();
 													sourceCodeNamespace = source_entity.getEntityCodeNamespace();
 												}
@@ -2638,7 +2630,7 @@ if (source_entity == null) {
 
 			String sourceName = "";
 			String sourceCodeNamespace = "";
-			if (source_entity != null) {
+			if (source_entity.getEntityDescription() != null) {
 				sourceName = source_entity.getEntityDescription().getContent();
 				sourceCodeNamespace = source_entity.getEntityCodeNamespace();
 			}

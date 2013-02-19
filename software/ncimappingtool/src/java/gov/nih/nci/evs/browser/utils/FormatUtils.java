@@ -113,7 +113,10 @@ public class FormatUtils {
     public static String replaceHyperlinks(String s, String target,
         String hyperlinktext) {
         Vector<String> v = findHyperlinks(s, target);
-        String t3 = "";
+        //String t3 = "";
+
+        StringBuffer buf = new StringBuffer();
+
         for (int i = 0; i < v.size(); i++) {
             String str = (String) v.elementAt(i);
             String s1 = str;
@@ -141,9 +144,12 @@ public class FormatUtils {
 
             String s2 = link;
             t2 = t1 + s2;
-            t3 = t3 + t2;
+            //t3 = t3 + t2;
+            buf.append(t2);
         }
-        t3 = t3 + s;
+        buf.append(s);
+        String t3 = buf.toString();
+        //t3 = t3 + s;
 
         t3 = t3.replaceAll("\"<a", "<a");
         t3 = t3.replaceAll("</a>\"", "</a>");
