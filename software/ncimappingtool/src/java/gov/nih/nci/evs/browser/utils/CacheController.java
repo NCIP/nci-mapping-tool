@@ -192,7 +192,7 @@ public class CacheController {
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubconcepts ");
             map = new TreeUtils().getSubconcepts(scheme, version, code);
-            nodeArray = HashMap2JSONArray(map);
+            nodeArray = hashMap2JSONArray(map);
 
             if (fromCache) {
                 try {
@@ -236,7 +236,7 @@ public class CacheController {
             _logger.debug("Not in cache -- calling getSubValueSets ");
 
             map = ValueSetHierarchy.getSubValueSets(scheme, code);
-            nodeArray = HashMap2JSONArray(map);
+            nodeArray = hashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
                 try {
@@ -266,7 +266,7 @@ public class CacheController {
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
             map = ValueSetHierarchy.getSubValueSets(code);
-            nodeArray = HashMap2JSONArray(map);
+            nodeArray = hashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
 				try {
@@ -297,7 +297,7 @@ public class CacheController {
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
             map = ValueSetHierarchy.getSubValueSets(null, code);
-            nodeArray = HashMap2JSONArray(map);
+            nodeArray = hashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
                 try {
@@ -665,7 +665,7 @@ public class CacheController {
             }
 
         } catch (Exception ex) {
-
+			ex.printStackTrace();
         }
         return nodesArray;
     }
@@ -720,12 +720,12 @@ public class CacheController {
             try {
 
 				HashMap hmap = ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes(node_id);
-
-				if (hmap == null) {
+				/*if (hmap == null) {
 					System.out.println("ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes returns NULL???");
-				}
+					return null;
+				}*/
 
-				nodesArray = HashMap2JSONArray(hmap);
+				nodesArray = hashMap2JSONArray(hmap);
                 element = new Element(key, nodesArray);
                 _cache.put(element);
             } catch (Exception ex) {
@@ -739,7 +739,7 @@ public class CacheController {
 
 
 
-    public JSONArray HashMap2JSONArray(HashMap hmap) {
+    public JSONArray hashMap2JSONArray(HashMap hmap) {
 
         //JSONObject json = new JSONObject();
         JSONArray nodesArray = null;
@@ -771,7 +771,7 @@ public class CacheController {
             }
         } catch (Exception e) {
 e.printStackTrace();
-System.out.println("Exception thrown by HashMap2JSONArray???");
+System.out.println("Exception thrown by hashMap2JSONArray???");
         }
         return nodesArray;
     }
@@ -989,7 +989,7 @@ System.out.println("Exception thrown by HashMap2JSONArray???");
                                 node_id, childItem));
                             nodesArray.put(nodeObject);
                         } catch (Exception ex) {
-
+							ex.printStackTrace();
                         }
                     }
                 } else {
@@ -1021,7 +1021,7 @@ System.out.println("Exception thrown by HashMap2JSONArray???");
                                 node_id, childItem));
                             nodesArray.put(nodeObject);
                         } catch (Exception ex) {
-
+                            ex.printStackTrace();
                         }
                     }
 

@@ -418,15 +418,6 @@ if (options.size() == 0) {
             //options.add("Valid");
             //options.add("Invalid");
             List<MappingData> list = obj.getMappingData(options);
-
-
-      if (list != null) {
-		  System.out.println("Number of records to export: " + list.size());
-  	  } else {
-		  System.out.println("obj.getMappingData(options) returns NULL???");
-	  }
-
-
             LexGridXMLGenerator.writeContent(out, obj.getName(),
                                              obj.getFromCS(), obj.getToCS(), list);
 

@@ -112,6 +112,8 @@ public class Constants {
     public static final int  STANDARD_VIEW = 1;
     public static final int  TERMINOLOGY_VIEW = 2;
 
+    public static final long MILLISECONDS_PER_MINUTE = 60L * 1000;
+
     /**
      * Constructor
      */

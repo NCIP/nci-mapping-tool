@@ -460,7 +460,8 @@ public class MappingIteratorBean extends Object {
 				dt = System.currentTimeMillis() - ms;
 				ms = System.currentTimeMillis();
 				total_delay = total_delay + dt;
-				if (total_delay > NCImtBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+				//if (total_delay > NCImtBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+				if (total_delay > NCImtBrowserProperties.getPaginationTimeOut() * Constants.MILLISECONDS_PER_MINUTE) {
 					_timeout = true;
 					_logger.debug("Time out at: " + _lastResolved);
 					break;
@@ -540,7 +541,7 @@ System.out.println("end of getData size: " + _size);
             osWriter.write("(" + k + ") " + ref.getConceptCode() + ":"
                 + ref.getEntityDescription().getContent() + "\n");
         } catch (Exception ex) {
-
+			ex.printStackTrace();
         }
     }
 

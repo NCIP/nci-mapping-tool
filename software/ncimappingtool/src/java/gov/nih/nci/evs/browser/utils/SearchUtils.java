@@ -765,8 +765,8 @@ public class SearchUtils {
             (String) hierarchicalAssoName_vec.elementAt(0);
         Vector superconcept_vec =
             getAssociationSources(scheme, version, code, hierarchicalAssoName);
-        if (superconcept_vec == null)
-            return null;
+        //if (superconcept_vec == null)
+        //    return null;
         return superconcept_vec;
 
     }
@@ -1612,7 +1612,9 @@ public class SearchUtils {
             String word = (String) compareWords.get(k);
             compareCodes.add(word);
         }
-        String target = "";
+        //String target = "";
+        StringBuffer buf = new StringBuffer();
+
         if (algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0) {
             compareCodes = new ArrayList<String>();
             for (int k = 0; k < compareWords.size(); k++) {
@@ -1621,11 +1623,15 @@ public class SearchUtils {
                 compareCodes.add(doubleMetaphonecode);
                 // _logger.debug("*** DoubleMetaphoneLuceneQuery word " + word +
                 // " code: " + doubleMetaphone.encode(word));
-                target = target + doubleMetaphonecode;
-                if (k < compareWords.size() - 1)
-                    target = target + " ";
+                //target = target + doubleMetaphonecode;
+                buf.append(doubleMetaphonecode);
+                if (k < compareWords.size() - 1) {
+                    //target = target + " ";
+                    buf.append(" ");
+				}
             }
         }
+        String target = buf.toString();
         // Create a bucket to store results.
         Map<String, ScoredTerm> scoredResult =
             new TreeMap<String, ScoredTerm>();
@@ -1737,17 +1743,23 @@ public class SearchUtils {
 
         List<String> compareWords = toScoreWords(searchTerm);
         List<String> compareCodes = new ArrayList<String>(compareWords.size());
-        String target = "";
+        //String target = "";
+        StringBuffer buf = new StringBuffer();
+
         if (algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0) {
             for (int k = 0; k < compareWords.size(); k++) {
                 String word = (String) compareWords.get(k);
                 String doubleMetaphonecode = doubleMetaphoneEncode(word);
                 compareCodes.set(k, doubleMetaphonecode);
-                target = target + doubleMetaphonecode;
-                if (k < compareWords.size() - 1)
-                    target = target + " ";
+                //target = target + doubleMetaphonecode;
+                buf.append(doubleMetaphonecode);
+                if (k < compareWords.size() - 1) {
+                    //target = target + " ";
+                    buf.append(" ");
+				}
             }
         }
+        String target = buf.toString();
 
         // Create a bucket to store results.
         Map<String, ScoredTerm> scoredResult =
@@ -1843,7 +1855,8 @@ public class SearchUtils {
         float totalWords = wordsToCompare.size();
         float matchScore = 0;
         float position = 0;
-        String s = "";
+        //String s = "";
+        StringBuffer buf = new StringBuffer();
         int k = 0;
         for (Iterator<String> words = wordsToCompare.listIterator(); words
             .hasNext(); position++) {
@@ -1860,11 +1873,14 @@ public class SearchUtils {
                     matchScore += ((position / 10) + 1);
                 }
             }
-            s = s + word;
+            //s = s + word;
+            buf.append(word);
             if (k < wordsToCompare.size() - 1)
-                s = s + " ";
+               //s = s + " ";
+                buf.append(" ");
             k++;
         }
+        String s = buf.toString();
 
         if (s.indexOf(target) == -1) {
             return (float) 0.0;
@@ -2287,15 +2303,17 @@ public class SearchUtils {
         Vector schemes, Vector versions, String matchText, String source,
         String matchAlgorithm, boolean excludeDesignation, boolean ranking,
         int maxToReturn) {
+
+        if (matchText == null || matchText.length() == 0) {
+            return null;
+        }
         String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
         matchText0 = matchText0.trim();
 
         _logger.debug("searchByProperties..." + matchText);
 
-        if (matchText == null || matchText.length() == 0) {
-            return null;
-        }
+
 
         matchText = matchText.trim();
         if (matchAlgorithm.compareToIgnoreCase("contains") == 0) {
@@ -2690,7 +2708,7 @@ public class SearchUtils {
                             // codesToRemove)
                             // cns = cns2.difference(cns);
 
-                            if (cns != null) {
+                            //if (cns != null) {
 								/*
                                 cns =
                                     filterOutAnonymousClasses(lbSvc, scheme,
@@ -2707,7 +2725,7 @@ public class SearchUtils {
 										}
 								    }
                                 }
-                            }
+                            //}
                         } catch (Exception ex) {
                             // return null;
                         }
@@ -2721,7 +2739,9 @@ public class SearchUtils {
                 ms = System.currentTimeMillis();
                 total_delay = total_delay + dt;
 
-                if (total_delay > NCImtBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+                //if (total_delay > NCImtBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+				if (total_delay > NCImtBrowserProperties.getPaginationTimeOut() * Constants.MILLISECONDS_PER_MINUTE) {
+
                     message =
                         "WARNING: Search is incomplete -- please enter more specific search criteria.";
                     // cont_flag = false;
@@ -3064,6 +3084,11 @@ public class SearchUtils {
         String[] property_types, String[] property_names, String source,
         String matchAlgorithm, boolean excludeDesignation, boolean ranking,
         int maxToReturn) {
+
+        if (matchText == null || matchText.length() == 0) {
+            return null;
+        }
+
         boolean restrictToProperties = false;
         CodedNodeSet.PropertyType[] propertyTypes = null;
         LocalNameList propertyNames = null;
@@ -3101,9 +3126,7 @@ public class SearchUtils {
         String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
         matchText0 = matchText0.trim();
-        if (matchText == null || matchText.length() == 0) {
-            return null;
-        }
+
         matchText = matchText.trim();
         if (matchAlgorithm.compareToIgnoreCase("contains") == 0) {
             matchAlgorithm = findBestContainsAlgorithm(matchText);
@@ -3234,7 +3257,7 @@ public class SearchUtils {
 
                     _logger.debug("Number of matches: " + iterator_size);
                 } catch (Exception ex) {
-
+					ex.printStackTrace();
                 }
             }
 
@@ -3246,7 +3269,7 @@ public class SearchUtils {
                     try {
                         iterator_size = iterator.numberRemaining();
                     } catch (Exception ex) {
-
+                        ex.printStackTrace();
                     }
                 }
             }
@@ -3544,7 +3567,7 @@ public class SearchUtils {
 
         Vector<String> v = null;
 
-        if (code != null && code.compareTo("") != 0) {
+        if (code.compareTo("") != 0) {
             qualifierList = new NameAndValueList();
             NameAndValue nv = new NameAndValue();
             nv.setName("source-code");
@@ -3767,7 +3790,9 @@ public class SearchUtils {
             ms = System.currentTimeMillis();
             total_delay = total_delay + dt;
 
-            if (total_delay > NCImtBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+            //if (total_delay > NCImtBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+			if (total_delay > NCImtBrowserProperties.getPaginationTimeOut() * Constants.MILLISECONDS_PER_MINUTE) {
+
                 message =
                     "WARNING: Search is incomplete -- please enter more specific search criteria.";
             }
@@ -3893,7 +3918,7 @@ public class SearchUtils {
 
             if (lbSvc == null) {
                 _logger.warn("lbSvc = null");
-                return null;
+                return Boolean.FALSE;
             }
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
             if (version != null) {
@@ -3908,7 +3933,7 @@ public class SearchUtils {
 		} catch (Exception ex) {
             ex.printStackTrace();
 		}
-		return null;
+		return Boolean.FALSE;
 	}
 
 
@@ -4040,8 +4065,8 @@ int j = i+1;
 		s = s.trim();
 		String t = s;
 
-		if (right_trim.length() >= t.length()) return null;
-		if (left_trim.length() >= t.length()) return null;
+		//if (right_trim.length() >= t.length()) return null;
+		//if (left_trim.length() >= t.length()) return null;
 
 		if (left_trim != null) {
 			if (left_trim.length() >= t.length()) return null;

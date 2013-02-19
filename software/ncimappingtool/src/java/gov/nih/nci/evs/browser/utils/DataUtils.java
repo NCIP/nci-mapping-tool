@@ -3,6 +3,9 @@ package gov.nih.nci.evs.browser.utils;
 import java.io.*;
 import java.net.URI;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import java.text.*;
 import java.util.*;
 import java.sql.*;
@@ -214,8 +217,8 @@ public class DataUtils {
     public static HashMap _versionReleaseDateHashMap = null;
 
 */
-    public static String[] rel_options = new String[] {"SY", "BT", "NT", "RO"};
-    public static String[] score_options = new String[] {"0", "1", "2", "3", "4", "5", "6"};
+    public static final String[] rel_options = new String[] {"SY", "BT", "NT", "RO"};
+    public static final String[] score_options = new String[] {"0", "1", "2", "3", "4", "5", "6"};
 
     private static HashMap _namespace2CodingScheme = null;
 
@@ -413,11 +416,11 @@ public class DataUtils {
  			HashMap hmap = MetadataUtils.getMappingDisplayHashMap(cs, version);
  			if (hmap != null) {
  				_mappingDisplayNameHashMap.put(cs, hmap);
-
- 				Iterator it2 = hmap.keySet().iterator();
- 				while (it2.hasNext()) {
-					String key = (String) it2.next();
-					String value2 = (String) hmap.get(key);
+				Iterator it2 = hmap.entrySet().iterator();
+				while (it2.hasNext()) {
+					Entry thisEntry = (Entry) it2.next();
+					String key = (String) thisEntry.getKey();
+					String value2 = (String) thisEntry.getValue();
                     _mapping_namespace_hmap.put(key, value2);
 				}
  			}
@@ -491,9 +494,7 @@ public class DataUtils {
 				}
 
                 Boolean isActive = null;
-                if (csr == null) {
-                    _logger.warn("\tcsr == null???");
-                } else if (csr.getRenderingDetail() == null) {
+                if (csr.getRenderingDetail() == null) {
                     _logger.warn("\tcsr.getRenderingDetail() == null");
                 } else if (csr.getRenderingDetail().getVersionStatus() == null) {
                     _logger
@@ -542,7 +543,7 @@ public class DataUtils {
                         _codingSchemeName2URIHashMap.put(cs.getCodingSchemeName(), cs.getCodingSchemeURI());
 
                         boolean isMapping = isMapping(cs.getCodingSchemeName(), representsVersion);
-                        _isMappingHashMap.put(cs.getCodingSchemeName(), new Boolean(isMapping));
+                        _isMappingHashMap.put(cs.getCodingSchemeName(), Boolean.valueOf(isMapping));
 
                         String[] localnames = cs.getLocalName();
                         for (int m = 0; m < localnames.length; m++) {
@@ -555,7 +556,7 @@ public class DataUtils {
 
                         NameAndValue[] nvList =
                             MetadataUtils.getMetadataProperties(cs);
-                        if (cs != null && nvList != null) {
+                        if (nvList != null) {
 
                             String css_local_name = css.getLocalName();
                             boolean localname_exist = false;
@@ -701,6 +702,7 @@ public class DataUtils {
                                 + " possibly due to missing security token.");
                         _logger.error("\t\tAccess to " + formalname
                             + " denied.");
+                            ex.printStackTrace();
                     }
 
                 } else {
@@ -710,7 +712,7 @@ public class DataUtils {
                 }
             }
         } catch (Exception e) {
-            // e.printStackTrace();
+             e.printStackTrace();
             // return null;
         }
         if (nv_vec.size() > 0) {
@@ -1104,8 +1106,8 @@ public class DataUtils {
         Vector superconcept_vec =
             getAssociationSourceCodes(scheme, version, code,
                 hierarchicalAssoName);
-        if (superconcept_vec == null)
-            return null;
+        //if (superconcept_vec == null)
+        //    return null;
         // SortUtils.quickSort(superconcept_vec, SortUtils.SORT_BY_CODE);
         return superconcept_vec;
 
@@ -1452,7 +1454,7 @@ public class DataUtils {
                     if (tags == null)
                         return version;
 
-                    if (tags != null && tags.length > 0) {
+                    if (tags.length > 0) {
                         for (int j = 0; j < tags.length; j++) {
                             String version_tag = (String) tags[j];
 
@@ -1703,7 +1705,8 @@ public class DataUtils {
     public static String getPropertyQualfierValues(
         org.LexGrid.commonTypes.Property p) {
 
-        String s = "";
+        //String s = "";
+        StringBuffer buf = new StringBuffer();
         PropertyQualifier[] qualifiers = p.getPropertyQualifier();
         if (qualifiers != null && qualifiers.length > 0) {
             for (int j = 0; j < qualifiers.length; j++) {
@@ -1713,12 +1716,16 @@ public class DataUtils {
                 if (qualifier_name.compareTo("label") != 0) {
 					String qualifier_value = q.getValue().getContent();
 
-					s = s + qualifier_name + ": " + qualifier_value;
-					if (j < qualifiers.length - 1)
-						s = s + "; ";
+					//s = s + qualifier_name + ": " + qualifier_value;
+					buf.append(qualifier_name + ": " + qualifier_value);
+					if (j < qualifiers.length - 1) {
+						//s = s + "; ";);
+						buf.append("; ");
+					}
 				}
             }
         }
+        String s = buf.toString();
         return s;
     }
 
@@ -2113,29 +2120,37 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
                                                     replaceAssociationNameByRela(
                                                         ac, associationName);
 
-
-                                                String s =
+												StringBuffer buf = new StringBuffer();
+                                                buf.append(
                                                     relaValue + "|" + pt + "|"
                                                         + ac.getConceptCode() + "|"
-                                                        + ac.getCodingSchemeName();
+                                                        + ac.getCodingSchemeName());
 
                                                 if (isMapping) {
 													if (ac.getAssociationQualifiers() != null) {
-														String qualifiers = "";
+														//String qualifiers = "";
+														StringBuffer buf3 = new StringBuffer();
+
 														for (NameAndValue qual : ac
 																.getAssociationQualifiers()
 																.getNameAndValue()) {
 															String qualifier_name = qual.getName();
 															String qualifier_value = qual.getContent();
-															qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+															//qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+															buf3.append((qualifier_name + ":" + qualifier_value) + "$");
 
 														    //System.out.println("qualifiers: " + qualifiers);
 
 														}
-														s = s + "|" + qualifiers;
+														String qualifiers = buf3.toString();
+
+														buf.append("|" + qualifiers);
+														//s = s + "|" + qualifiers;
 													}
-													s = s + "|" + ac.getCodeNamespace();
+													//s = s + "|" + ac.getCodeNamespace();
+													buf.append("|" + ac.getCodeNamespace());
 												}
+												String s = buf.toString();
 
 
                                                 if (isRole) {
@@ -2293,9 +2308,6 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
                                                     replaceAssociationNameByRela(
                                                         ac, associationName);
 
-
-
-
                                                 String s =
                                                     relaValue + "|" + pt + "|"
                                                          + ac.getConceptCode() + "|"
@@ -2304,14 +2316,18 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
                                                 if (isMapping) {
 													if (ac.getAssociationQualifiers() != null) {
-														String qualifiers = "";
+														//String qualifiers = "";
+														StringBuffer buf2 = new StringBuffer();
 														for (NameAndValue qual : ac
 																.getAssociationQualifiers()
 																.getNameAndValue()) {
 															String qualifier_name = qual.getName();
 															String qualifier_value = qual.getContent();
-															qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+															//qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+															buf2.append((qualifier_name + ":" + qualifier_value) + "$");
 														}
+														String qualifiers = buf2.toString();
+
 														s = s + "|" + qualifiers;
 													}
 													s = s + "|" + ac.getCodeNamespace();
@@ -3087,14 +3103,14 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
         if (concepts == null || concepts.size() <= 0) {
             _logger.debug(label + "(none)");
-        } else if (concepts != null && concepts.size() == 1) {
+        } else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
             _logger.debug(label + " " + cName + "(" + cCode + ")");
-        } else if (concepts != null) {
+        } else {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
@@ -3110,14 +3126,14 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
         if (concepts == null || concepts.size() <= 0) {
             _logger.debug(label + "(none)");
-        } else if (concepts != null && concepts.size() == 1) {
+        } else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
             _logger.debug(label + " " + cName + "(" + cCode + ")");
-        } else if (concepts != null) {
+        } else {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
@@ -3133,14 +3149,14 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
         if (concepts == null || concepts.size() <= 0) {
             _logger.debug(label + "(none)");
-        } else if (concepts != null && concepts.size() == 1) {
+        } else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
             _logger.debug(label + " " + cName + "(" + cCode + ")");
-        } else if (concepts != null) {
+        } else {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
@@ -3155,14 +3171,14 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
         if (concepts == null || concepts.size() <= 0) {
             _logger.debug(label + "(none)");
-        } else if (concepts != null && concepts.size() == 1) {
+        } else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
             _logger.debug(label + " " + cName + "(" + cCode + ")");
-        } else if (concepts != null) {
+        } else {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
@@ -3178,14 +3194,14 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
         if (concepts == null || concepts.size() <= 0) {
             _logger.debug(label + "(none)");
-        } else if (concepts != null && concepts.size() == 1) {
+        } else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
             _logger.debug(label + " " + cName + "(" + cCode + ")");
-        } else if (concepts != null) {
+        } else {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
@@ -3200,14 +3216,14 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
         if (concepts == null || concepts.size() <= 0) {
             _logger.debug(label + "(none)");
-        } else if (concepts != null && concepts.size() == 1) {
+        } else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
             _logger.debug(label + " " + cName + "(" + cCode + ")");
-        } else if (concepts != null) {
+        } else {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
@@ -3462,7 +3478,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
                 e.printStackTrace();
             }
         } catch (Exception ex) {
-
+			ex.printStackTrace();
         }
         return null;
     }
@@ -3567,22 +3583,26 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
     public static String convertToCommaSeparatedValue(Vector v) {
         if (v == null)
             return null;
-        String s = "";
+        //String s = "";
+        StringBuffer buf = new StringBuffer();
         if (v.size() == 0)
-            return s;
-        s = (String) v.elementAt(0);
+            return buf.toString();//s;
+        //s = (String) v.elementAt(0);
+        buf.append((String) v.elementAt(0));
         for (int i = 1; i < v.size(); i++) {
             String next = (String) v.elementAt(i);
-            s = s + "; " + next;
+            //s = s + "; " + next;
+            buf.append("; " + next);
         }
-        return s;
+        return buf.toString();//s;
     }
 
     public static String replaceInnerEvalExpressions(String s, Vector from_vec,
         Vector to_vec) {
         String openExp = "<%=";
         String closeExp = "%>";
-        String t = "";
+        //String t = "";
+        StringBuffer buf = new StringBuffer();
 
         int idx = s.indexOf(openExp);
         if (idx == -1)
@@ -3590,7 +3610,8 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
         while (idx != -1) {
             String lhs = s.substring(0, idx);
-            t = t + lhs;
+            //t = t + lhs;
+            buf.append(lhs);
 
             String res = s.substring(idx + 3, s.length());
             int idx2 = s.indexOf(closeExp);
@@ -3607,15 +3628,18 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
                     break;
                 }
             }
+            buf.append(expression);
 
-            t = t + expression;
+            //t = t + expression;
 
             String rhs = s.substring(idx2 + 2, s.length());
 
             s = rhs;
             idx = s.indexOf(openExp);
         }
-        t = t + s;
+        buf.append(s);
+        String t = buf.toString();
+        //t = t + s;
         return t;
     }
 
@@ -3624,7 +3648,8 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
             return s;
         String openExp = "<%=";
         String closeExp = "%>";
-        String t = "";
+        //String t = "";
+        StringBuffer buf = new StringBuffer();
 
         int idx = s.indexOf(openExp);
         if (idx == -1)
@@ -3632,7 +3657,8 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
         while (idx != -1) {
             String lhs = s.substring(0, idx);
-            t = t + lhs;
+            //t = t + lhs;
+            buf.append(lhs);
 
             String res = s.substring(idx + 3, s.length());
             int idx2 = s.indexOf(closeExp);
@@ -3644,14 +3670,17 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
                 expression = contextPath;
             }
 
-            t = t + expression;
+            //t = t + expression;
+            buf.append(expression);
 
             String rhs = s.substring(idx2 + 2, s.length());
 
             s = rhs;
             idx = s.indexOf(openExp);
         }
-        t = t + s;
+        buf.append(s);
+        String t = buf.toString();
+        //t = t + s;
         return t;
     }
 
@@ -3739,10 +3768,13 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
     private static void dumpHashMap(HashMap hmap) {
 		_logger.warn("\n\n");
 		if (hmap == null) return;
-		Iterator it = hmap.keySet().iterator();
+
+		Iterator it = hmap.entrySet().iterator();
 		while (it.hasNext()) {
-			String key = (String) it.next();
-			String value = (String) hmap.get(key);
+			Entry thisEntry = (Entry) it.next();
+			String key = (String) thisEntry.getKey();
+			String value = (String) thisEntry.getValue();
+			System.out.println(key + " --> " + value);
 		}
 	}
 
@@ -4003,11 +4035,11 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 					}
 				}
 			} catch (Exception ex) {
-
+				ex.printStackTrace();
 			}
 
 		} catch (Exception ex) {
-
+			ex.printStackTrace();
 		}
 		return v;
 	}
@@ -4321,9 +4353,9 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
 		String version = null;
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
-        if (version != null)
+        /*if (version != null)
             csvt.setVersion(version);
-
+        */
 		Vector conceptDomainName_vec = new Vector();
 		try {
 			LexBIGService lbSvc = null;
@@ -4666,10 +4698,14 @@ System.out.println("vsd_str " + vsd_str);
 
 
     public static void printValueSetDefinitionHierarchyNode(int level, String root) {
-		String indent = "";
+		//String indent = "";
+		StringBuffer buf = new StringBuffer();
+
 		for (int i=0; i<level; i++) {
-			indent = indent + "\t";
+			//indent = indent + "\t";
+			buf.append("\t");
 		}
+		String indent = buf.toString();
 		System.out.println(indent + root);
 		Vector children = (Vector) _valueSetDefinitionHierarchyHashMap.get(root);
 		if (children != null) {
@@ -4727,7 +4763,8 @@ System.out.println("vsd_str " + vsd_str);
 		String uri = "";
 		String description = "";
 		String domain = "";
-		String src_str = "";
+		//String src_str = "";
+		StringBuffer buf = new StringBuffer();
 
 		uri = vsd.getValueSetDefinitionURI();
 		name = vsd.getValueSetDefinitionName();
@@ -4744,8 +4781,12 @@ System.out.println("vsd_str " + vsd_str);
 
 		while (sourceEnum.hasMoreElements()) {
 			Source src = (Source) sourceEnum.nextElement();
-			src_str = src_str + src.getContent() + ";";
+			//src_str = src_str + src.getContent() + ";";
+			buf.append(src.getContent() + ";");
 		}
+		String src_str = buf.toString();
+
+
 		if (src_str.length() > 0) {
 			src_str = src_str.substring(0, src_str.length()-1);
 		}
@@ -5125,10 +5166,11 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 			}
 		}
 
-		Iterator it = csnv2codesMap.keySet().iterator();
+		Iterator it = csnv2codesMap.entrySet().iterator();
 		while (it.hasNext()) {
-			String key = (String) it.next();
-			ArrayList alist = (ArrayList) csnv2codesMap.get(key);
+			Entry thisEntry = (Entry) it.next();
+			String key = (String) thisEntry.getKey();
+			ArrayList alist = (ArrayList) thisEntry.getValue();
 			Vector u = DataUtils.parseData(key, "$");
 			String scheme = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
@@ -5223,7 +5265,7 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 						if (tags == null)
 							return "NOT ASSIGNED";
 
-						if (tags != null && tags.length > 0) {
+						if (tags.length > 0) {
 							tag_str = "";
 							for (int j = 0; j < tags.length; j++) {
 								String version_tag = (String) tags[j];
@@ -5580,6 +5622,17 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 			}
 		}
 		return null;
+	}
+
+	public static boolean isInteger( String input )
+	{
+	   if (input == null) return false;
+	   try {
+		  Integer.parseInt( input );
+		  return true;
+	   } catch( Exception e) {
+		  return false;
+	   }
 	}
 
 }

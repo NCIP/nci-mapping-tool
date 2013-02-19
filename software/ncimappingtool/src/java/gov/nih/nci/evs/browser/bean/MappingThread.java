@@ -49,10 +49,10 @@ public class MappingThread implements Runnable
   HttpSession session = null;
   String type;
 
-  String vsd_uri = null;
+  String vsd_uri;
 
   CodedNodeSet vsd_cns = null;
-  String valueSetDefinitionRevisionId = null;
+  String valueSetDefinitionRevisionId;
   AbsoluteCodingSchemeVersionReferenceList csVersionList;
   String csVersionTag;
   boolean advanced = false;
