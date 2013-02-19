@@ -443,8 +443,8 @@ if (stage.compareTo("draft") == 0) {
 			    <select id="entry_status" name="entry_status" size="3" multiple tabindex="4">
 			    <%
 
-				    String[] status_options = DataUtils.export_options;
-				    String default_status = DataUtils.default_export_option;
+				    String[] status_options = DataUtils.get_export_options();
+				    String default_status = DataUtils.get_default_export_option();
 				    for (int i=0; i<status_options.length; i++) {
 					 String t = status_options[i];
 					 if (t.compareTo(default_status) == 0) {
