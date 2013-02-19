@@ -132,7 +132,7 @@ public class SearchUtils {
     }
 
     public SearchUtils(String url) {
-        SearchUtils._url = url;
+        //SearchUtils._url = url;
         initializeSortParameters();
     }
 

@@ -149,53 +149,7 @@ public class MappingUtils {
 
     private static Vector filler_vec = null;
 
-    private void initializeTestCases(File inputfile) {
-		searchText_vec = new Vector();
-		File in = inputfile;
-		try{
-			BufferedReader buff= new BufferedReader(new FileReader(in));
-			String line=buff.readLine();
-			while(line != null){
-				if (!line.startsWith("#")) {
-                	searchText_vec.add(line);
-			    }
-			    line=buff.readLine();
-			}
-			buff.close();
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-    }
-
-
-    public static String removeFillers(String str) {
-		String delim = getDelimiters();
-		return removeFillers(str, delim);
-	}
-
-    public static String removeFillers(String str, String delim) {
-		Vector fillers = getFillers();
-		StringTokenizer st = new StringTokenizer(str, delim);
-		int knt = 0;
-		//String retstr = "";
-		StringBuffer buf = new StringBuffer();
-		while(st.hasMoreTokens()) {
-			String val = st.nextToken();
-			if (!fillers.contains(val)) {
-			    //retstr = retstr + " " + val;
-			    buf.append(" " + val);
-			}
-		}
-		String retstr = buf.toString();
-
-		retstr = retstr.trim();
-		return retstr;
-	}
-
-
-    public static Vector getFillers() {
-		if (filler_vec != null) return filler_vec;
+    static {
 		filler_vec = new Vector();
 		filler_vec.add("a");
 		filler_vec.add("an");
@@ -223,12 +177,58 @@ public class MappingUtils {
 		filler_vec.add("were");
 		filler_vec.add("will");
 		filler_vec.add("with");
-
-		return filler_vec;
-
 	}
 
 
+/*
+    private void initializeTestCases(File inputfile) {
+		searchText_vec = new Vector();
+		File in = inputfile;
+		try{
+			BufferedReader buff= new BufferedReader(new FileReader(in));
+			String line=buff.readLine();
+			while(line != null){
+				if (!line.startsWith("#")) {
+                	searchText_vec.add(line);
+			    }
+			    line=buff.readLine();
+			}
+			buff.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+    }
+*/
+
+    public static String removeFillers(String str) {
+		String delim = getDelimiters();
+		return removeFillers(str, delim);
+	}
+
+    public static String removeFillers(String str, String delim) {
+		Vector fillers = getFillers();
+		StringTokenizer st = new StringTokenizer(str, delim);
+		int knt = 0;
+		//String retstr = "";
+		StringBuffer buf = new StringBuffer();
+		while(st.hasMoreTokens()) {
+			String val = st.nextToken();
+			if (!fillers.contains(val)) {
+			    //retstr = retstr + " " + val;
+			    buf.append(" " + val);
+			}
+		}
+		String retstr = buf.toString();
+
+		retstr = retstr.trim();
+		return retstr;
+	}
+
+
+    public static Vector getFillers() {
+		return filler_vec;
+	}
 
 
     private void initializeTestCases() {
@@ -290,7 +290,9 @@ searchText_vec.add("adverse");
 
 		try {
 			FileOutputStream os= new FileOutputStream(output);
-			osWriter=new OutputStreamWriter(os);
+			//osWriter = new OutputStreamWriter(os);
+			osWriter = new OutputStreamWriter(os, "UTF-8");
+
 		} catch (Exception ex) {
             System.out.println("\tWARNING: FileOutputStream exception thrown???");
             return;
@@ -359,7 +361,7 @@ System.out.println("lexical matching vbt: " + vbt);
         OutputStreamWriter osWriter = null;
 		try {
 			FileOutputStream os = new FileOutputStream(new File(outputfile));
-			osWriter = new OutputStreamWriter(os);
+			osWriter = new OutputStreamWriter(os, "UTF-8");
 			return lexicalMatch(osWriter, codingSchemeName, version, vbt);
 
 		} catch (Exception ex) {
@@ -490,7 +492,7 @@ System.out.println("lexical matching version: " + version);
         OutputStreamWriter osWriter = null;
 		try {
 			FileOutputStream os= new FileOutputStream(new File(outputfile));
-			osWriter = new OutputStreamWriter(os);
+			osWriter = new OutputStreamWriter(os, "UTF-8");
 			lexicalMatch(osWriter, codingSchemeName, version, vbt_vec);
 
 		} catch (Exception ex) {
@@ -1179,8 +1181,20 @@ System.out.println("algorithm: " + algorithm);
 		return u;
 	}
 
+	static {
+		supportedSearchTechniqueNames = new Vector();
+		Vector<ModuleDescription> v = getAllSupportedSearchTechniques();
+		for (int i=0; i<v.size(); i++) {
+			ModuleDescription md = (ModuleDescription) v.elementAt(i);
+			supportedSearchTechniqueNames.add(md.getName());
+		}
+		supportedSearchTechniqueNames = SortUtils.quickSort(supportedSearchTechniqueNames);
+	}
+
+
 
     public static Vector<String> getAllSupportedSearchTechniqueNames() {
+		/*
 		if (supportedSearchTechniqueNames != null) return supportedSearchTechniqueNames;
 
 		supportedSearchTechniqueNames = new Vector();
@@ -1190,6 +1204,7 @@ System.out.println("algorithm: " + algorithm);
 			supportedSearchTechniqueNames.add(md.getName());
 		}
 		supportedSearchTechniqueNames = SortUtils.quickSort(supportedSearchTechniqueNames);
+		*/
 		return supportedSearchTechniqueNames;
 	}
 

@@ -139,7 +139,7 @@ public class LexGridXMLGenerator {
 
   }
 
-
+/*
    public void test() {
 	   String identifier = "GO_to_NCIt_Mapping";
 	   String version = "1.0";
@@ -155,13 +155,12 @@ public class LexGridXMLGenerator {
                    target_cs, target_cs_uri);
    }
 
-
    public static void main(String[] args) throws Exception {
 	   LexGridXMLGenerator test = new LexGridXMLGenerator();
 	   test.test();
 
    }
-
+*/
 }
 
 

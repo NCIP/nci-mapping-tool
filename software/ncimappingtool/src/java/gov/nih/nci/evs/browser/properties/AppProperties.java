@@ -94,9 +94,16 @@ public class AppProperties {
         loadProperties();
     }
 
+    static {
+		_appProperties = new AppProperties();
+	}
+
+
     public static AppProperties getInstance() {
+		/*
         if (_appProperties == null)
             _appProperties = new AppProperties();
+        */
         return _appProperties;
     }
 

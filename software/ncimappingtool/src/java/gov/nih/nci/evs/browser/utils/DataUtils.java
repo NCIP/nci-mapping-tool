@@ -3456,14 +3456,18 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
                             _logger
                                 .debug(c.getEntityDescription().getContent());
                             Property[] properties = c.getProperty();
-                            String values = "";
+                            //String values = "";
+                            StringBuffer buf = new StringBuffer();
                             for (int j = 0; j < properties.length; j++) {
                                 Property prop = properties[j];
-                                values = values + prop.getValue().getContent();
+                                //values = values + prop.getValue().getContent();
+                                buf.append(prop.getValue().getContent());
                                 if (j < properties.length - 1) {
-                                    values = values + "; ";
+                                    //values = values + "; ";
+                                    buf.append("; ");
                                 }
                             }
+                            String values = buf.toString();
                             hmap.put(rcr.getCode(), values);
                         }
                     }

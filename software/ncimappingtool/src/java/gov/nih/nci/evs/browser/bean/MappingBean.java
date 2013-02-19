@@ -332,13 +332,18 @@ public class MappingBean {
 	}
 
 
+    static {
+		_mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
+	}
+
+
     public String returnToHomeAction() {
 		/*
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
         */
-		_mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
+		//_mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
 		if (_mode_of_operation != null && _mode_of_operation.compareToIgnoreCase(NCImtBrowserProperties.BATCH_MODE_OF_OPERATION) == 0) {
 			return "start";
 		}
@@ -377,7 +382,7 @@ System.out.println("submitMetadataAction ...");
         String type = (String) request.getParameter("type");
 
 
-_mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
+//_mode_of_operation = NCImtBrowserProperties.getModeOfOperation();
 
 
 		String key = MappingObject.computeKey(identifier, mapping_version);
