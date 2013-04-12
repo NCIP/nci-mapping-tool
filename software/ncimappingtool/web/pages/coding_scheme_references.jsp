@@ -1,3 +1,10 @@
+<%--L
+  Copyright Northrop Grumman Information Technology.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/nci-mapping-tool/LICENSE.txt for details.
+L--%>
+
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="gov.nih.nci.evs.valueseteditor.beans.*" %>
 <%@ page import="gov.nih.nci.evs.valueseteditor.beans.ValueSetBean.ComponentObject" %>
