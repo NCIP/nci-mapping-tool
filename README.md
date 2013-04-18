@@ -1,7 +1,19 @@
 Welcome to the nci-mapping-tool Project!
 ==============================
 
-TBD
+EVS Mapping Tool was developed for supporting NCI internal operations. It provides a means for users to 
+perform cross terminology mapping. Users would be able to place constraints on source or target objects. 
+
+The key capabilities of EVS Mapping Tool include the following:
+* Support concept mapping based on NCI Metathesaurus (i.e., the CUI and source atom relationships).
+*	Support concept mapping between terminologies hosted by NCI CBIIT through the LexBIG terminology server.
+*	Support mapping between two value sets.
+*	Perform concept matching using algorithms supported by LexEVS API.
+*	Provide hyper-link to the concept details page in NCI Term browser.
+*	Support manual mapping.
+*	Provide administrative functions (e.g., assign and maintain status of mapping entries).
+*	Export to LexGrid XML and Microsoft excel formats.
+
 
 nci-mapping-tool is developed in Java and requires Apache Ant for building.
 
