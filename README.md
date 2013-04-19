@@ -1,10 +1,10 @@
 Welcome to the nci-mapping-tool Project!
 ==============================
 
-EVS Mapping Tool was developed for supporting NCI internal operations. It provides a means for users to 
+NCI Mapping Tool was developed for supporting NCI internal operations. It provides a means for users to 
 perform cross terminology mapping. Users would be able to place constraints on source or target objects. 
 
-The key capabilities of EVS Mapping Tool include the following:
+The key capabilities of NCI Mapping Tool include the following:
 * Support concept mapping based on NCI Metathesaurus (i.e., the CUI and source atom relationships).
 *	Support concept mapping between terminologies hosted by NCI CBIIT through the LexBIG terminology server.
 *	Support mapping between two value sets.
