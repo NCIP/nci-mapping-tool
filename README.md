@@ -1,10 +1,11 @@
-Welcome to the nci-mapping-tool Project!
+Welcome to the NCI EVS Mapping Tool Project!
 ==============================
 
-NCI Mapping Tool was developed for supporting NCI internal operations. It provides a means for users to 
-perform cross terminology mapping. Users would be able to place constraints on source or target objects. 
+The NCI EVS Mapping Tool supports mapping between term lists, value sets, terminology subsets, or whole 
+terminologies using a mix of automated and manual methods.  This initial prototype release is used 
+internally by EVS, but will need further development to reach a broader user community. 
 
-The key capabilities of NCI Mapping Tool include the following:
+The key capabilities of NCI EVS Mapping Tool include the following:
 * Support concept mapping based on NCI Metathesaurus (i.e., the CUI and source atom relationships).
 *	Support concept mapping between terminologies hosted by NCI CBIIT through the LexBIG terminology server.
 *	Support mapping between two value sets.
@@ -15,9 +16,9 @@ The key capabilities of NCI Mapping Tool include the following:
 *	Export to LexGrid XML and Microsoft excel formats.
 
 
-nci-mapping-tool is developed in Java and requires Apache Ant for building.
+NCI EVS Mapping Tool is developed in Java and requires Apache Ant for building.
 
-nci-mapping-tool is distributed under the BSD 3-Clause License.
+NCI EVS Mapping Tool is distributed under the BSD 3-Clause License.
 Please see the NOTICE and LICENSE files for details.
 
 You will find more details about nci-mapping-tool in the following links:
@@ -26,4 +27,4 @@ You will find more details about nci-mapping-tool in the following links:
  * [Issue Tracker] (https://tracker.nci.nih.gov/browse/NCIMT)
 
  
-Please join us in further developing and improving nci-mapping-tool.
+Please join us in further developing and improving NCI EVS Mapping Tool.
